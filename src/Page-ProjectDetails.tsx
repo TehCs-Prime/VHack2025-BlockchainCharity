@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './Page-ProjectDetails.css';
 
 import Logo from '/assets/Logo.png';
 import silageTarpImage from '/assets/Logo.png';
+import equipmentImage from '/assets/Logo.png';
+import seedsImage from '/assets/Logo.png';
 
 
 import DonorTab from './Tab-Donors';
@@ -97,41 +99,13 @@ const newsData: NewsUpdate[] = [
     }
 ];
 
-interface Milestone {
-    id: string;
-    name: string;
-    amount: string;
-    isActive: boolean;
-    isImplemented: boolean;
-  }
-  
-  interface Expense {
-    date: string;
-    type: string;
-    description: string;
-    amount: string;
-  }
-  
-  interface MilestoneTabProps {
-    milestones: Milestone[];
-    currentMilestone: Milestone;
-    objective: string;
-    description: string;
-    supportText: string;
-    whatWeDid: string;
-    expenses: Expense[];
-    totalExpenses: string;
-    images: string[];
-  }
-
 const ProjectDetails: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Milestone');
 
-  const [donations, setDonations] = useState<Donation[]>([
+  const [donations] = useState<Donation[]>([
     { id: 1, currency: 'BNB', amount: 0.01085, donor: 'anonymous', date: '2025-03-22 12:43:36', message: 'Thanks for your work!' },
     { id: 2, currency: 'USDT', amount: 20, donor: 'anonymous', date: '2025-03-21 00:24:53', message: null },
     { id: 3, currency: 'USDT', amount: 130.6, donor: 'anonymous', date: '2025-03-19 18:13:02', message: null },
@@ -151,19 +125,62 @@ const ProjectDetails: React.FC = () => {
   ];
 
   const milestones = [
-    { id: 'M1', name: 'Milestone 1', amount: 'US$ 4,375', isActive: false, isImplemented: true },
-    { id: 'M2', name: 'Milestone 2', amount: 'US$ 4,350', isActive: false, isImplemented: true },
-    { id: 'M3', name: 'Milestone 3', amount: 'US$ 1,160', isActive: true, isImplemented: true }
-  ];
-
-  const currentMilestone = milestones[2];
-
-  const expenses = [
-    {
-      date: '04/14/2021',
-      type: 'Product',
-      description: '4 Silage Tarps, 24 x 105\' - 2 Silage Tarps, 50 x 105\'',
-      amount: 'US$ 1,425'
+    { 
+      id: 'M1', 
+      name: 'Milestone 1', 
+      amount: 'US$ 4,375', 
+      isImplemented: true,
+      description: "Farm equipment is essential for efficient and productive farming operations. Modern farm equipment can increase productivity, reduce manual labor, and improve the overall efficiency of farming operations.",
+      supportText: "Your support will allow us to purchase essential farming equipment for use by farmers throughout the region. All donations for this milestone will be used in BTC.",
+      whatWeDid: "We purchased tractors and attachments that are necessary for land preparation, planting, harvesting, and other farming operations. These equipments have significantly improved productivity and reduced manual labor.",
+      expenses: [
+        {
+          date: '02/10/2021',
+          type: 'Equipment',
+          description: '2 Tractors with essential attachments',
+          amount: 'US$ 4,375'
+        }
+      ],
+      totalExpenses: 'US$ 4,375',
+      images: [equipmentImage]
+    },
+    { 
+      id: 'M2', 
+      name: 'Milestone 2', 
+      amount: 'US$ 4,350', 
+      isImplemented: true,
+      description: "High-quality seeds are fundamental to successful farming. Seeds with good genetic potential can lead to higher yields, better resistance to diseases and pests, and improved crop quality.",
+      supportText: "Your support will allow us to purchase quality seeds for distribution to farmers in the region. All donations for this milestone will be used in BTC.",
+      whatWeDid: "We sourced and distributed high-quality, certified seeds to farmers in the region. These seeds have better germination rates, disease resistance, and yield potential compared to conventional seeds.",
+      expenses: [
+        {
+          date: '03/15/2021',
+          type: 'Seeds',
+          description: 'Certified organic seeds for 20 farms',
+          amount: 'US$ 4,350'
+        }
+      ],
+      totalExpenses: 'US$ 4,350',
+      images: [seedsImage]
+    },
+    { 
+      id: 'M3', 
+      name: 'Milestone 3', 
+      amount: 'US$ 1,160', 
+      isImplemented: true,
+      description: "Silage tarps are efficient and cost-effective ways for a farmer to develop healthier soils. Silage tarps can be laid down across land that has been prepared, but not ready to plant so as to help suppress the growth of weeds, or they can be laid across areas where cover crops have been planted to kill off the top vegetation, and allowing decomposition to begin creating a healthier and richer soil structure.",
+      supportText: "Your support will allow us to purchase four silage tarps for use by farmers throughout the region. All donations for this milestone will be used in BTC. We have confirmed with Farmers Friend, the tarps vendor, that we may purchase all equipment directly in bitcoin.",
+      whatWeDid: "Silage Tarps are a simple, cost-effective way to preemptively eliminate weeds by creating a warm, moist environment that quickly kills established weeds and suffocates weed seed germination. They also provide a haven for worms and other beneficial organisms that help decompose organic matter and loosen the soil.",
+      expenses: [
+        {
+          date: '04/14/2021',
+          type: 'Product',
+          description: '4 Silage Tarps, 24 x 105\' - 2 Silage Tarps, 50 x 105\'',
+          amount: 'US$ 1,425'
+        }
+      ],
+      totalExpenses: 'US$ 1,425',
+      images: [silageTarpImage]
     }
   ];
 
@@ -229,12 +246,6 @@ const ProjectDetails: React.FC = () => {
   
   // Determine if project is fully funded
   const isFullyFunded = project.raisedAmount >= project.goalAmount;
-
-  const truncateMessage = (message: string, maxLength: number = 30) => {
-    if (!message) return "-";
-    if (message.length <= maxLength) return message;
-    return message.substring(0, maxLength) + "...";
-  };
 
   return (
     <div className="project-details-container">
@@ -417,14 +428,8 @@ const ProjectDetails: React.FC = () => {
         <div className="tab-content">
           {activeTab === 'Milestone' && <MilestoneTab
             milestones={milestones}
-            currentMilestone={currentMilestone}
             objective="US$ 9,885"
-            description="Silage tarps are efficient and cost-effective ways for a farmer to develop healthier soils. Silage tarps can be laid down across land that has been prepared, but not ready to plant so as to help suppress the growth of weeds, or they can be laid across areas where cover crops have been planted to kill off the top vegetation, and allowing decomposition to begin creating a healthier and richer soil structure."
-            supportText="Your support will allow us to purchase four silage tarps for use by farmers throughout the region. All donations for this milestone will be used in BTC. We have confirmed with Farmers Friend, the tarps vendor, that we may purchase all equipment directly in bitcoin."
-            whatWeDid="Silage Tarps are a simple, cost-effective way to preemptively eliminate weeds by creating a warm, moist environment that quickly kills established weeds and suffocates weed seed germination. They also provide a haven for worms and other beneficial organisms that help decompose organic matter and loosen the soil."
-            expenses={expenses}
-            totalExpenses="US$ 1,425"
-            images={[silageTarpImage]}
+            initialMilestoneId="M3" // Start with milestone 3 selected
         />}
           
           {activeTab === 'updates' && <UpdatesTab newsData={newsData} />}
