@@ -1,0 +1,137 @@
+.receiver-content {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+  }
+  
+  .allocations-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #222;
+  }
+  
+  .date-filters {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .date-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .date-filter label {
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .date-input-container {
+    position: relative;
+  }
+  
+  .date-input {
+    padding: 8px 35px 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+  }
+  
+  .to-text {
+    font-size: 16px;
+    color: #666;
+    margin-top: 25px;
+  }
+  
+  .allocations-table {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+  
+  .table-header {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+    color: #666;
+    background-color: #fafafa;
+  }
+  
+  .table-row {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+  }
+  
+  .table-row:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .col {
+    display: flex;
+    align-items: center;
+  }
+
+  .col.message {
+    padding-left: 140px; 
+    margin-right: 180px;
+  }
+  
+  .id {
+    width: 5%;
+  }
+  
+  .receiver {
+    width: 20%;
+  }
+  
+  .date {
+    width: 15%;
+  }
+  
+  .amount {
+    width: 10%;
+  }
+  
+  .currency {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .use-of-funds {
+    width: 30%;
+  }
+  
+  .actions {
+    width: 10%;
+    justify-content: flex-end;
+  }
+  
+  .currency-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .usdt-icon {
+    background-color: #26A17B;
+  }
+  
+  .busd-icon {
+    background-color: #F0B90B;
+  }
