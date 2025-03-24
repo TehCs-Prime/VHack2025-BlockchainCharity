@@ -1,4 +1,4 @@
-# **Lacial - Cryptocurrency-Based Charity Platform**  
+# **Lacial - Blockchain-Based Charity Platform**  
 
 ![Lacial Logo](link-to-your-logo.png)  
 
