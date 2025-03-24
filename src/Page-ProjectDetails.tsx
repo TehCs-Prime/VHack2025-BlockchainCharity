@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import OverlayDonation from './Overlay-Donation';
 import { useParams, Link } from 'react-router-dom';
 import './Page-ProjectDetails.css';
 
@@ -53,6 +54,7 @@ const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Milestone');
+  const [showDonationOverlay, setShowDonationOverlay] = useState(false);
   
 
   useEffect(() => {
@@ -558,13 +560,25 @@ const ProjectDetails: React.FC = () => {
           
           {/* Donation button */}
           <div className="donation-button-container">
-            <button 
+            <button
               className={`donate-button ${isFullyFunded ? 'disabled' : ''}`}
               disabled={isFullyFunded}
+              onClick={() => setShowDonationOverlay(true)}
             >
-              {isFullyFunded ? 'Fully Funded' : 'Donate Now'} 
+              {isFullyFunded ? 'Fully Funded' : 'Donate Now'}
               {!isFullyFunded && <span className="button-arrow">→</span>}
             </button>
+
+            {showDonationOverlay && (
+              <OverlayDonation
+                projectName={project?.title}
+                onClose={() => setShowDonationOverlay(false)}
+                onDonate={(cryptoAmount, cryptoCurrency, fiatAmount, fiatCurrency) => {
+                  console.log(`Donating ${cryptoAmount} ${cryptoCurrency} (${fiatAmount} ${fiatCurrency})`);
+                  // TODO: Integrate with blockchain donation logic
+                }}
+              />
+            )}
             
             {/* Social sharing */}
             <div className="social-share">
