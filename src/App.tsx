@@ -5,6 +5,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Explore from './Page-Explore';
 import ProjectDetails from './Page-ProjectDetails';
+import Leaderboard from './Leaderboard';
 import './App.css';
 
 const App: React.FC = () => {
@@ -14,8 +15,9 @@ const App: React.FC = () => {
         <Header />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Explore />} />
+            <Route path="/explore" element={<Explore />} />
             <Route path="/project/:projectId" element={<ProjectDetails />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
             {/* Add other routes as needed */}
           </Routes>
         </main>
