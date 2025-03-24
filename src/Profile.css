@@ -1,0 +1,306 @@
+/* Remove container constraints */
+.profile-container {
+    padding: 0; /* Remove padding */
+    width: 100%;
+    min-height: 100vh; /* Full screen height */
+    background: #f8fafc; /* Background color for the entire screen */
+  }
+  
+  /* Make the card span the full width and height */
+  .profile-card {
+    background: white;
+    border-radius: 0; /* Remove rounded corners */
+    box-shadow: none; /* Remove shadow */
+    padding: 2rem;
+    min-height: 100vh; /* Full screen height */
+    width: 100%; /* Full width */
+    box-sizing: border-box;
+  }
+  
+  /* Profile Header */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #2a9d8f;
+  }
+  
+  .profile-info h2 {
+    margin: 0;
+    color: #264653;
+  }
+  
+  .signup-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  
+  /* Donation History */
+  .donation-history {
+    margin-top: 2rem;
+  }
+  
+  .donation-history h3 {
+    color: #264653;
+    border-bottom: 2px solid #2a9d8f;
+    padding-bottom: 0.5rem;
+  }
+  
+  .donation-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .donation-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .donation-amount {
+    font-weight: 600;
+  }
+  
+  .donation-amount.cash {
+    color: #2a9d8f;
+  }
+  
+  .donation-amount.crypto {
+    color: #e76f51;
+  }
+  
+  .donation-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  
+/* Edit Profile Button */
+.edit-profile-btn {
+  background: #2a9d8f;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem; /* Reduced padding */
+  border-radius: 4px; /* Slightly smaller radius */
+  cursor: pointer;
+  font-size: 0.8rem; /* Smaller font size */
+  margin-top: 0.5rem;
+}
+  
+  .edit-profile-btn:hover {
+    background: #22867a;
+  }
+  
+  /* Profile Picture Edit */
+  .profile-pic-edit {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+  .edit-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 0.3rem;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Edit Input */
+  .edit-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border: 2px solid #2a9d8f;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Edit Buttons */
+  .edit-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .save-btn {
+    background: #2a9d8f;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .save-btn:hover {
+    background: #22867a;
+  }
+  
+  .cancel-btn {
+    background: #e76f51;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel-btn:hover {
+    background: #d1583a;
+  }
+  
+  .editable {
+    border: 3px solid #e76f51;
+  }
+  
+  /* Local Avatar */
+  .local-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #2a9d8f;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 3px solid #e9c46a;
+  }
+  
+  .local-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .initials-fallback {
+    user-select: none;
+  }
+  
+  /* Edit Mode Styling */
+  .profile-pic-edit .local-avatar {
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .profile-pic-edit:hover .local-avatar {
+    transform: scale(1.05);
+  }
+  
+  .edit-overlay {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: #e76f51;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .profile-card {
+      padding: 1.5rem;
+    }
+  
+    .profile-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .profile-card {
+      padding: 1rem;
+    }
+  
+    .local-avatar {
+      width: 80px;
+      height: 80px;
+      font-size: 1.2rem;
+    }
+  }
+
+  .ai-recommendation-link {
+    margin-top: 1rem;
+  }
+  
+  .recommendation-btn {
+    background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem; /* Matching small size */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem; /* Spacing between buttons */
+  }
+  
+  .recommendation-btn:hover {
+    opacity: 0.8;
+  }
+
+  /* Account Settings Section */
+.account-settings-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.account-settings-section h3 {
+  color: #264653;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Update settings button to match donation amounts */
+.settings-btn {
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background: #6c757d;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.settings-btn:hover {
+  background: #5a6268;
+  color: white;
+}
+
+/* Remove border-top from previous implementation */
+.account-settings-section {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Adjust donation history margin */
+.donation-history {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}

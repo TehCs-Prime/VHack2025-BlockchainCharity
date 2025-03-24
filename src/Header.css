@@ -103,7 +103,7 @@
   .login-link:hover, .signup-link:hover {
     color: #F0B90B;
   }
-  
+
   .divider {
     color: #ccc;
     margin: 0 2px;
@@ -131,3 +131,44 @@
       margin-top: 10px;
     }
   }
+
+  .auth-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Adjust spacing between avatar and buttons */
+  }
+  
+  /* Adjust profile picture size */
+  .profile-link {
+    color: #2a9d8f;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .profile-link:hover {
+    background-color: #e9f5f3;
+    text-decoration: underline;
+  }
+  .logout-btn {
+    background: #e76f51;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  
+  .logout-btn:hover {
+    opacity: 0.9;
+  }
+

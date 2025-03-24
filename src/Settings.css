@@ -1,0 +1,240 @@
+.settings-container {
+    padding: 0; /* Remove padding */
+    width: 100%;
+    min-height: 100vh; /* Full screen height */
+    background: #f8fafc; /* Background color for the entire screen */
+  }
+  
+  /* Make the card span the full width and height */
+  .settings-card {
+    background: white;
+    border-radius: 0; /* Remove rounded corners */
+    box-shadow: none; /* Remove shadow */
+    padding: 2rem 2.5rem;
+    min-height: 100vh; /* Full screen height */
+    width: 100%; /* Full width */
+    box-sizing: border-box;
+  }
+  
+  /* Header Section */
+  .settings-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #f1f5f9;
+  }
+  
+  .settings-subtitle {
+    color: #64748b;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  /* Section Styling */
+  .settings-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-icon {
+    color: #2a9d8f;
+    font-size: 1.5rem;
+  }
+  
+  /* Setting Items */
+  .setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .setting-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+  
+  .item-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .item-icon {
+    color: #64748b;
+    font-size: 1.4rem;
+  }
+  
+  .item-title {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+  }
+  
+  .item-subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+  
+  /* Buttons */
+  .manage-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8fafc;
+    color: #2a9d8f;
+    border: 1px solid #e2e8f0;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .manage-btn:hover {
+    background: #2a9d8f;
+    color: white;
+    border-color: #2a9d8f;
+  }
+  
+  /* Preference Items */
+  .preference-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .toggle-icon {
+    color: #64748b;
+    font-size: 1.4rem;
+  }
+  
+  .toggle-text {
+    display: block;
+    font-weight: 500;
+    color: #1e293b;
+  }
+  
+  .toggle-subtext {
+    display: block;
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* Switch Styling */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e2e8f0;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  input:checked + .slider {
+    background-color: #2a9d8f;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+  
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .settings-card {
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .settings-card {
+      padding: 1rem;
+    }
+  }
+
+  /* Language Selector Styles */
+.language-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.language-dropdown {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #1e293b;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.language-dropdown:hover {
+  border-color: #2a9d8f;
+}
+
+.language-dropdown:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(42, 157, 143, 0.2);
+}
+
+/* Remove SMS notification related CSS if it exists */
