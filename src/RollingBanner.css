@@ -1,0 +1,47 @@
+.rolling-banner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff; /* or any background you like */
+    padding: 1rem 0;       /* spacing around the logos */
+  }
+  
+  /* The track that holds all logos side by side */
+  .rolling-banner__track {
+    display: flex;
+    align-items: center;
+    /* Double the width of the content if you have 2 sets of logos */
+    width: 200%;
+    animation: scroll 20s linear infinite;
+  }
+  
+  /* Each logo item */
+  .rolling-banner__item {
+    flex: 0 0 auto;
+    width: 200px; /* or adjust to your preference */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2rem; /* spacing between logos */
+  }
+  
+  .rolling-banner__item img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* The continuous scrolling keyframes */
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* move left by 50% of the container width (since we repeated the array) */
+      transform: translateX(-50%);
+    }
+  }
+  .rolling-banner__track:hover {
+    animation-play-state: paused;
+  }
+  

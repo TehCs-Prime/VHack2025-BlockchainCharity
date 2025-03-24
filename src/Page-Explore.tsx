@@ -28,6 +28,7 @@ interface Project {
   description: string;
   updatedAt: Date;
   progress: number; // Add progress property
+  imageUrl: string;
 }
 
 export const ProjectDiscovery: React.FC = () => {
@@ -58,6 +59,7 @@ const navigateToProjectDetails = (projectId: number) => {
       description: 'Providing clean water access to rural communities',
       updatedAt: new Date('2025-02-15'),
       progress: 65,
+      imageUrl: '/assets/CleanAir.jpeg',
     },
     {
       id: 2,
@@ -69,6 +71,7 @@ const navigateToProjectDetails = (projectId: number) => {
       description: 'Building schools in underserved areas',
       updatedAt: new Date('2025-03-01'),
       progress: 30,
+      imageUrl: '/assets/Education.jpeg',
     },
     {
       id: 3,
@@ -80,6 +83,7 @@ const navigateToProjectDetails = (projectId: number) => {
       description: 'Protecting endangered species in the Amazon',
       updatedAt: new Date('2025-01-20'),
       progress: 100,
+      imageUrl: '/assets/Jungle.jpeg',
     },
     {
       id: 4,
@@ -91,6 +95,7 @@ const navigateToProjectDetails = (projectId: number) => {
       description: 'Emergency response and aid distribution',
       updatedAt: new Date('2025-03-10'),
       progress: 10,
+      imageUrl: '/assets/Disaster.jpeg',
     }
 ];
 
@@ -392,6 +397,7 @@ const navigateToProjectDetails = (projectId: number) => {
                 </div>
                 <h3 className="project-title">{project.title}</h3>
                 <div className="project-category">{project.category}</div>
+                <img className= "project-image" src={project.imageUrl} alt={project.title}/>
                 <p className="project-description">{project.description}</p>
                 
                 {/* Progress bar addition */}

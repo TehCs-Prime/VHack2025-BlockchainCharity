@@ -427,6 +427,13 @@
     font-size: 0.85rem;
     margin-bottom: 1rem;
   }
+
+  .project-image {
+    width: 350px;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 10px;
+  }
   
   .project-description {
     color: #666;
