@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
+import { NavLink } from "react-router-dom";
 import './Header.css'
 import Logo from '/assets/Logo.png'
 
@@ -26,21 +27,31 @@ const Header: React.FC = () => {
       <div className="container">
         {/* Logo Section */}
         <div className="logo-container">
-          <Link to="/">
+          <NavLink to="/">
             <img src={Logo} alt="GiveMoney" className="logo" />
-          </Link>
+          </NavLink>
         </div>
 
-        {/* Navigation Links */}
         <nav className="nav">
           <ul className="nav-list">
-            {navItems.map((item, index) => (
-              <li key={index} className="nav-item">
-                <Link to={item.link} className="nav-link">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            <li className="nav-item">
+              <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/explore" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Explore</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/approach" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>How We Do It</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/impact" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Impact</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>About Us</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/leaderboard" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Leaderboard</NavLink>
+            </li>
           </ul>
         </nav>
 
@@ -66,4 +77,4 @@ const Header: React.FC = () => {
   )
 }
 
-export default Header
+export default Header;

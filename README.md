@@ -1,55 +1,57 @@
-# VHack2025-BlockchainCharity
-# React + TypeScript + Vite
+# **Lacial - Blockchain-Based Charity Platform**  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Lacial Logo](link-to-your-logo.png)  
 
-Currently, two official plugins are available:
+> A blockchain-powered charity platform that ensures **transparent and secure** donations using cryptocurrency.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Table of Contents**  
+- [About the Project](#about-the-project)  
+- [Features](#features)  
+- [Tech Stack](#tech-stack)  
+- [Getting Started](#getting-started)  
+- [Installation](#installation)  
+- [Usage](#usage)  
+- [Roadmap](#roadmap)  
+- [Contributing](#contributing)  
+- [License](#license)  
+- [Contact](#contact)  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## **About the Project**  
+Lacial is a **decentralized** and **transparent** charity donation platform powered by cryptocurrency. The platform enables users to donate securely while tracking their contributions on the blockchain.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## **Features**  
+✅ **Secure Donations** – Donations are processed using blockchain to ensure security.  
+✅ **Transparent Transactions** – All transactions are verifiable on the blockchain.  
+✅ **Gamified Achievements** – Earn badges for contributions.  
+✅ **User-Friendly Dashboard** – Track donations and achievements easily.  
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## **Tech Stack**  
+- **Frontend:** React, TypeScript, Tailwind CSS  
+- **Backend:** Node.js, Express.js  
+- **Blockchain:** Ethereum, Solidity, Web3.js  
+- **Database:** PostgreSQL / MongoDB  
+- **Others:** GitHub Actions, Docker  
+
+---
+
+## **Getting Started**  
+Follow these steps to set up the project locally.
+
+### **Prerequisites**  
+Ensure you have the following installed:  
+- Node.js (v16+)  
+- Git  
+- Docker (optional)  
+- MetaMask Wallet (for testing transactions)  
+
+### **Installation**  
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/yourusername/Lacial.git
+   cd Lacial
