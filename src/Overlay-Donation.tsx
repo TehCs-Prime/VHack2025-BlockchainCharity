@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Overlay-Donation.css';
-import OverlayDonationInfo from './Overlay-DonationInfo';
+
 
 interface OverlayProps {
   onClose: () => void;
@@ -81,25 +81,11 @@ const OverlayDonation: React.FC<OverlayProps> = ({ onClose, onDonate, projectNam
     setIsChecked(e.target.checked);
   };
 
-  const handleContinue = () => {
+  const handleSubmit = () => {
     if (!isChecked) return;
-
-    // Convert string values to numbers
-    const cryptoAmt = parseFloat(cryptoAmount);
-    const fiatAmt = parseFloat(fiatAmount);
-
-    if (!cryptoAmt || !fiatAmt) return;
-
-    // Call onDonate before showing the next overlay
-    onDonate(cryptoAmt, selectedCrypto, fiatAmt, selectedFiat);
-    
-    // Show the next overlay
-    setShowDonationInfo(true);
+    onDonate(parseFloat(cryptoAmount), selectedCrypto, parseFloat(fiatAmount), selectedFiat);
+    onClose();
   };
-
-  if (showDonationInfo) {
-    return <OverlayDonationInfo onClose={onClose} />;
-  }
 
   return (
     <div className="donation-overlay">
@@ -166,7 +152,7 @@ const OverlayDonation: React.FC<OverlayProps> = ({ onClose, onDonate, projectNam
             </label>
           </div>
 
-          <button className="continue-btn" onClick={handleContinue} disabled={!isChecked}>
+          <button className="continue-btn" onClick={handleSubmit} disabled={!isChecked}>
             Continue
           </button>
         </div>
