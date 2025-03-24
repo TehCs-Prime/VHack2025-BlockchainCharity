@@ -49,6 +49,22 @@
     overflow: hidden;
     padding: 40px;
   }
+
+  .project-details-content.status-funding {
+    background-color: #fdf0bd;
+  }
+  
+  .project-details-content.status-under-implementation {
+    background-color: #c8defd;
+  }
+  
+  .project-details-content.status-completed {
+    background-color: #ebebeb;
+  }
+  
+  .project-details-content.status-cancelled {
+    background-color: #fcdfdf;
+  }
   
   .project-status-badge {
     display: inline-block;
