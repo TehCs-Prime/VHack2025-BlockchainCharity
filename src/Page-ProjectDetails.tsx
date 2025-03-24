@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import OverlayDonation from './Overlay-Donation';
+import OverlayDonationFlow from './Overlay-DonationFlow';
 import { useParams, Link } from 'react-router-dom';
 import './Page-ProjectDetails.css';
 
@@ -570,13 +570,11 @@ const ProjectDetails: React.FC = () => {
             </button>
 
             {showDonationOverlay && (
-              <OverlayDonation
+              <OverlayDonationFlow
                 projectName={project?.title}
                 onClose={() => setShowDonationOverlay(false)}
-                onDonate={(cryptoAmount, cryptoCurrency, fiatAmount, fiatCurrency) => {
-                  console.log(`Donating ${cryptoAmount} ${cryptoCurrency} (${fiatAmount} ${fiatCurrency})`);
                   // TODO: Integrate with blockchain donation logic
-                }}
+                
               />
             )}
             
