@@ -152,9 +152,7 @@ export default function Profile() {
         </div>
 
         <div className="profile-card">
-  <div className="profile-header">
-    {/* ... existing profile header content ... */}
-  </div>
+
 
   {/* Donation History Section */}
   <div className="donation-history">
@@ -182,8 +180,8 @@ export default function Profile() {
             Manage Account
           </Link>
       </div>
-    </div>
   </div>
+</div>
 </div>
       </div>
     </div>

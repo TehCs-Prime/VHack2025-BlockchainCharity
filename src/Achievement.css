@@ -1,0 +1,223 @@
+/* Container */
+.achievement-container {
+  position: relative;
+  background-color: #ffffff;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+}
+  
+  /* Title */
+  .achievement-title {
+    font-size: 2.25rem; /* text-4xl */
+    font-weight: 600;
+    color: #2d3748; /* gray-800 */
+    margin-bottom: 2.5rem;
+  }
+  
+  /* Grid for achievement cards */
+  .achievement-grid {
+    padding: 0 5rem; /* equivalent to px-20 */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem; /* gap-6 */
+    padding-bottom: 1rem; /* pb-4 */
+  }
+  
+  @media (min-width: 768px) {
+    .achievement-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* Achievement card */
+  .achievement-card {
+    background-color: #ffffff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-radius: 0.5rem; /* rounded-xl */
+    padding: 1.5rem; /* p-6 */
+    text-align: left;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .achievement-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.1), 0 6px 8px -2px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Header section of a card */
+  .achievement-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* gap-4 */
+  }
+  
+  /* Avatar */
+  .achievement-avatar {
+    background-color: #e2e8f0; /* gray-200 */
+    padding: 1rem; /* p-4 */
+    border-radius: 50%;
+    font-size: 1.25rem; /* text-xl */
+  }
+  
+  /* Info section */
+  .achievement-info {
+    flex: 1;
+  }
+  
+  /* Card Title and Criteria */
+  .achievement-card-title {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600;
+    color: #4a5568; /* gray-700 */
+    margin: 0;
+  }
+  
+  .achievement-card-criteria {
+    font-size: 0.875rem; /* text-sm */
+    color: #718096; /* gray-600 */
+    margin: 0.25rem 0;
+  }
+  
+  /* Progress bar container */
+  .achievement-progress-container {
+    width: 100%;
+    background-color: #e2e8f0; /* gray-300 */
+    height: 0.5rem; /* h-2 */
+    border-radius: 9999px;
+    margin-top: 0.5rem;
+  }
+  
+  /* Progress bar itself */
+  .achievement-progress-bar {
+    height: 100%;
+    border-radius: 9999px;
+  }
+  
+  .achievement-progress-bar.incomplete {
+    background-color: #4299e1; /* blue-500 */
+  }
+  
+  .achievement-progress-bar.complete {
+    background-color: #48bb78; /* green-500 */
+  }
+  
+  /* Percentage text */
+  .achievement-progress-percent {
+    font-size: 0.75rem;
+    position: absolute;
+    right: 0;
+    bottom: 0.25rem;
+  }
+  
+  /* View More button */
+  .achievement-viewmore-container {
+    margin-top: 2rem;
+  }
+  
+  .achievement-viewmore-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #4299e1;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .achievement-viewmore-btn:hover {
+    background-color: #3182ce;
+    transform: scale(1.02);
+  }
+  
+  /* Modal styles */
+  .achievement-modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    z-index: 9999;
+  }
+  
+  .achievement-modal-inner {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 48rem;
+    max-height: 50vh;  /* Reduced height */
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid #e2e8f0;
+  }
+  
+  /* Modal title */
+  .achievement-modal-title {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Button group inside modal */
+  .achievement-modal-btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .achievement-modal-button {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    background-color: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .achievement-modal-button.active,
+  .achievement-modal-button:hover {
+    background-color: #4299e1;
+    color: #ffffff;
+  }
+  
+  /* Modal close button */
+  .achievement-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    background-color: #e53e3e;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .achievement-modal-close:hover {
+    background-color: #c53030;
+  }
+  
+  /* Modal content container */
+  .achievement-modal-content {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 48rem;
+    height: 80vh;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+  }
+  

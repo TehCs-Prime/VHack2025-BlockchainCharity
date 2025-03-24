@@ -2,7 +2,6 @@
 .profile-container {
     padding: 0; /* Remove padding */
     width: 100%;
-    min-height: 100vh; /* Full screen height */
     background: #f8fafc; /* Background color for the entire screen */
   }
   
@@ -12,7 +11,6 @@
     border-radius: 0; /* Remove rounded corners */
     box-shadow: none; /* Remove shadow */
     padding: 2rem;
-    min-height: 100vh; /* Full screen height */
     width: 100%; /* Full width */
     box-sizing: border-box;
   }

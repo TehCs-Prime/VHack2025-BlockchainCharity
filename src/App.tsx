@@ -5,13 +5,13 @@ import Header from './Header';
 import Footer from './Footer';
 import Explore from './Page-Explore';
 import ProjectDetails from './Page-ProjectDetails';
-import Login from './Login'
-import Signup from './Signup'
-import Profile from './Profile'
+import Login from './Login';
+import Signup from './Signup';
 import ImpactReport from './ImpactReport';
 import Leaderboard from './Leaderboard';
-import './App.css';
 import Settings from './Settings';
+import ProfilePage from './ProfilePage';  // New combined profile page
+import './App.css';
 
 const App: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ const App: React.FC = () => {
             <Route path="/project/:projectId" element={<ProjectDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/impact" element={<ImpactReport />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
