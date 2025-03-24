@@ -1,7 +1,7 @@
 import React from 'react';
 import './Tab-Donors.css';
 
-interface Donation {
+export interface Donation {
     id: number;
     currency: string;
     amount: number;
@@ -63,7 +63,7 @@ const DonorTab: React.FC<DonorTabProps> = ({ donations }) => {
                     )}
                     </div>
                     <div className="col actions">
-                    <button className="expand-btn">›</button>
+                    <button className="expand-btn"><a href='https://bscscan.com/tx/0x192d2b9dc09637f580b3e913e99489922fca3820d87e9c8de59a542b7d76cc9f'style={{ textDecoration: "none", color: "inherit" }}>›</a></button>
                     </div>
                 </div>
                 ))}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Tab-Updates.css'
 
-interface NewsUpdate {
+export interface NewsUpdate {
     id: number;
     title: string;
     date: string;

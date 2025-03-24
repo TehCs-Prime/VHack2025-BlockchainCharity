@@ -27,6 +27,7 @@ interface Project {
   location: string;
   description: string;
   updatedAt: Date;
+  progress: number; // Add progress property
 }
 
 export const ProjectDiscovery: React.FC = () => {
@@ -56,6 +57,7 @@ const navigateToProjectDetails = (projectId: number) => {
       location: 'Kenya',
       description: 'Providing clean water access to rural communities',
       updatedAt: new Date('2025-02-15'),
+      progress: 65,
     },
     {
       id: 2,
@@ -66,6 +68,7 @@ const navigateToProjectDetails = (projectId: number) => {
       location: 'India',
       description: 'Building schools in underserved areas',
       updatedAt: new Date('2025-03-01'),
+      progress: 30,
     },
     {
       id: 3,
@@ -76,8 +79,21 @@ const navigateToProjectDetails = (projectId: number) => {
       location: 'Brazil',
       description: 'Protecting endangered species in the Amazon',
       updatedAt: new Date('2025-01-20'),
+      progress: 100,
     },
-  ];
+    {
+      id: 4,
+      title: 'Disaster Relief Program',
+      status: 'Cancelled',
+      timing: 'New Project',
+      category: 'Disaster Recovery',
+      location: 'Philippines',
+      description: 'Emergency response and aid distribution',
+      updatedAt: new Date('2025-03-10'),
+      progress: 10,
+    }
+];
+
 
   // Handle checkbox changes with improved logic
   const handleCheckboxChange = (
@@ -99,7 +115,7 @@ const navigateToProjectDetails = (projectId: number) => {
       
       // If clicking a specific value
       const newValues = currentValues.filter(v => v !== 'All');
-      const valueIndex = newValues.indexOf(value as any);
+      const valueIndex = newValues.indexOf(value as never); // Fixed type error using 'never' instead of 'any'
       
       // If value is already selected, remove it
       if (valueIndex !== -1) {
@@ -111,7 +127,7 @@ const navigateToProjectDetails = (projectId: number) => {
         }
       } else {
         // Add the value
-        newValues.push(value as any);
+        newValues.push(value as never); // Fixed type error using 'never' instead of 'any'
       }
       
       return { ...prev, [section]: newValues };
@@ -320,7 +336,7 @@ const navigateToProjectDetails = (projectId: number) => {
         <div className="projects-content">
           <div className="search-and-controls">
             <div className="search-bar">
-              <img className="search-icon" src="/assets/SearchIcon.png"></img>
+              <img className="search-icon" src="/assets/SearchIcon.png" alt="Search"></img>
               <input
                 type="text"
                 placeholder="Search projects..."
@@ -377,6 +393,20 @@ const navigateToProjectDetails = (projectId: number) => {
                 <h3 className="project-title">{project.title}</h3>
                 <div className="project-category">{project.category}</div>
                 <p className="project-description">{project.description}</p>
+                
+                {/* Progress bar addition */}
+                <div className="project-progress">
+                  <div className="progress-label">
+                    Progress: {project.progress}%
+                  </div>
+                  <div className="progress-bar-container">
+                    <div 
+                      className="progress-bar-fill" 
+                      style={{ width: `${project.progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
                 <div className="project-footer">
                   <span className="project-location">{project.location}</span>
                   <span className="project-date">

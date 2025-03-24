@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Tab-Milestone.css';
 
-interface Milestone {
+export interface Milestone {
   id: string;
   name: string;
   amount: string;
@@ -14,7 +14,7 @@ interface Milestone {
   images: string[];
 }
 
-interface Expense {
+export interface Expense {
   date: string;
   type: string;
   description: string;
@@ -84,7 +84,7 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
             </div>
           </div>
 
-          <h3 className="section-title">SILAGE TARPS</h3>
+          <h3 className="section-title">SOLUTIONS</h3>
           <p className="milestone-description">{selectedMilestone.description}</p>
           <p className="support-text">{selectedMilestone.supportText}</p>
 
@@ -137,7 +137,7 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
                     <div className="expense-type">{expense.type}</div>
                     <div className="expense-amount">{expense.amount}</div>
                     <div className="expense-receipt">
-                      <span className="receipt-icon">📄</span>
+                    <a className="receipt-icon" href="/assets/receipt.pdf" target="_blank" rel="Receipt" style={{ textDecoration: "none", color: "inherit" }}>📄</a>                    
                     </div>
                   </div>
                 ))}
@@ -155,7 +155,7 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
 
                     <div className="blockchain-transaction">
                       <span className="icon"></span> TRANSACTION 🔗
-                      <a href="#" className="blockchain-link">View in Blockchain</a>
+                      <a href="https://bitpay.com/insight/BTC/mainnet/tx/e6b6d64675281f3e0e6eeb94a28da0717e77492ae7b4194ce9fbd500716aaeda" className="blockchain-link">View in Blockchain</a>
                     </div>
                   </>
                 )}

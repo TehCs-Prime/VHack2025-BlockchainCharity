@@ -444,54 +444,45 @@
     padding-top: 1rem;
   }
   
-  /* Responsive design */
-  @media (max-width: 992px) {
-    .content-layout {
-      flex-direction: column;
-    }
-    
-    .filters-sidebar {
-      position: static;
-      width: 100%;
-      flex: 0 0 auto;
-    }
-    
-    .search-and-controls {
-      flex-direction: column;
-      gap: 1rem;
-      align-items: stretch;
-    }
-    
-    .search-bar {
-      flex: 0 0 100%;
-    }
-    
-    .sort-controls {
-      justify-content: space-between;
-    }
+  .project-progress {
+    margin: 12px 0;
   }
   
-  @media (max-width: 576px) {
-    .project-discovery-container {
-      padding: 1rem;
-    }
-    
-    .page-title-container {
-      margin: -1rem -1rem 1.5rem -1rem;
-      padding: 2rem 1rem;
-    }
-    
-    .page-title {
-      font-size: 2rem;
-    }
-    
-    .sort-controls {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.8rem;
-    }
-    
-    .grid-view {
-      grid-template-columns: 1fr;
-    }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar-container {
+    width: 100%;
+    background-color: #f0f0f0;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .progress-bar-fill {
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  
+  /* Status-specific progress bar colors */
+  [data-status="Funding"] .progress-bar-fill {
+    background-color: #FF9800;
+  }
+  
+  [data-status="Completed"] .progress-bar-fill {
+    background-color: #4CAF50;
+  }
+  
+  [data-status="Under Implementation"] .progress-bar-fill {
+    background-color: #2196F3;
+  }
+  
+  [data-status="Cancelled"] .progress-bar-fill {
+    background-color: #F44336;
   }

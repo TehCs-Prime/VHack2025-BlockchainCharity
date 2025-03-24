@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
             <div className="binance-logo">
               <img src={Logo} alt='Logo' />
               <div className="logo-text">
-                <span className="binance-text">WORDE CHARITY</span>
+                <span className="binance-text">LACIAL CHARITY</span>
               </div>
             </div>
 
@@ -44,15 +44,15 @@ const Footer: React.FC = () => {
           <h3 className="footer-heading">CONTACT US</h3>
           <div className="contact-item">
             <h4>General Inquiry</h4>
-            <a href="mailto:contact@binance.org">contact@worde.org</a>
+            <a href="mailto:contact@binance.org">contact@lacial.org</a>
           </div>
           <div className="contact-item">
             <h4>Media Inquiry</h4>
-            <a href="mailto:ngo@binance.org">media@worde.org</a>
+            <a href="mailto:ngo@binance.org">media@lacial.org</a>
           </div>
           <div className="contact-item">
             <h4>Technical Help</h4>
-            <a href="mailto:support@binance.org">support@worde.org</a>
+            <a href="mailto:support@binance.org">support@lacial.org</a>
           </div>
         </div>
 
@@ -71,7 +71,7 @@ const Footer: React.FC = () => {
           </div>
           <div className="copyright">
             <p>Copyright 2025.</p>
-            <p>All Rights Reserved by Sigmale™</p>
+            <p>All Rights Reserved by Lacial</p>
             <p>Version 2.0.1 + build.30245</p>
           </div>
         </div>

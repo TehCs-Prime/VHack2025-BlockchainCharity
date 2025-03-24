@@ -41,6 +41,11 @@
     align-items: center;
     gap: 0.5rem;
   }
+
+  .binance-logo img {
+    width: 300px;
+    height: auto;
+  }
   
   
   .logo-text {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Tab-Allocations.css';
 
-interface Allocation {
+export interface Allocation {
     id: number;
     receiver: string;
     date: string;
@@ -102,7 +102,7 @@ const AllocationsTab: React.FC<AllocationsTabProps> = ({ allocations }) => {
                             {allocation.useOfFunds || '--'}
                         </div>
                         <div className="col actions">
-                            <button className="expand-btn">›</button>
+                            <button className="expand-btn"><a style={{ textDecoration: "none", color: "inherit" }} href='https://explorer.bnbchain.org/tx/CE44E7BF6C19FD2C4D94EF830A71DF8BF6EFFE0244B94847A1DF115742E6F285'>›</a></button>
                         </div>
                     </div>
                 ))}
