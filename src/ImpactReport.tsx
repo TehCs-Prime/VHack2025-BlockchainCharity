@@ -1,5 +1,4 @@
 // src/pages/ImpactReport.tsx
-import { Link } from "react-router-dom";
 import "./ImpactReport.css";
 
 // Define TypeScript interfaces for better type safety
@@ -68,19 +67,20 @@ export default function ImpactReport() {
         </div>
 
         <div className="impact-map">
-          <h2>Global Impact</h2>
-          <div className="map-visualization">
-            {/* Simple map placeholder */}
-            <div className="map-placeholder">
-              🌍 Real-time impact locations
-              <div className="map-marker" style={{ left: "30%", top: "40%" }}>🇰🇪</div>
-              <div className="map-marker" style={{ left: "55%", top: "60%" }}>🇧🇷</div>
-              <div className="map-marker" style={{ left: "70%", top: "30%" }}>🇮🇳</div>
-            </div>
-          </div>
+  <h2>Global Impact</h2>
+  <div className="map-visualization">
+    <img 
+      src="public\assets\marked_world_map.jpg" 
+      alt="Global Impact Map" 
+      className="map-image"
+    />
+    <div className="map-marker" style={{ left: "30%", top: "40%" }}>🇰🇪</div>
+    <div className="map-marker" style={{ left: "55%", top: "60%" }}>🇧🇷</div>
+    <div className="map-marker" style={{ left: "70%", top: "30%" }}>🇮🇳</div>
+  </div>
+</div>
+
         </div>
       </div>
-
-    </div>
   );
 }
