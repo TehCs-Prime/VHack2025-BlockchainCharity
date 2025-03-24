@@ -53,6 +53,7 @@ const ProjectDetails: React.FC = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Milestone');
+  
 
   useEffect(() => {
     // Simulate fetching project data
@@ -520,7 +521,7 @@ const ProjectDetails: React.FC = () => {
     <div className="project-details-container">
       {/* Breadcrumb navigation */}
       <div className="breadcrumb">
-        <Link to="/">All Projects</Link>
+        <Link to="/explore">All Projects</Link>
         <span className="breadcrumb-separator">›</span>
         <span className="current-page">{project.title}</span>
       </div>

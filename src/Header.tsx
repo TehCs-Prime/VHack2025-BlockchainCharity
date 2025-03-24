@@ -14,14 +14,6 @@ const Header: React.FC = () => {
     navigate('/')
   }
 
-  const navItems = [
-    { label: 'Home', link: '/' },
-    { label: 'Explore', link: '/explore' },
-    { label: 'How We Do It', link: '/approach' },
-    { label: 'Impact', link: '/impact' },
-    { label: 'About Us', link: '/about' },
-  ]
-
   return (
     <header className="header">
       <div className="container">

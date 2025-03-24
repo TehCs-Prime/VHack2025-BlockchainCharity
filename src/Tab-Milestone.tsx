@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Tab-Milestone.css';
+import GraphOverlay from './Graph-Overlay'; // Import the new component
 
 export interface Milestone {
   id: string;
@@ -35,12 +36,22 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<string>(
     initialMilestoneId || (milestones.length > 0 ? milestones[0].id : '')
   );
+  // Add state for graph overlay
+  const [isGraphOpen, setIsGraphOpen] = useState(false);
 
   const selectedMilestone = milestones.find(m => m.id === selectedMilestoneId) || milestones[0];
   const selectedIndex = milestones.findIndex(m => m.id === selectedMilestoneId);
 
   const handleMilestoneClick = (id: string) => {
     setSelectedMilestoneId(id);
+  };
+
+  const handleOpenGraph = () => {
+    setIsGraphOpen(true);
+  };
+
+  const handleCloseGraph = () => {
+    setIsGraphOpen(false);
   };
 
   return (
@@ -110,7 +121,7 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
                   <span className="total-label">TOTAL AMOUNT SPENT</span>
                   <span className="total-value">{selectedMilestone.totalExpenses}</span>
                 </div>
-                <button className="view-graph-btn">
+                <button className="view-graph-btn" onClick={handleOpenGraph}>
                   <span className="graph-icon">📊</span> View in graph
                 </button>
               </div>
@@ -137,7 +148,7 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
                     <div className="expense-type">{expense.type}</div>
                     <div className="expense-amount">{expense.amount}</div>
                     <div className="expense-receipt">
-                    <a className="receipt-icon" href="/assets/receipt.pdf" target="_blank" rel="Receipt" style={{ textDecoration: "none", color: "inherit" }}>📄</a>                    
+                      <a className="receipt-icon" href="/assets/receipt.pdf" target="_blank" rel="Receipt" style={{ textDecoration: "none", color: "inherit" }}>📄</a>                    
                     </div>
                   </div>
                 ))}
@@ -164,6 +175,15 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
           </div>
         </>
       )}
+
+      {/* Add the Graph Overlay component */}
+      <GraphOverlay 
+        isOpen={isGraphOpen}
+        onClose={handleCloseGraph}
+        expenses={selectedMilestone ? selectedMilestone.expenses : []}
+        milestoneName={selectedMilestone ? `Milestone ${selectedMilestone.id}: ${selectedMilestone.name}` : ''}
+        totalExpenses={selectedMilestone ? selectedMilestone.totalExpenses : '$0'}
+      />
     </div>
   );
 };
