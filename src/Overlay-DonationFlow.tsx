@@ -80,7 +80,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
               <label>Crypto Amount</label>
               <input
                 type="number"
-                placeholder="Enter crypto amount"
+                placeholder="0.000000"
                 value={donationData.cryptoAmount}
                 onChange={handleCryptoChange}
               />
