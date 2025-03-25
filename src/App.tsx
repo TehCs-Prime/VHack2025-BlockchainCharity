@@ -13,6 +13,7 @@ import Settings from './Settings';
 import ProfilePage from './ProfilePage';  // New combined profile page
 import Home from './Home';
 import './App.css';
+import CharityProfile from './CharityProfile';
 
 const App: React.FC = () => {
   return (
@@ -27,6 +28,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/charity-profile" element={<CharityProfile />} />
             <Route path="/impact" element={<ImpactReport />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/leaderboard" element={<Leaderboard />} />

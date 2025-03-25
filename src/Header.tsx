@@ -14,6 +14,9 @@ const Header: React.FC = () => {
     navigate('/home')
   }
 
+  // Determine which profile route to navigate to based on the user's role
+  const profileRoute = user && user.role === 'charity' ? '/charity-profile' : '/profile'
+
   return (
     <header className="header">
       <div className="container">
@@ -51,7 +54,7 @@ const Header: React.FC = () => {
         <div className="auth-section">
           {user ? (
             <div className="user-menu">
-              <Link to="/profile" className="profile-link">
+              <Link to={profileRoute} className="profile-link">
                 Profile
               </Link>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
