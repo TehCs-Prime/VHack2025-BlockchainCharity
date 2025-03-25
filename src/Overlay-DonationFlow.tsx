@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import './Overlay-DonationFlow.css';
 
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 interface OverlayDonationFlowProps {
   onClose: () => void;
   projectName?: string;
@@ -26,7 +32,9 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     displayName: false, 
     marketingUpdates: false,
   });
-  
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState('');
+  const [error, setError] = useState('');
   const [isChecked, setIsChecked] = useState(false);
 
   const getExchangeRate = (crypto: string, fiat: string): number => {
@@ -51,6 +59,30 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     }));
   };
   
+  // Check if MetaMask is installed
+const isMetaMaskInstalled = () => {
+  return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
+};
+
+// Connect to MetaMask wallet
+const connectWallet = async () => {
+  if (!isMetaMaskInstalled()) {
+    setError('MetaMask is not installed. Please install it to continue.');
+    return;
+  }
+
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    setWalletAddress(accounts[0]);
+    setWalletConnected(true);
+    setError('');
+    // For prototype, just proceed to next step after connecting
+    setStep('appreciation');
+  } catch (err) {
+    setError('Failed to connect wallet: ' + (err as Error).message);
+  }
+};
+
   const handleBackStep = () => {
     if (step === 'info') setStep('donation');
     else if (step === 'wallet') setStep('info');
@@ -61,7 +93,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     if (step === 'donation' && !isChecked) return;
     if (step === 'donation') setStep('info');
     else if (step === 'info') setStep('wallet');
-    else if (step === 'wallet') setStep('appreciation');
+    else if (step === 'wallet') connectWallet(); // This now calls connectWallet
     else onClose();
   };
 
@@ -211,17 +243,26 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     <div className="form-group">
       <label>Network</label>
       <select
-  value={donationData.network}
-  onChange={(e) => setDonationData({ ...donationData, network: e.target.value })}
->
-  <option value="erc20">Ethereum</option>
-  <option value="bep20">BNB Chain</option>
-  <option value="polygon">Polygon</option>
-</select>
-
+        value={donationData.network}
+        onChange={(e) => setDonationData({ ...donationData, network: e.target.value })}
+      >
+        <option value="erc20">Ethereum</option>
+        <option value="bep20">BNB Chain</option>
+        <option value="polygon">Polygon</option>
+      </select>
     </div>
 
-    <button className="connect-btn" onClick={handleNextStep}>Connect Wallet</button>
+    {walletConnected ? (
+      <div className="wallet-info">
+        <p>Connected: {walletAddress.substring(0, 6)}...{walletAddress.substring(walletAddress.length - 4)}</p>
+      </div>
+    ) : (
+      <button className="connect-btn" onClick={connectWallet}>
+        Connect Wallet
+      </button>
+    )}
+
+    {error && <div className="error-message">{error}</div>}
   </div>
 )}
 
