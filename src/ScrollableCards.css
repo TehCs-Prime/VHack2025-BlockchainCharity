@@ -9,9 +9,14 @@
   .cards-scroll-container::-webkit-scrollbar {
     display: none;
   }
+  .project-cards:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
   
   /* Ensure each card has a minimum width */
-  .project-card {
+  .project-cards {
+    position: relative; 
     flex: 0 0 auto;
     min-width: 250px;
     background: #f9fbdc;
@@ -40,7 +45,7 @@
     margin: 0;
   }
   
-  .project-status {
+  .project-statuss {
     position: absolute;
     top: 0;
     right: 0;
@@ -51,25 +56,26 @@
     font-weight: 500;
   }
   
-  .project-status[data-status="Funding"] {
+  .project-statuss[data-status="Funding"] {
     background-color: #f39c12;
   }
   
-  .project-status[data-status="Under Implementation"] {
+  .project-statuss[data-status="Under Implementation"] {
     background-color: #3498db;
   }
   
-  .project-status[data-status="Completed"] {
+  .project-statuss[data-status="Completed"] {
     background-color: #2ecc71;
   }
   
-  .project-status[data-status="Cancelled"] {
+  .project-statuss[data-status="Cancelled"] {
     background-color: #e74c3c;
   }
 
-  .project-title {
+  .project-titles {
     margin-top: 20px;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: bold;
   }
 
   .scrollable-cards-wrapper {

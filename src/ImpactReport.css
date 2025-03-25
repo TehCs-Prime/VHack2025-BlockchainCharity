@@ -121,15 +121,15 @@ html, body {
 .summary {
   padding: 2rem;
   text-align: center;
-  background: #fff;
+  background: #f8f3d6;
 }
 
 .summary h2 {
   color: #222;
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 1.5rem;
   font-family: "Poppins", sans-serif;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .metrics-grid {
@@ -180,27 +180,27 @@ html, body {
 .metric-value span:first-child {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #FFD700;
+  color: #000000;
 }
 
 .trend {
-  color: #FFD700;
-  font-weight: 500;
+  color: #96d544;
+  font-weight: bolder;
 }
 
 /* IMPACT MAP SECTION */
 .impact-map {
   padding: 2rem;
   text-align: center;
-  background: #fff;
+  background: #f8f3d6;
 }
 
 .impact-map h2 {
   color: #222;
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 1.5rem;
   font-family: "Poppins", sans-serif;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .map-visualization {
@@ -230,16 +230,16 @@ html, body {
 /* RECENT ACTIVITIES SECTION */
 .recent-activities {
   padding: 2rem;
-  background: #FFFDE7;
+  background: #f8f3d6;
   text-align: center;
 }
 
 .recent-activities h2 {
   color: #222;
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 1.5rem;
   font-family: "Poppins", sans-serif;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .activities-grid {
@@ -252,16 +252,17 @@ html, body {
 /* USER COMMENTS SECTION */
 .user-comments {
   padding: 2rem;
+  padding-bottom: 5rem;
   text-align: center;
-  background: #FFFDE7;
+  background: #f8f3d6;
 }
 
 .user-comments h2 {
   color: #222;
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 1.5rem;
   font-family: "Poppins", sans-serif;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 /* Display exactly 3 comment cards in a row */
@@ -305,7 +306,7 @@ html, body {
 
 /* CALL-TO-ACTION SECTION */
 .cta-section {
-  background: #8BC34A; /* Vibrant light green background */
+  background: #fcffc3; /* Vibrant light green background */
   text-align: center;
   padding: 3rem 2rem;
   position: relative;
@@ -317,17 +318,17 @@ html, body {
   margin-bottom: 1rem;
   font-family: "Poppins", sans-serif;
   font-weight: 700;
-  color: #fff;
+  color: #000000;
 }
 
 .cta-section p {
   font-size: 1.3rem;
   margin-bottom: 2rem;
-  color: #fff;
+  color: #000000;
 }
 
 .cta-button {
-  background: #fff;
+  background: #2b2b2b;
   color: #8BC34A;
   border: 2px solid #fff;
   padding: 1rem 2rem;

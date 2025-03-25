@@ -84,14 +84,15 @@ const ScrollableCards: React.FC = () => {
       <div className="cards-scroll-container" ref={scrollContainerRef}>
         {mockProjects.map((project) => (
           <div
-            className="project-card"
+            className="project-cards"
             key={project.id}
             onClick={() => navigate(`/project/${project.id}`)}
           >
-            <div className="project-status" data-status={project.status}>
+            <div className="project-statuss" data-status={project.status}>
               {project.status}
             </div>
-            <h3 className="project-title">{project.title}</h3>
+            
+            <h3 className="project-titles">{project.title}</h3>
             <img
               className="project-image"
               src={project.imageUrl}
