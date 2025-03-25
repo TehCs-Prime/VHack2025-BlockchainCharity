@@ -189,7 +189,7 @@ export default function ImpactReport() {
 
       {/* CALL-TO-ACTION SECTION */}
       <section className="cta-section">
-        <h2>Join Us In Making a Difference</h2>
+        <h2>Join Us In Making a Difference!</h2>
         <p>Your support helps us keep making an impact around the world.</p>
         <button 
           className="cta-button"
