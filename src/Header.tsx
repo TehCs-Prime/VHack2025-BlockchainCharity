@@ -19,15 +19,15 @@ const Header: React.FC = () => {
       <div className="container">
         {/* Logo Section */}
         <div className="logo-container">
-          <NavLink to="/">
-            <img src={Logo} alt="GiveMoney" className="logo" />
+          <NavLink to="/home">
+            <img src={Logo} alt="LaCial" className="logo" />
           </NavLink>
         </div>
 
         <nav className="nav">
           <ul className="nav-list">
             <li className="nav-item">
-              <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
+              <NavLink to="/home" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/explore" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Explore</NavLink>

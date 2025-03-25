@@ -11,6 +11,7 @@ import ImpactReport from './ImpactReport';
 import Leaderboard from './Leaderboard';
 import Settings from './Settings';
 import ProfilePage from './ProfilePage';  // New combined profile page
+import Home from './Home';
 import './App.css';
 
 const App: React.FC = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Header />
         <main className="main-content">
           <Routes>
+            <Route path="/home" element={<Home />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/project/:projectId" element={<ProjectDetails />} />
             <Route path="/login" element={<Login />} />
