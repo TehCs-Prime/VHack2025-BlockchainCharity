@@ -19,7 +19,7 @@ const Signup: React.FC = () => {
       email
     });
 
-    navigate('/');
+    navigate('/home');
   };
 
   return (

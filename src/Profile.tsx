@@ -1,66 +1,67 @@
-import { useState, useEffect, ChangeEvent } from 'react'
-import { useAuth } from './AuthContext'
-import './Profile.css'
-import LocalAvatar from './LocalAvatar'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, ChangeEvent } from 'react';
+import { useAuth } from './AuthContext';
+import { Link } from 'react-router-dom';
+import './Profile.css';
+import LocalAvatar from './LocalAvatar';
 
 interface User {
-  username: string
-  email: string
-  profilePicture: string
-  signupDate: string
+  username: string;
+  email: string;
+  profilePicture: string;
+  signupDate: string;
 }
 
 interface Donation {
-  id: number
-  campaign: string
-  amount: string
-  currency: string
-  date: string
-  type: "cash" | "crypto"
+  id: number;
+  campaign: string;
+  amount: string;
+  currency: string;
+  date: string;
+  type: "cash" | "crypto";
 }
 
 export default function Profile() {
-  const { user, updateUser } = useAuth() as unknown as { user: User; updateUser: (updatedUser: User) => void }
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [newUsername, setNewUsername] = useState<string>(user.username)
-  const [previewUrl, setPreviewUrl] = useState<string>(user.profilePicture)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const { user, updateUser } = useAuth() as unknown as { user: User; updateUser: (updatedUser: User) => void };
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newUsername, setNewUsername] = useState<string>(user.username);
+  const [previewUrl, setPreviewUrl] = useState<string>(user.profilePicture);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showMore, setShowMore] = useState<boolean>(false);
 
   useEffect(() => {
-    setNewUsername(user.username)
-    setPreviewUrl(user.profilePicture)
-  }, [user])
+    setNewUsername(user.username);
+    setPreviewUrl(user.profilePicture);
+  }, [user]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file)
-      const reader = new FileReader()
+      setSelectedFile(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewUrl(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleSave = () => {
     updateUser({
       ...user,
       username: newUsername,
       profilePicture: previewUrl
-    })
-    setIsEditing(false)
-  }
+    });
+    setIsEditing(false);
+  };
 
   const handleCancel = () => {
-    setNewUsername(user.username)
-    setPreviewUrl(user.profilePicture)
-    setSelectedFile(null)
-    setIsEditing(false)
-  }
+    setNewUsername(user.username);
+    setPreviewUrl(user.profilePicture);
+    setSelectedFile(null);
+    setIsEditing(false);
+  };
 
-  // Mock donation history
+  // Extended mock donation history (10 items)
   const donationHistory: Donation[] = [
     {
       id: 1,
@@ -77,13 +78,81 @@ export default function Profile() {
       currency: "ETH",
       date: "2024-02-28",
       type: "crypto"
+    },
+    {
+      id: 3,
+      campaign: "Health for All",
+      amount: "50.00",
+      currency: "USD",
+      date: "2024-01-20",
+      type: "cash"
+    },
+    {
+      id: 4,
+      campaign: "Clean Water Project",
+      amount: "75.00",
+      currency: "USD",
+      date: "2023-12-10",
+      type: "cash"
+    },
+    {
+      id: 5,
+      campaign: "Animal Welfare Support",
+      amount: "25.00",
+      currency: "USD",
+      date: "2023-11-05",
+      type: "cash"
+    },
+    {
+      id: 6,
+      campaign: "Renewable Energy Fund",
+      amount: "1.0",
+      currency: "BTC",
+      date: "2023-10-15",
+      type: "crypto"
+    },
+    {
+      id: 7,
+      campaign: "Disaster Relief",
+      amount: "150.00",
+      currency: "USD",
+      date: "2023-09-01",
+      type: "cash"
+    },
+    {
+      id: 8,
+      campaign: "Food Security Initiative",
+      amount: "80.00",
+      currency: "USD",
+      date: "2023-08-20",
+      type: "cash"
+    },
+    {
+      id: 9,
+      campaign: "Community Empowerment",
+      amount: "60.00",
+      currency: "USD",
+      date: "2023-07-30",
+      type: "cash"
+    },
+    {
+      id: 10,
+      campaign: "Sustainable Agriculture",
+      amount: "90.00",
+      currency: "USD",
+      date: "2023-06-25",
+      type: "cash"
     }
-  ]
+  ];
+
+  // Determine how many donations to display based on showMore state
+  const displayedDonations = showMore ? donationHistory.slice(0, 10) : donationHistory.slice(0, 5);
 
   return (
-    <div className="profile-container">
-      <div className="profile-card">
-        <div className="profile-header">
+    <div className="profile-page">
+      {/* Profile Header */}
+      <header className="profile-header">
+        <div className="avatar-section">
           {isEditing ? (
             <label className="profile-pic-edit">
               <input
@@ -104,86 +173,75 @@ export default function Profile() {
           ) : (
             <LocalAvatar user={user} className="static" />
           )}
+        </div>
+        <div className="info-section">
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+                className="edit-input"
+              />
+              <div className="edit-buttons">
+                <button className="save-btn" onClick={handleSave}>Save</button>
+                <button className="cancel-btn" onClick={handleCancel}>Cancel</button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1>{user.username}</h1>
+              <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>Edit Profile</button>
+            </>
+          )}
+          <p className="email">{user.email}</p>
+          <p className="signup-date">Member since: {new Date(user.signupDate).toLocaleDateString()}</p>
+        </div>
+      </header>
 
-          <div className="profile-info">
-            {isEditing ? (
-              <>
-                <input
-                  type="text"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
-                  className="edit-input"
-                />
-                
-                <div className="edit-buttons">
-                  <button 
-                    className="save-btn"
-                    onClick={handleSave}
-                  >
-                    Save
-                  </button>
-                  <button 
-                    className="cancel-btn"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </button>
+      {/* Main Content */}
+      <main className="profile-content">
+        {/* Content Box with Shadow */}
+        <div className="content-box">
+          {/* Donation History Section */}
+          <section className="section donation-history">
+            <h2>Donation History</h2>
+            <div className={`donation-list ${showMore ? 'scrollable' : ''}`}>
+              {displayedDonations.map(donation => (
+                <div key={donation.id} className="donation-item">
+                  <div className="donation-main">
+                    <h3>{donation.campaign}</h3>
+                    <p className={`donation-amount ${donation.type}`}>
+                      {donation.amount} {donation.currency}
+                    </p>
+                  </div>
+                  <p className="donation-date">{new Date(donation.date).toLocaleDateString()}</p>
                 </div>
-              </>
-            ) : (
-              <>
-                <h2>{user.username}</h2>
-                <button 
-                  className="edit-profile-btn"
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit Profile
-                </button>
-
-
-              
-              </>
+              ))}
+            </div>
+            {!showMore && (
+              <button className="view-more-btn" onClick={() => setShowMore(true)}>
+                View More
+              </button>
             )}
-            <p>{user.email}</p>
-            <p className="signup-date">
-              Member since: {new Date(user.signupDate).toLocaleDateString()}
-            </p>
-          </div>
+          </section>
+
+          {/* Account Settings Section */}
+          <section className="section account-settings">
+            <h2>Account Settings</h2>
+            <div className="account-item">
+              <h3>Manage Your Account</h3>
+              <Link 
+                to="/settings" 
+                className="settings-btn"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                Go to Settings
+              </Link>
+            </div>
+          </section>
         </div>
-
-        <div className="profile-card">
-
-
-  {/* Donation History Section */}
-  <div className="donation-history">
-    <h3>Donation History</h3>
-    {donationHistory.map(donation => (
-      <div key={donation.id} className="donation-item">
-        <div className="donation-main">
-          <h4>{donation.campaign}</h4>
-          <p className={`donation-amount ${donation.type}`}>
-            {donation.amount} {donation.currency}
-          </p>
-        </div>
-        <p className="donation-date">{new Date(donation.date).toLocaleDateString()}</p>
-      </div>
-    ))}
-  </div>
-
-  {/* Account Settings Section */}
-  <div className="donation-history">  {/* Changed class name */}
-    <h3>Account Settings</h3>
-    <div className="donation-item">  {/* Added donation-item wrapper */}
-      <div className="donation-main">
-        <h4>Account Management</h4>
-      <   Link to="/settings" className="settings-btn">
-            Manage Account
-          </Link>
-      </div>
-  </div>
-</div>
-</div>
-      </div>
+      </main>
     </div>
-  )
+  );
 }

@@ -1,0 +1,123 @@
+.cards-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 1rem;
+    gap: 1rem;
+    justify-self: center;
+  }
+  
+  .cards-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  .project-cards:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Ensure each card has a minimum width */
+  .project-cards {
+    position: relative; 
+    flex: 0 0 auto;
+    min-width: 250px;
+    background: #f9fbdc;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .project-image {
+    width: 350px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .project-progress {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  .project-description {
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  .project-statuss {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-bottom-left-radius: 8px;
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+  }
+  
+  .project-statuss[data-status="Funding"] {
+    background-color: #f39c12;
+  }
+  
+  .project-statuss[data-status="Under Implementation"] {
+    background-color: #3498db;
+  }
+  
+  .project-statuss[data-status="Completed"] {
+    background-color: #2ecc71;
+  }
+  
+  .project-statuss[data-status="Cancelled"] {
+    background-color: #e74c3c;
+  }
+
+  .project-titles {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .scrollable-cards-wrapper {
+    position: relative; 
+    width: 100%;
+    margin: 2rem auto;
+    max-width: 1200px;
+  }
+
+  .scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* optional: fade them out until hover */
+    opacity: 0.8;
+  }
+  
+  .scroll-button:hover {
+    opacity: 1;
+  }
+  
+  .scroll-button img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .scroll-button.left {
+    left: -20px; /* or 10px, or wherever you want the button */
+  }
+  
+  .scroll-button.right {
+    right: -20px; 
+  }
+  

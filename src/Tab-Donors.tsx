@@ -25,7 +25,7 @@ const DonorTab: React.FC<DonorTabProps> = ({ donations }) => {
         <div className="donors-content">
             <div className="donors-header">
                 <h1>Donors</h1>
-                <button className="view-more-btn">View More</button>
+                <button className="view-more-button">View More</button>
             </div>
             
             <div className="donors-table">

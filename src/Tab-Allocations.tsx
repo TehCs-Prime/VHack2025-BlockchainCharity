@@ -73,7 +73,7 @@ const AllocationsTab: React.FC<AllocationsTabProps> = ({ allocations }) => {
                             />
                         </div>
                     </div>
-                    <button className="view-more-btn">View More</button>
+                    <button className="view-more-button">View More</button>
                 </div>
             </div>
             
