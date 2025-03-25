@@ -41,7 +41,12 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     email: '',
     message: '',
     network: 'erc20',
-    displayName: false, 
+    paymentMethod: 'wallet',
+    cardNumber: '',
+    cardExpiry: '',
+    cardCvc: '',
+    cardName: '',
+    displayName: false,
     marketingUpdates: false,
   });
   const [walletConnected, setWalletConnected] = useState(false);
@@ -105,7 +110,13 @@ const connectWallet = async () => {
     if (step === 'donation' && !isChecked) return;
     if (step === 'donation') setStep('info');
     else if (step === 'info') setStep('wallet');
-    else if (step === 'wallet') connectWallet(); // This now calls connectWallet
+    else if (step === 'wallet') {
+      if (donationData.paymentMethod === 'wallet') {
+        connectWallet();
+      } else {
+        setStep('appreciation');
+      }
+    }
     else onClose();
   };
 
@@ -119,6 +130,18 @@ const connectWallet = async () => {
             <div className="modal-header">
               <h2>Donate to {projectName}</h2>
               <button className="close-btn" onClick={onClose}>✖</button>
+            </div>
+            <div className="form-group">
+              <label>Payment Method</label>
+              <div className="input-group">
+                <select
+                  value={donationData.paymentMethod}
+                  onChange={(e) => setDonationData({ ...donationData, paymentMethod: e.target.value })}
+                >
+                  <option value="wallet">Cryptocurrency Wallet</option>
+                  <option value="card">Credit/Debit Card</option>
+                </select>
+              </div>
             </div>
             <div className="form-group">
               <label>Crypto Amount</label>
@@ -278,26 +301,72 @@ const connectWallet = async () => {
       <p><span style={{ fontWeight: 'bold' }}>Donate to:</span> {projectName || "Unknown Project"}</p>
     </div>
 
-    <div className="form-group">
-      <label>Network</label>
-      <select
-        value={donationData.network}
-        onChange={(e) => setDonationData({ ...donationData, network: e.target.value })}
-      >
-        <option value="erc20">Ethereum</option>
-        <option value="bep20">BNB Chain</option>
-        <option value="polygon">Polygon</option>
-      </select>
-    </div>
-
-    {walletConnected ? (
-      <div className="wallet-info">
-        <p>Connected: {walletAddress.substring(0, 6)}...{walletAddress.substring(walletAddress.length - 4)}</p>
+    {donationData.paymentMethod === 'card' ? (
+      <div className="card-details">
+        <div className="form-group">
+          <label>Card Number</label>
+          <input
+            type="text"
+            placeholder="1234 5678 9012 3456"
+            value={donationData.cardNumber}
+            onChange={(e) => setDonationData({ ...donationData, cardNumber: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label>Expiration Date</label>
+          <input
+            type="text"
+            placeholder="MM/YY"
+            value={donationData.cardExpiry}
+            onChange={(e) => setDonationData({ ...donationData, cardExpiry: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label>CVC</label>
+          <input
+            type="text"
+            placeholder="123"
+            value={donationData.cardCvc}
+            onChange={(e) => setDonationData({ ...donationData, cardCvc: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label>Cardholder Name</label>
+          <input
+            type="text"
+            placeholder="John Doe"
+            value={donationData.cardName}
+            onChange={(e) => setDonationData({ ...donationData, cardName: e.target.value })}
+          />
+        </div>
+        <button className="connect-btn" onClick={connectWallet}>
+            Continue
+        </button>
       </div>
     ) : (
-      <button className="connect-btn" onClick={connectWallet}>
-        Connect Wallet
-      </button>
+      <>
+        <div className="form-group">
+          <label>Network</label>
+          <select
+            value={donationData.network}
+            onChange={(e) => setDonationData({ ...donationData, network: e.target.value })}
+          >
+            <option value="erc20">Ethereum</option>
+            <option value="bep20">BNB Chain</option>
+            <option value="polygon">Polygon</option>
+          </select>
+        </div>
+
+        {walletConnected ? (
+          <div className="wallet-info">
+            <p>Connected: {walletAddress.substring(0, 6)}...{walletAddress.substring(walletAddress.length - 4)}</p>
+          </div>
+        ) : (
+          <button className="connect-btn" onClick={connectWallet}>
+            Connect Wallet
+          </button>
+        )}
+      </>
     )}
 
     {error && <div className="error-message">{error}</div>}
@@ -325,7 +394,9 @@ const connectWallet = async () => {
 
     {/* Add TxID Message */}
     <p className="txid-message">
-      Your donation records will be shown on the website after the TxID is verified.
+      {donationData.paymentMethod === 'card'
+        ? "Your card payment is being processed. You'll receive email confirmation within 24 hours."
+        : "Your donation records will be shown on the website after the TxID is verified."}
     </p>
 
     {/* Display donor message */}
