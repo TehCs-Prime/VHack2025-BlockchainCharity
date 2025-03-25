@@ -29,27 +29,27 @@ interface HeroSlide {
 export default function ImpactReport() {
   const navigate = useNavigate();
 
-  // Data for the hero carousel (three slides) with different background images
   const heroSlides: HeroSlide[] = [
     { 
       id: 1, 
-      title: "Project One", 
-      description: "Transforming local communities through sustainable agriculture and education.", 
-      image: "public/assets/gallery1.jpg" 
-    },
-    { 
-      id: 2, 
-      title: "Project Two", 
-      description: "Empowering youth with innovative learning and skill development programs.", 
+      title: "Clean Water Initiative", 
+      description: "Installing water filters and constructing community wells to secure safe drinking water in Kenya—transforming local communities through sustainable agriculture and education.", 
       image: "public/assets/gallery2.jpg" 
     },
     { 
-      id: 3, 
-      title: "Project Three", 
-      description: "Building resilient infrastructure and clean energy solutions across regions.", 
+      id: 2, 
+      title: "Youth Empowerment Program", 
+      description: "Empowering youth with innovative learning and skill development programs that foster leadership and create brighter futures.", 
       image: "public/assets/gallery3.jpg" 
     },
+    { 
+      id: 3, 
+      title: "Wildlife Conservation Project", 
+      description: "Protecting endangered species and preserving natural habitats through innovative conservation strategies and community-based initiatives.", 
+      image: "public/assets/gallery1.jpg" 
+    },
   ];
+
 
   // Data for the impact metrics (summary section)
   const impactMetrics: ImpactMetric[] = [
