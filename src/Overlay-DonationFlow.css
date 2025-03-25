@@ -1,0 +1,213 @@
+/* General Overlay Styles */
+.overlay-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .overlay-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Step Container */
+  .step-donation, .step-info, .step-wallet, .step-appreciation {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    flex-grow: 1; /* Ensures title stays centered */
+    text-align: center;
+    margin: 0;
+  }
+  
+  /* Form Styles */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  textarea {
+    resize: none;
+  }
+  
+  /* Buttons */
+  .next-btn, .connect-btn, .done-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    width: 100%; 
+    text-align: center;
+  }
+  
+  .next-btn:hover, .connect-btn:hover, .done-btn:hover {
+    background: #219a52;
+  }
+  
+  .next-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+  }
+  
+  /* Appreciation Step */
+  .donation-summary {
+    background: #f3f3f3;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+/* Improve checkbox styling */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adds spacing between checkbox and label */
+    font-size: 14px;
+    color: #333;
+    margin-top: 5px;
+  }
+  
+  /* Ensure labels align properly with checkboxes */
+  .checkbox-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  
+  /* Improve label readability */
+  .checkbox-group label {
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  /* Ensure checkboxes align properly with inputs */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+/* Header container with proper spacing */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Spaces out Back, Title, and Close */
+    padding: 12px 20px;
+    width: 100%;
+    border-bottom: 1px solid #ddd; /* Adds subtle separation */
+    position: relative;
+}
+
+/* Back Button (Left Aligned) */
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.3s ease-in-out;
+}
+
+.back-btn:hover {
+    color: #333; /* Highlight color on hover */
+}
+
+/* Centered Title */
+.modal-header h2 {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1; /* Ensures title stays centered */
+    margin: 0;
+    color: #333;
+}
+
+/* Close Button (Right Aligned) */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #ddd; /* Close button in green for consistency */
+    transition: color 0.3s ease-in-out;
+}
+
+.close-btn:hover {
+    color: #333; /* Red color on hover for better UX */
+}
+
+.thank-you-logo {
+    width: 80px;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+  }
+  
+  .thank-you-message {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+  }
+  
+  .donation-cause {
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  .txid-message {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .donation-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 10px auto;
+    width: 80%;
+  }
+  
+  .note {
+    font-size: 0.8rem;
+    color: #777;
+    text-align: center;
+    margin-top: 10px;
+  }

@@ -23,7 +23,7 @@ interface HeroSlide {
   id: number;
   title: string;
   description: string;
-  image: string; // Background image URL for the slide
+  image: string; 
 }
 
 export default function ImpactReport() {
