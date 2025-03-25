@@ -73,8 +73,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
         {step === 'donation' && (
           <div className="step-donation">
             <div className="modal-header">
-              <button className="close-btn" onClick={onClose}>&times;</button>
               <h2>Donate to {projectName}</h2>
+              <button className="close-btn" onClick={onClose}>✖</button>
             </div>
             <div className="form-group">
               <label>Crypto Amount</label>
@@ -137,7 +137,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     <div className="modal-header">
       <button className="back-btn" onClick={handleBackStep}>⬅</button>
       <h2>Enter Your Information</h2>
-      <button className="close-btn" onClick={onClose}>&times;</button>
+      <button className="close-btn" onClick={onClose}>✖</button>
     </div>
 
     <div className="form-group">
@@ -197,7 +197,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     <div className="modal-header">
       <button className="back-btn" onClick={handleBackStep}>←</button>
       <h2>Complete Your Transaction</h2>
-      <button className="close-btn" onClick={onClose}>&times;</button>
+      <button className="close-btn" onClick={onClose}>✖</button>
     </div>        
 
     <p>Amount: <span>{donationData.cryptoAmount} {donationData.cryptoType}</span></p>
@@ -229,8 +229,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
 {step === 'appreciation' && (
   <div className="step-appreciation">
     <div className="modal-header">
-      <button className="close-btn" onClick={onClose}>✖</button>
       <button className='baack-btn' onClick={handleBackStep}>⬅</button>
+      <button className="close-btn" onClick={onClose}>✖</button>
     </div>
 
     {/* Add Thank You Image */}
