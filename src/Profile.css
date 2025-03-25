@@ -34,7 +34,9 @@
   .profile-info h2 {
     margin: 0;
     color: #264653;
+    text-align: left;
   }
+  
   
   .signup-date {
     color: #6c757d;

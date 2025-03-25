@@ -1,178 +1,395 @@
-/* src/styles/ImpactReport.css */
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* General Container */
 .impact-container {
-    padding: 0;
-    min-height: 100vh;
-    background: white; /* Changed to pure white */
-    width: 100%;
-  }
-  
-  .impact-header {
-    text-align: center;
-    padding: 2rem 1rem;
-    background: white; /* Changed to white */
-  }
-  
-  .impact-header h1 {
-    color: #264653;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #222;
+}
+
+/* HERO CAROUSEL SECTION */
+.hero {
+  position: relative;
+  height: 80vh; /* Larger hero section */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+/* Navigation buttons now placed as direct children of .hero */
+.hero-nav-btn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 2;
+}
+
+.left-btn {
+  left: 0;
+}
+
+.right-btn {
+  right: 0;
+}
+
+.hero-nav-btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.arrow-symbol {
+  font-size: 3rem;
+  pointer-events: none; /* Ensures clicks go to the button */
+}
+
+/* Hero content is centered; placed on top of overlay and nav buttons */
+.hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+/* Hero text in white */
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+/* Dots at the bottom center of the hero section */
+.hero-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.3rem;
+  z-index: 3;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  background-color: #ccc;
+  border-radius: 0; /* Not circular */
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.dot.active,
+.dot:hover {
+  background-color: #fff;
+}
+
+/* SUMMARY SECTION */
+.summary {
+  padding: 2rem;
+  text-align: center;
+  background: #fff;
+}
+
+.summary h2 {
+  color: #222;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Metric Card: border appears on hover */
+.metric-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 2px solid transparent;
+  transition: border 0.3s ease, transform 0.3s ease;
+}
+
+.metric-card:hover {
+  border-color: #FFD700;
+  transform: translateY(-3px);
+}
+
+.metric-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFD700;
+}
+
+.metric-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #222;
+}
+
+.metric-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.metric-value span:first-child {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #FFD700;
+}
+
+.trend {
+  color: #FFD700;
+  font-weight: 500;
+}
+
+/* IMPACT MAP SECTION */
+.impact-map {
+  padding: 2rem;
+  text-align: center;
+  background: #fff;
+}
+
+.impact-map h2 {
+  color: #222;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.map-visualization {
+  position: relative;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #FFD700;
+}
+
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.95);
+}
+
+
+/* Impact Summary Sentence */
+.impact-summary {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  color: #222;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+/* RECENT ACTIVITIES SECTION */
+.recent-activities {
+  padding: 2rem;
+  background: #FFFDE7;
+  text-align: center;
+}
+
+.recent-activities h2 {
+  color: #222;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+/* Activity Card: border appears on hover */
+.activity-card {
+  background: #fff;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, border 0.3s ease;
+}
+
+.activity-card:hover {
+  transform: translateY(-5px);
+  border-color: #FFD700;
+}
+
+.activity-image img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.activity-details {
+  padding: 1rem;
+  text-align: left;
+}
+
+.activity-details h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: #222;
+}
+
+.activity-details p {
+  margin: 0 0 0.5rem 0;
+  color: #444;
+}
+
+.activity-date {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* USER COMMENTS SECTION */
+.user-comments {
+  padding: 2rem;
+  text-align: center;
+  background: #FFFDE7;
+}
+
+.user-comments h2 {
+  color: #222;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.comments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+/* Comment Card: border appears on hover */
+.comment-card {
+  background: #fff;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.comment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border-color: #FFD700;
+}
+
+.comment-text {
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  color: #555;
+}
+
+.comment-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* CALL-TO-ACTION SECTION */
+.cta-section {
+  background: #FFD700;
+  color: #222;
+  text-align: center;
+  padding: 2rem;
+}
+
+.cta-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+.cta-section p {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+}
+
+.cta-button {
+  background: #fff;
+  color: #FFD700;
+  border: 2px solid #FFD700;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #FFF9C4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero h1 {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
   }
-  
-  .last-updated {
-    color: #64748b;
-    font-size: 0.9rem;
-  }
-  
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 0 2rem;
-    margin-bottom: 3rem;
-  }
-  
-  .metric-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    border: 1px solid #f0f0f0; /* Added subtle border instead of shadow */
-  }
-  
-  .metric-icon {
-    font-size: 2rem;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #2a9d8f; /* Added color for better visibility */
-  }
-  
-  .metric-content h3 {
-    color: #1e293b;
-    margin-bottom: 0.5rem;
-  }
-  
-  .metric-value {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-  }
-  
-  .metric-value span:first-child {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2a9d8f;
-  }
-  
-  .trend {
-    color: #e76f51;
-    font-weight: 500;
-  }
-  
-  .impact-sections {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    padding: 0 2rem;
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .activity-feed {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin: 0 1rem;
-    border: 1px solid #f0f0f0; /* Added subtle border */
-  }
-  
-  .activity-list {
-    margin-top: 1rem;
-  }
-  
-  .activity-item {
-    padding: 1rem 0;
-    border-bottom: 1px solid #f0f0f0; /* Lightened border */
-  }
-  
-  .activity-time {
-    color: #64748b;
-    font-size: 0.85rem;
-  }
-  
-  .activity-event {
-    color: #1e293b;
-    margin: 0.25rem 0;
-  }
-  
-  .impact-map {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin: 0 1rem;
-    border: 1px solid #f0f0f0; /* Added subtle border */
-  }
-  
   .map-visualization {
-    margin-top: 1rem;
-    height: 400px;
-    position: relative;
+    height: 300px;
   }
-  
-  .map-placeholder {
-    background: white; /* Changed to white */
-    border-radius: 8px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #64748b;
-    position: relative;
-    border: 1px solid #f0f0f0; /* Added subtle border */
-  }
-  
-  .map-marker {
-    position: absolute;
+  .hero-nav-btn {
     font-size: 1.5rem;
-    color: #2a9d8f; /* Added color for visibility */
   }
-  
-  .back-link {
-    text-align: center;
-    padding: 2rem;
-    background: white; /* Changed to white */
+  .arrow-symbol {
+    font-size: 2rem;
   }
-  
-  .back-link a {
-    color: #2a9d8f;
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  @media (max-width: 768px) {
-    .impact-sections {
-      grid-template-columns: 1fr;
-      padding: 0 1rem;
-    }
-    
-    .metrics-grid {
-      padding: 0 1rem;
-    }
-    
-    .activity-feed,
-    .impact-map {
-      margin: 0 0.5rem;
-    }
-  
-    .map-visualization {
-      height: 300px;
-    }
-    
-    .impact-header h1 {
-      font-size: 2rem;
-    }
-  }
+}
