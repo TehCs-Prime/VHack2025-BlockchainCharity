@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 import './Overlay-DonationFlow.css';
 
 declare global {
@@ -19,7 +20,18 @@ const exchangeRates: { [key: string]: { [key: string]: number } } = {
 };
 
 const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, projectName }) => {
+  const { user } = useAuth();
   const [step, setStep] = useState<'donation' | 'info' | 'wallet' | 'appreciation'>('donation');
+  
+  useEffect(() => {
+    if (user) {
+      setDonationData(prev => ({
+        ...prev,
+        name: user.username,
+        email: user.email
+      }));
+    }
+  }, [user]);
   const [donationData, setDonationData] = useState({
     cryptoAmount: '',
     cryptoType: 'BNB',
@@ -177,8 +189,8 @@ const connectWallet = async () => {
       <input
         type="text"
         placeholder="Enter your name"
-        value={donationData.name}
-        onChange={(e) => setDonationData({ ...donationData, name: e.target.value })}
+        defaultValue={user?.username || ''}
+        readOnly={!!user}
       />
       <div className="checkbox-group">
         <input
@@ -196,8 +208,8 @@ const connectWallet = async () => {
       <input
         type="email"
         placeholder="Enter your email"
-        value={donationData.email}
-        onChange={(e) => setDonationData({ ...donationData, email: e.target.value })}
+        defaultValue={user?.email || ''}
+        readOnly={!!user}
       />
       <div className="checkbox-group">
         <input
