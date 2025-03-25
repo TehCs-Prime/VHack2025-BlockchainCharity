@@ -122,55 +122,60 @@ const connectWallet = async () => {
             </div>
             <div className="form-group">
               <label>Crypto Amount</label>
-              <input
-                type="number"
-                placeholder="0.000000"
-                value={donationData.cryptoAmount}
-                onChange={handleCryptoChange}
-              />
-              <select
-                value={donationData.cryptoType}
-                onChange={(e) => {
-                  const newCryptoType = e.target.value;
-                  const rate = getExchangeRate(newCryptoType, donationData.fiatType);
-                  setDonationData(prev => ({
-                    ...prev,
-                    cryptoType: newCryptoType,
-                    fiatAmount: prev.cryptoAmount ? (parseFloat(prev.cryptoAmount) * rate).toFixed(2) : ''
-                  }));
-                }}
-              >
-                <option value="BNB">BNB</option>
-                <option value="BTC">BTC</option>
-                <option value="ETH">ETH</option>
-              </select>
+              <div className="input-group">
+                <input
+                  type="number"
+                  placeholder="0.000000"
+                  value={donationData.cryptoAmount}
+                  onChange={handleCryptoChange}
+                />
+                <select
+                  value={donationData.cryptoType}
+                  onChange={(e) => {
+                    const newCryptoType = e.target.value;
+                    const rate = getExchangeRate(newCryptoType, donationData.fiatType);
+                    setDonationData(prev => ({
+                      ...prev,
+                      cryptoType: newCryptoType,
+                      fiatAmount: prev.cryptoAmount ? (parseFloat(prev.cryptoAmount) * rate).toFixed(2) : ''
+                    }));
+                  }}
+                >
+                  <option value="BNB">BNB</option>
+                  <option value="BTC">BTC</option>
+                  <option value="ETH">ETH</option>
+                </select>
+              </div>
             </div>
 
             <div className="form-group">
               <label>Fiat Equivalent</label>
-              <input
-                type="number"
-                placeholder="0.00"
-                value={donationData.fiatAmount}
-                onChange={handleFiatChange}
-              />
-              <select
-                value={donationData.fiatType}
-                onChange={(e) => {
-                  const newFiatType = e.target.value;
-                  setDonationData(prev => ({
-                    ...prev,
-                    fiatType: newFiatType,
-                    cryptoAmount: prev.fiatAmount ?
-                      (parseFloat(prev.fiatAmount) / getExchangeRate(prev.cryptoType, newFiatType)).toFixed(6)
-                      : prev.cryptoAmount
-                  }));
-                }}
-              >
-                <option value="MYR">MYR</option>
-                <option value="USD">USD</option>
-              </select>
+              <div className="input-group">
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  value={donationData.fiatAmount}
+                  onChange={handleFiatChange}
+                />
+                <select
+                  value={donationData.fiatType}
+                  onChange={(e) => {
+                    const newFiatType = e.target.value;
+                    setDonationData(prev => ({
+                      ...prev,
+                      fiatType: newFiatType,
+                      cryptoAmount: prev.fiatAmount ?
+                        (parseFloat(prev.fiatAmount) / getExchangeRate(prev.cryptoType, newFiatType)).toFixed(6)
+                        : prev.cryptoAmount
+                    }));
+                  }}
+                >
+                  <option value="MYR">MYR</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
             </div>
+
 
             <div className="agreement">
               <input
@@ -179,16 +184,15 @@ const connectWallet = async () => {
                 checked={isChecked}
                 onChange={(e) => setIsChecked(e.target.checked)}
               />
-<label htmlFor="terms-checkbox">
-  By proceeding with the donation, you agree with our
-  <span className="terms-link">
-    <a href="#" target="_blank">Terms of Use</a>
-  </span> and
-  <span className="terms-link">
-    <a href="#" target="_blank">Privacy Policy</a>
-  </span>.
-</label>
-
+              <label htmlFor="terms-checkbox">
+                By proceeding with the donation, you agree with our
+                <span className="terms-link">
+                  <a href="#" target="_blank">Terms of Use</a>
+                </span> and
+                <span className="terms-link">
+                  <a href="#" target="_blank">Privacy Policy</a>
+                </span>.
+              </label>
             </div>
 
             <button className="next-btn" onClick={handleNextStep} disabled={!isChecked}>
