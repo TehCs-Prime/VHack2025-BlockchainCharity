@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ImpactReport.css";
+import ScrollableCards from "./ScrollableCards";
 
 // Define TypeScript interfaces for better type safety
 interface ImpactMetric {
@@ -8,14 +10,6 @@ interface ImpactMetric {
   value: string;
   trend: string;
   icon: string;
-}
-
-interface Activity {
-  id: number;
-  image?: string; // Placeholder image URL; can be updated later
-  title: string;
-  description: string;
-  date: string;
 }
 
 interface Comment {
@@ -33,6 +27,8 @@ interface HeroSlide {
 }
 
 export default function ImpactReport() {
+  const navigate = useNavigate();
+
   // Data for the hero carousel (three slides) with different background images
   const heroSlides: HeroSlide[] = [
     { 
@@ -55,9 +51,6 @@ export default function ImpactReport() {
     },
   ];
 
-  // State to track the current hero slide
-  const [currentSlide, setCurrentSlide] = useState(0);
-
   // Data for the impact metrics (summary section)
   const impactMetrics: ImpactMetric[] = [
     { id: 1, title: "Meals Provided", value: "24,582", trend: "↑ 12%", icon: "🍲" },
@@ -66,41 +59,36 @@ export default function ImpactReport() {
     { id: 4, title: "CO2 Reduced (tons)", value: "582", trend: "↓ 3%", icon: "🌍" },
   ];
 
-  // Data for recent activities (cards with image placeholders)
-  const recentActivities: Activity[] = [
-    { id: 1, title: "Clean Water Initiative", description: "Donation received and community water filter installed.", date: "March 1, 2025", image: "public/assets/placeholder1.jpg" },
-    { id: 2, title: "Education Outreach", description: "Delivered education kits to remote schools.", date: "March 3, 2025", image: "public/assets/placeholder2.jpg" },
-    { id: 3, title: "Solar Panel Project", description: "Completed installation for rural electrification.", date: "March 5, 2025", image: "public/assets/placeholder3.jpg" },
-    { id: 4, title: "Sustainable Farming Workshop", description: "Community workshop held on modern farming techniques.", date: "March 6, 2025", image: "public/assets/placeholder4.jpg" },
-  ];
-
-  // Data for user comments (longer, detailed feedback)
+  // Data for user comments (only using first 3 for display)
   const userComments: Comment[] = [
     {
       id: 1,
       name: "Alice Johnson",
       date: "March 1, 2025",
-      comment: "I was truly amazed by the clean water initiative. Not only did they provide a sustainable solution, but they also involved local community members in the process, ensuring long-term success and self-reliance. Their efforts have made a lasting impact on our village.",
+      comment: "I was truly amazed by the clean water initiative. Their efforts have made a lasting impact on our village.",
     },
     {
       id: 2,
       name: "Bob Smith",
       date: "March 3, 2025",
-      comment: "The education outreach program has been a game-changer. My children now have access to learning resources that were previously unavailable in our area. The dedicated team made sure every detail was attended to, and the results speak for themselves. I am proud to be associated with such impactful work.",
+      comment: "The education outreach program has been a game-changer. My children now have access to better resources.",
     },
     {
       id: 3,
       name: "Charlie Davis",
       date: "March 5, 2025",
-      comment: "The solar panel project is remarkable. It brought electricity to a region that had struggled for years. The project not only reduced energy costs but also provided training for local technicians. It’s inspiring to see how renewable energy can transform lives and empower communities.",
+      comment: "The solar panel project brought electricity to our region and provided training for local technicians.",
     },
     {
       id: 4,
       name: "Diana Lee",
       date: "March 6, 2025",
-      comment: "Participating in the sustainable farming workshop was an eye-opening experience. The program combined traditional practices with modern techniques, helping us understand how to better manage our resources. This initiative has boosted local agriculture and fostered a sense of community pride.",
+      comment: "Participating in the sustainable farming workshop was eye-opening and boosted local agriculture.",
     },
   ];
+
+  // State to track the current hero slide
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   // Navigation handlers for hero slider
   const nextSlide = () => {
@@ -113,22 +101,18 @@ export default function ImpactReport() {
 
   return (
     <div className="impact-container">
-      
       {/* HERO CAROUSEL SECTION */}
       <section
         className="hero"
         style={{ backgroundImage: `url(${heroSlides[currentSlide].image})` }}
       >
         <div className="hero-overlay"></div>
-
-        {/* Navigation buttons placed directly inside .hero */}
         <button onClick={prevSlide} className="hero-nav-btn left-btn">
           <span className="arrow-symbol">&#10094;</span>
         </button>
         <button onClick={nextSlide} className="hero-nav-btn right-btn">
           <span className="arrow-symbol">&#10095;</span>
         </button>
-
         <div className="hero-content">
           <h1>{heroSlides[currentSlide].title}</h1>
           <p>{heroSlides[currentSlide].description}</p>
@@ -143,7 +127,7 @@ export default function ImpactReport() {
           ))}
         </div>
       </section>
-      
+
       {/* SUMMARY SECTION */}
       <section className="summary">
         <h2>Our Impact in Numbers</h2>
@@ -184,27 +168,14 @@ export default function ImpactReport() {
       {/* RECENT ACTIVITIES SECTION */}
       <section className="recent-activities">
         <h2>Recent Activities</h2>
-        <div className="activities-grid">
-          {recentActivities.map((activity) => (
-            <div key={activity.id} className="activity-card">
-              <div className="activity-image">
-                <img src={activity.image} alt={activity.title} />
-              </div>
-              <div className="activity-details">
-                <h3>{activity.title}</h3>
-                <p>{activity.description}</p>
-                <span className="activity-date">{activity.date}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ScrollableCards />
       </section>
 
       {/* USER COMMENTS SECTION */}
       <section className="user-comments">
         <h2>What People Are Saying</h2>
         <div className="comments-grid">
-          {userComments.map((comment) => (
+          {userComments.slice(0, 3).map((comment) => (
             <div key={comment.id} className="comment-card">
               <p className="comment-text">"{comment.comment}"</p>
               <div className="comment-info">
@@ -216,11 +187,19 @@ export default function ImpactReport() {
         </div>
       </section>
 
-      {/* CALL-TO-ACTION / FOOTER */}
+      {/* CALL-TO-ACTION SECTION */}
       <section className="cta-section">
         <h2>Join Us In Making a Difference</h2>
         <p>Your support helps us keep making an impact around the world.</p>
-        <button className="cta-button">Donate Now</button>
+        <button 
+          className="cta-button"
+          onClick={() => {
+            navigate("/explore");
+            window.scrollTo(0, 0);
+          }}
+        >
+          Donate Now
+        </button>
       </section>
     </div>
   );
