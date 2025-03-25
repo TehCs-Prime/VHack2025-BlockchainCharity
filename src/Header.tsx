@@ -39,9 +39,6 @@ const Header: React.FC = () => {
               <NavLink to="/impact" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Impact</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>About Us</NavLink>
-            </li>
-            <li className="nav-item">
               <NavLink to="/leaderboard" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Leaderboard</NavLink>
             </li>
           </ul>
