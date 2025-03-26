@@ -339,7 +339,7 @@ const connectWallet = async () => {
             onChange={(e) => setDonationData({ ...donationData, cardName: e.target.value })}
           />
         </div>
-        <button className="connect-btn" onClick={connectWallet}>
+        <button className="connect-btn" onClick={handleNextStep}>
             Continue
         </button>
       </div>
