@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 import './Overlay-DonationFlow.css';
+
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
 
 interface OverlayDonationFlowProps {
   onClose: () => void;
@@ -13,7 +20,18 @@ const exchangeRates: { [key: string]: { [key: string]: number } } = {
 };
 
 const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, projectName }) => {
+  const { user } = useAuth();
   const [step, setStep] = useState<'donation' | 'info' | 'wallet' | 'appreciation'>('donation');
+  
+  useEffect(() => {
+    if (user) {
+      setDonationData(prev => ({
+        ...prev,
+        name: user.username,
+        email: user.email
+      }));
+    }
+  }, [user]);
   const [donationData, setDonationData] = useState({
     cryptoAmount: '',
     cryptoType: 'BNB',
@@ -23,10 +41,17 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     email: '',
     message: '',
     network: 'erc20',
-    displayName: false, 
+    paymentMethod: 'wallet',
+    cardNumber: '',
+    cardExpiry: '',
+    cardCvc: '',
+    cardName: '',
+    displayName: false,
     marketingUpdates: false,
   });
-  
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState('');
+  const [error, setError] = useState('');
   const [isChecked, setIsChecked] = useState(false);
 
   const getExchangeRate = (crypto: string, fiat: string): number => {
@@ -51,6 +76,30 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     }));
   };
   
+  // Check if MetaMask is installed
+const isMetaMaskInstalled = () => {
+  return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
+};
+
+// Connect to MetaMask wallet
+const connectWallet = async () => {
+  if (!isMetaMaskInstalled()) {
+    setError('MetaMask is not installed. Please install it to continue.');
+    return;
+  }
+
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    setWalletAddress(accounts[0]);
+    setWalletConnected(true);
+    setError('');
+    // For prototype, just proceed to next step after connecting
+    setStep('appreciation');
+  } catch (err) {
+    setError('Failed to connect wallet: ' + (err as Error).message);
+  }
+};
+
   const handleBackStep = () => {
     if (step === 'info') setStep('donation');
     else if (step === 'wallet') setStep('info');
@@ -61,7 +110,13 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     if (step === 'donation' && !isChecked) return;
     if (step === 'donation') setStep('info');
     else if (step === 'info') setStep('wallet');
-    else if (step === 'wallet') setStep('appreciation');
+    else if (step === 'wallet') {
+      if (donationData.paymentMethod === 'wallet') {
+        connectWallet();
+      } else {
+        setStep('appreciation');
+      }
+    }
     else onClose();
   };
 
@@ -73,43 +128,77 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
         {step === 'donation' && (
           <div className="step-donation">
             <div className="modal-header">
-              <button className="close-btn" onClick={onClose}>&times;</button>
               <h2>Donate to {projectName}</h2>
+              <button className="close-btn" onClick={onClose}>✖</button>
+            </div>
+            <div className="form-group">
+              <label>Payment Method</label>
+              <div className="input-group">
+                <select
+                  value={donationData.paymentMethod}
+                  onChange={(e) => setDonationData({ ...donationData, paymentMethod: e.target.value })}
+                >
+                  <option value="wallet">Cryptocurrency Wallet</option>
+                  <option value="card">Credit/Debit Card</option>
+                </select>
+              </div>
             </div>
             <div className="form-group">
               <label>Crypto Amount</label>
-              <input
-                type="number"
-                placeholder="Enter crypto amount"
-                value={donationData.cryptoAmount}
-                onChange={handleCryptoChange}
-              />
-              <select
-                value={donationData.cryptoType}
-                onChange={(e) => setDonationData({ ...donationData, cryptoType: e.target.value })}
-              >
-                <option value="BNB">BNB</option>
-                <option value="BTC">BTC</option>
-                <option value="ETH">ETH</option>
-              </select>
+              <div className="input-group">
+                <input
+                  type="number"
+                  placeholder="0.000000"
+                  value={donationData.cryptoAmount}
+                  onChange={handleCryptoChange}
+                />
+                <select
+                  value={donationData.cryptoType}
+                  onChange={(e) => {
+                    const newCryptoType = e.target.value;
+                    const rate = getExchangeRate(newCryptoType, donationData.fiatType);
+                    setDonationData(prev => ({
+                      ...prev,
+                      cryptoType: newCryptoType,
+                      fiatAmount: prev.cryptoAmount ? (parseFloat(prev.cryptoAmount) * rate).toFixed(2) : ''
+                    }));
+                  }}
+                >
+                  <option value="BNB">BNB</option>
+                  <option value="BTC">BTC</option>
+                  <option value="ETH">ETH</option>
+                </select>
+              </div>
             </div>
 
             <div className="form-group">
               <label>Fiat Equivalent</label>
-              <input
-                type="number"
-                placeholder="0.00"
-                value={donationData.fiatAmount}
-                onChange={handleFiatChange}
-              />
-              <select
-                value={donationData.fiatType}
-                onChange={(e) => setDonationData({ ...donationData, fiatType: e.target.value })}
-              >
-                <option value="MYR">MYR</option>
-                <option value="USD">USD</option>
-              </select>
+              <div className="input-group">
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  value={donationData.fiatAmount}
+                  onChange={handleFiatChange}
+                />
+                <select
+                  value={donationData.fiatType}
+                  onChange={(e) => {
+                    const newFiatType = e.target.value;
+                    setDonationData(prev => ({
+                      ...prev,
+                      fiatType: newFiatType,
+                      cryptoAmount: prev.fiatAmount ?
+                        (parseFloat(prev.fiatAmount) / getExchangeRate(prev.cryptoType, newFiatType)).toFixed(6)
+                        : prev.cryptoAmount
+                    }));
+                  }}
+                >
+                  <option value="MYR">MYR</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
             </div>
+
 
             <div className="agreement">
               <input
@@ -120,8 +209,12 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
               />
               <label htmlFor="terms-checkbox">
                 By proceeding with the donation, you agree with our
-                <a href="#" target="_blank"> Terms of Use</a> and
-                <a href="#" target="_blank"> Privacy Policy</a>.
+                <span className="terms-link">
+                  <a href="#" target="_blank">Terms of Use</a>
+                </span> and
+                <span className="terms-link">
+                  <a href="#" target="_blank">Privacy Policy</a>
+                </span>.
               </label>
             </div>
 
@@ -137,7 +230,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     <div className="modal-header">
       <button className="back-btn" onClick={handleBackStep}>⬅</button>
       <h2>Enter Your Information</h2>
-      <button className="close-btn" onClick={onClose}>&times;</button>
+      <button className="close-btn" onClick={onClose}>✖</button>
     </div>
 
     <div className="form-group">
@@ -145,8 +238,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
       <input
         type="text"
         placeholder="Enter your name"
-        value={donationData.name}
-        onChange={(e) => setDonationData({ ...donationData, name: e.target.value })}
+        defaultValue={user?.username || ''}
+        readOnly={!!user}
       />
       <div className="checkbox-group">
         <input
@@ -164,8 +257,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
       <input
         type="email"
         placeholder="Enter your email"
-        value={donationData.email}
-        onChange={(e) => setDonationData({ ...donationData, email: e.target.value })}
+        defaultValue={user?.email || ''}
+        readOnly={!!user}
       />
       <div className="checkbox-group">
         <input
@@ -197,7 +290,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     <div className="modal-header">
       <button className="back-btn" onClick={handleBackStep}>←</button>
       <h2>Complete Your Transaction</h2>
-      <button className="close-btn" onClick={onClose}>&times;</button>
+      <button className="close-btn" onClick={onClose}>✖</button>
     </div>        
 
     <p>Amount: <span>{donationData.cryptoAmount} {donationData.cryptoType}</span></p>
@@ -208,20 +301,75 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
       <p><span style={{ fontWeight: 'bold' }}>Donate to:</span> {projectName || "Unknown Project"}</p>
     </div>
 
-    <div className="form-group">
-      <label>Network</label>
-      <select
-  value={donationData.network}
-  onChange={(e) => setDonationData({ ...donationData, network: e.target.value })}
->
-  <option value="erc20">Ethereum</option>
-  <option value="bep20">BNB Chain</option>
-  <option value="polygon">Polygon</option>
-</select>
+    {donationData.paymentMethod === 'card' ? (
+      <div className="card-details">
+        <div className="form-group">
+          <label>Card Number</label>
+          <input
+            type="text"
+            placeholder="1234 5678 9012 3456"
+            value={donationData.cardNumber}
+            onChange={(e) => setDonationData({ ...donationData, cardNumber: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label>Expiration Date</label>
+          <input
+            type="text"
+            placeholder="MM/YY"
+            value={donationData.cardExpiry}
+            onChange={(e) => setDonationData({ ...donationData, cardExpiry: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label>CVC</label>
+          <input
+            type="text"
+            placeholder="123"
+            value={donationData.cardCvc}
+            onChange={(e) => setDonationData({ ...donationData, cardCvc: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label>Cardholder Name</label>
+          <input
+            type="text"
+            placeholder="John Doe"
+            value={donationData.cardName}
+            onChange={(e) => setDonationData({ ...donationData, cardName: e.target.value })}
+          />
+        </div>
+        <button className="connect-btn" onClick={connectWallet}>
+            Continue
+        </button>
+      </div>
+    ) : (
+      <>
+        <div className="form-group">
+          <label>Network</label>
+          <select
+            value={donationData.network}
+            onChange={(e) => setDonationData({ ...donationData, network: e.target.value })}
+          >
+            <option value="erc20">Ethereum</option>
+            <option value="bep20">BNB Chain</option>
+            <option value="polygon">Polygon</option>
+          </select>
+        </div>
 
-    </div>
+        {walletConnected ? (
+          <div className="wallet-info">
+            <p>Connected: {walletAddress.substring(0, 6)}...{walletAddress.substring(walletAddress.length - 4)}</p>
+          </div>
+        ) : (
+          <button className="connect-btn" onClick={connectWallet}>
+            Connect Wallet
+          </button>
+        )}
+      </>
+    )}
 
-    <button className="connect-btn" onClick={handleNextStep}>Connect Wallet</button>
+    {error && <div className="error-message">{error}</div>}
   </div>
 )}
 
@@ -229,8 +377,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
 {step === 'appreciation' && (
   <div className="step-appreciation">
     <div className="modal-header">
-      <button className="close-btn" onClick={onClose}>✖</button>
       <button className='baack-btn' onClick={handleBackStep}>⬅</button>
+      <button className="close-btn" onClick={onClose}>✖</button>
     </div>
 
     {/* Add Thank You Image */}
@@ -246,7 +394,9 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
 
     {/* Add TxID Message */}
     <p className="txid-message">
-      Your donation records will be shown on the website after the TxID is verified.
+      {donationData.paymentMethod === 'card'
+        ? "Your card payment is being processed. You'll receive email confirmation within 24 hours."
+        : "Your donation records will be shown on the website after the TxID is verified."}
     </p>
 
     {/* Display donor message */}
