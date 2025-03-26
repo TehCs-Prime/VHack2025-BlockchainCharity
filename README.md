@@ -47,7 +47,6 @@ Follow these steps to set up the project locally.
 Ensure you have the following installed:  
 - Node.js (v16+)  
 - Git  
-- Docker (optional)  
 - MetaMask Wallet (for testing transactions)  
 
 ## **Installation**  
@@ -62,22 +61,24 @@ Ensure you have the following installed:
 
 3. **Start the Development Server**  
    ```bash
-   npm install
+   npm run dev
 Once the server starts, open your browser and navigate to the URL provided in the terminal (usually http://localhost:3000).
 
 4. **Environment Configuration**  
 - MetaMask Setup: Ensure you have MetaMask installed and connected to the correct Ethereum network (e.g., Rinkeby for testing or Mainnet for production).
 - .env File: Create or update the .env file in the root directory with your configuration details such as blockchain endpoints, API keys, etc.
 
-5. **Docker(Optional)**
-- If you prefer to run the application in a containerized environment, use the provided Docker configuration files. For example:
-  ```bash
-  docker-compose up --build
 
 ## **Usage**
 
 ### **Dashboard**
-After launching the application, create an account or log in to access your personalized dashboard. Here you can track your donation history and view gamified achievements.
+After launching the application, sign up or log in as either a User or a Charity Organization to access your personalized dashboard.
+
+#### User Role:
+Access a personalized profile, track your donation history, and view your gamified achievements.
+
+#### Charity Organization Role:
+View your created campaigns, and if you are a verified charity, you can also create new campaigns. To log in to your verified charity account, use the email verifiedcharity@gmail.com.
 
 ### **Making a Donation**
 1. Choose a cause or charity from the list on the platform.
@@ -111,14 +112,14 @@ Contributions are welcome! Please follow these steps if you wish to contribute:
    git checkout -b feature/YourFeatureName
 
 3. Make your changes and commit them:
-
+   ```bash
    git commit -m 'Add some feature'
 
-4. Push to the branch:
+5. Push to the branch:
    ```bash
    git push origin feature/YourFeatureName
    
-5. Open a pull request detailing your changes.
+4. Open a pull request detailing your changes.
 
 For any major changes, please open an issue first to discuss what you would like to change.
 
