@@ -64,14 +64,14 @@ const Signup: React.FC = () => {
       // Instead of a system alert, show a custom verification card modal.
       setShowVerificationCard(true);
     } else {
-      navigate('/home');
+      navigate('/');
     }
   };
 
   // OK button: Accept the verification message and navigate to home.
   const handleCardClose = () => {
     setShowVerificationCard(false);
-    navigate('/home');
+    navigate('/');
   };
 
   // Cancel button: Cancel the sign-up process for charity.
