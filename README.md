@@ -75,28 +75,24 @@ Once the server starts, open your browser and navigate to the URL provided in th
   docker-compose up --build
 
 ### **Usage**
-**Dashboard**
+
+#### **Dashboard**
 After launching the application, create an account or log in to access your personalized dashboard. Here you can track your donation history and view gamified achievements.
 
-**Making a Donation**
+#### **Making a Donation**
+1. Choose a cause or charity from the list on the platform.
+2. Enter the donation amount.
+3. Confirm the donation via your MetaMask wallet.
+4. The transaction is recorded on the blockchain ensuring transparency and security.
 
-Choose a cause or charity from the list on the platform.
-
-Enter the donation amount.
-
-Confirm the donation via your MetaMask wallet.
-
-The transaction is recorded on the blockchain ensuring transparency and security.
-
-**Tracking Donations**
+#### **Tracking Donations**
 Each donation is recorded with a unique transaction ID. You can:
+- Review your donation history via the dashboard.
+- Verify transactions using a blockchain explorer.
 
-Review your donation history via the dashboard.
-
-Verify transactions using a blockchain explorer.
-
-**Achievements & Rewards**
+#### **Achievements & Rewards**
 Earn badges and rewards as you contribute. Your profile will display achievements that reflect your support and engagement with various charitable causes.
+
 
 ### **Roadmap**
 
