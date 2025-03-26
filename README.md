@@ -90,7 +90,7 @@ Each donation is recorded with a unique transaction ID. You can:
 - Review your donation history via the dashboard.
 - Verify transactions using a blockchain explorer.
 
-## **Achievements & Rewards**
+### **Achievements & Rewards**
 Earn badges and rewards as you contribute. Your profile will display achievements that reflect your support and engagement with various charitable causes.
 
 
