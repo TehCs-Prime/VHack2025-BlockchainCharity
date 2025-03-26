@@ -1,7 +1,7 @@
   .approach-container {
     display: grid;
     grid-template-rows: 1fr;
-    max-width: 1500px;
+    max-width: 1600px;
     margin: 0 auto;
     justify-items: center;
     padding: 2rem;
@@ -135,7 +135,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: #f6f6f6;
-    padding: 30px;
+    padding: 20px;
     border-radius: 10px;
   }
   
