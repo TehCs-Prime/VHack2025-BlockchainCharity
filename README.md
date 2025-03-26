@@ -53,5 +53,25 @@ Ensure you have the following installed:
 ### **Installation**  
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/yourusername/Lacial.git
-   cd Lacial
+   git clone https://github.com/TehCs-Prime/VHack2025-BlockchainCharity.git
+   cd VHack2025-BlockchainCharity
+
+2. **Install Dependencies**  
+   ```bash
+   npm install
+
+3. **Start the Development Server**  
+   ```bash
+   npm install
+Once the server starts, open your browser and navigate to the URL provided in the terminal (usually http://localhost:3000).
+
+4. **Environment Configuration**  
+- MetaMask Setup: Ensure you have MetaMask installed and connected to the correct Ethereum network (e.g., Rinkeby for testing or Mainnet for production).
+- .env File: Create or update the .env file in the root directory with your configuration details such as blockchain endpoints, API keys, etc.
+
+5. **Docker(Optional)**
+- If you prefer to run the application in a containerized environment, use the provided Docker configuration files. For example:
+  ```bash
+  docker-compose up --build
+
+
