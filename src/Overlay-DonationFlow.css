@@ -204,7 +204,6 @@
 .transaction-details {
   padding: 0.5rem 0; /* Reduce spacing */
   border-radius: 0; /* Remove unnecessary rounding */
-  margin: 0.5rem 0; /* Adjust margin for better spacing */
 }
 
 .transaction-details p {
