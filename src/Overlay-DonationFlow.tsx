@@ -297,7 +297,7 @@ const connectWallet = async () => {
     <p>Equivalent to: <span>{donationData.fiatAmount} {donationData.fiatType}</span></p>
 
     <div className="transaction-details">
-      <p><span style={{ fontWeight: 'bold' }}>Payment Method:</span> Crypto Wallet</p>
+      <p><span style={{ fontWeight: 'bold' }}>Payment Method:</span> {donationData.paymentMethod === 'card' ? "Credit/Debit Card" : "Crypto Wallet"}</p>
       <p><span style={{ fontWeight: 'bold' }}>Donate to:</span> {projectName || "Unknown Project"}</p>
     </div>
 
