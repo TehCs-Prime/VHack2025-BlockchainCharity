@@ -157,16 +157,16 @@ const ProjectDetails: React.FC = () => {
             ],
             // Project-specific donations
             donations: [
-              { id: 1, currency: 'BTC', amount: 0.25, donor: 'anonymous', date: '2025-02-10 12:43:36', message: 'Clean water for everyone!' },
+              { id: 1, currency: 'BNB', amount: 0.25, donor: 'anonymous', date: '2025-02-10 12:43:36', message: 'Clean water for everyone!' },
               { id: 2, currency: 'USDT', amount: 50000, donor: 'anonymous', date: '2025-02-05 08:15:22', message: null },
-              { id: 3, currency: 'BTC', amount: 0.15, donor: 'anonymous', date: '2025-01-28 16:30:45', message: 'Hope this helps!' },
+              { id: 3, currency: 'BNB', amount: 0.15, donor: 'anonymous', date: '2025-01-28 16:30:45', message: 'Hope this helps!' },
               { id: 4, currency: 'USDT', amount: 25000, donor: 'anonymous', date: '2025-01-20 09:22:10', message: null },
-              { id: 5, currency: 'BTC', amount: 0.1, donor: 'anonymous', date: '2025-01-15 14:05:38', message: 'Keep up the good work' },
+              { id: 5, currency: 'BNB', amount: 0.1, donor: 'anonymous', date: '2025-01-15 14:05:38', message: 'Keep up the good work' },
             ],
             // Project-specific allocations
             allocations: [
               { id: 1, receiver: 'Water Relief Organization', date: '2025-02-15 13:59:01', amount: 75000, currency: 'USDT', useOfFunds: 'Water filters' },
-              { id: 2, receiver: 'Community Well Builders', date: '2025-02-10 11:35:55', amount: 150000, currency: 'USDT', useOfFunds: 'Well construction' },
+              { id: 2, receiver: 'Community Well Builders', date: '2025-02-10 11:35:55', amount: 150000, currency: 'BNB', useOfFunds: 'Well construction' },
               { id: 3, receiver: 'Clean Water Trust', date: '2025-01-25 22:31:13', amount: 75000, currency: 'USDT', useOfFunds: 'Filter distribution' },
             ],
             // Project-specific news updates
@@ -260,13 +260,13 @@ const ProjectDetails: React.FC = () => {
                   }
               ],
               donations: [
-                  { id: 1, currency: 'ETH', amount: 0.5, donor: 'anonymous', date: '2025-02-25 10:30:00', message: 'Education changes lives!' },
+                  { id: 1, currency: 'BNB', amount: 0.5, donor: 'anonymous', date: '2025-02-25 10:30:00', message: 'Education changes lives!' },
                   { id: 2, currency: 'USDT', amount: 50000, donor: 'anonymous', date: '2025-02-20 14:10:45', message: null },
-                  { id: 3, currency: 'ETH', amount: 0.3, donor: 'anonymous', date: '2025-02-15 09:45:22', message: 'A better future for all' }
+                  { id: 3, currency: 'BNB', amount: 0.3, donor: 'anonymous', date: '2025-02-15 09:45:22', message: 'A better future for all' }
               ],
               allocations: [
                   { id: 1, receiver: 'Education Support Foundation', date: '2025-02-28 12:00:00', amount: 90000, currency: 'USDT', useOfFunds: 'Classroom construction' },
-                  { id: 2, receiver: 'Teacher Training Program', date: '2025-02-22 15:30:00', amount: 90000, currency: 'USDT', useOfFunds: 'Educator development' }
+                  { id: 2, receiver: 'Teacher Training Program', date: '2025-02-22 15:30:00', amount: 90000, currency: 'BNB', useOfFunds: 'Educator development' }
               ],
               newsUpdates: [
                   {
@@ -369,13 +369,13 @@ const ProjectDetails: React.FC = () => {
               }
             ],
             donations: [
-              { id: 1, currency: 'BTC', amount: 0.5, donor: 'nature_lover', date: '2025-01-18 11:25:00', message: 'For a thriving Amazon!' },
+              { id: 1, currency: 'BNB', amount: 0.5, donor: 'nature_lover', date: '2025-01-18 11:25:00', message: 'For a thriving Amazon!' },
               { id: 2, currency: 'USDT', amount: 75000, donor: 'ecoSupporter', date: '2025-01-15 09:40:22', message: null },
-              { id: 3, currency: 'BTC', amount: 0.3, donor: 'wildlifeFan', date: '2025-01-10 16:05:45', message: 'Conservation is key!' }
+              { id: 3, currency: 'BNB', amount: 0.3, donor: 'wildlifeFan', date: '2025-01-10 16:05:45', message: 'Conservation is key!' }
             ],
             allocations: [
               { id: 1, receiver: 'Amazonian Conservation Trust', date: '2025-01-20 14:10:00', amount: 400000, currency: 'USDT', useOfFunds: 'Habitat restoration' },
-              { id: 2, receiver: 'Wildlife Protection Agency', date: '2025-01-18 10:55:00', amount: 300000, currency: 'USDT', useOfFunds: 'Animal protection initiatives' }
+              { id: 2, receiver: 'Wildlife Protection Agency', date: '2025-01-18 10:55:00', amount: 300000, currency: 'BNB', useOfFunds: 'Animal protection initiatives' }
             ],
             newsUpdates: [
               {
@@ -459,7 +459,7 @@ const ProjectDetails: React.FC = () => {
               }
             ],
             donations: [
-              { id: 1, currency: 'BTC', amount: 0.2, donor: 'supporterX', date: '2025-02-25 14:20:00', message: 'We stand with disaster victims!' },
+              { id: 1, currency: 'BNB', amount: 0.2, donor: 'supporterX', date: '2025-02-25 14:20:00', message: 'We stand with disaster victims!' },
               { id: 2, currency: 'USDT', amount: 15000, donor: 'donorY', date: '2025-02-23 11:00:00', message: null }
             ],
             allocations: [

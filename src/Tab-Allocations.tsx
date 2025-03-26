@@ -36,7 +36,7 @@ const AllocationsTab: React.FC<AllocationsTabProps> = ({ allocations }) => {
         switch (currency) {
             case 'USDT':
                 return <div className="currency-icon usdt-icon">T</div>;
-            case 'BUSD':
+            case 'BNB':
                 return <div className="currency-icon busd-icon">B</div>;
             default:
                 return null;

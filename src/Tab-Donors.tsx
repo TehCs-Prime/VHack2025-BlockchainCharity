@@ -41,11 +41,11 @@ const DonorTab: React.FC<DonorTabProps> = ({ donations }) => {
                 {donations.map((donation) => (
                 <div key={donation.id} className="table-row">
                     <div className="col currency">
-                    <div className="currency-icon">
+                    <div className="currency-icons">
                         {donation.currency === 'BNB' ? (
-                        <div className="icon bnb-icon">₿</div>
+                        <div className="icons bnb-icon">₿</div>
                         ) : (
-                        <div className="icon usdt-icon">T</div>
+                        <div className="icons usdt-icon">T</div>
                         )}
                     </div>
                     {donation.currency}

@@ -34,19 +34,19 @@ export default function ImpactReport() {
       id: 1, 
       title: "Clean Water Initiative", 
       description: "Installing water filters and constructing community wells to secure safe drinking water in Kenya—transforming local communities through sustainable agriculture and education.", 
-      image: "public/assets/gallery2.jpg" 
+      image: "/assets/gallery2.jpg" 
     },
     { 
       id: 2, 
       title: "Youth Empowerment Program", 
       description: "Empowering youth with innovative learning and skill development programs that foster leadership and create brighter futures.", 
-      image: "public/assets/gallery3.jpg" 
+      image: "/assets/gallery3.jpg" 
     },
     { 
       id: 3, 
       title: "Wildlife Conservation Project", 
       description: "Protecting endangered species and preserving natural habitats through innovative conservation strategies and community-based initiatives.", 
-      image: "public/assets/gallery1.jpg" 
+      image: "/assets/gallery1.jpg" 
     },
   ];
 
@@ -152,7 +152,7 @@ export default function ImpactReport() {
         <h2>Global Impact Map</h2>
         <div className="map-visualization">
           <img 
-            src="public/assets/map.jpg" 
+            src="/assets/map.jpg" 
             alt="Global Impact Map" 
             className="map-image"
           />

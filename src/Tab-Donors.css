@@ -86,17 +86,7 @@
     justify-content: flex-end;
   }
   
-  .currency-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    margin-right: 8px;
-  }
-  
-  .icon {
+  .icons {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,6 +94,7 @@
     height: 24px;
     border-radius: 50%;
     font-weight: bold;
+    color: white;
   }
   
   .bnb-icon {
