@@ -12,6 +12,7 @@ import Leaderboard from './Leaderboard';
 import Settings from './Settings';
 import ProfilePage from './ProfilePage';  // New combined profile page
 import Home from './Home';
+import Approach from './Page-Approach'
 import './App.css';
 
 const App: React.FC = () => {
@@ -21,13 +22,14 @@ const App: React.FC = () => {
         <Header />
         <main className="main-content">
           <Routes>
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/project/:projectId" element={<ProjectDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/impact" element={<ImpactReport />} />
+            <Route path="/approach" element={<Approach />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             {/* Add other routes as needed */}

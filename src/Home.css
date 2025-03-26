@@ -1,13 +1,369 @@
 .Recommendation {
-    font-size: 45px;
     font-weight: bold;
-    margin-left: 100px;
-    border-bottom: 1px solid #ccc;
     padding-bottom: 5px;
-    color: rgb(54, 54, 54);
+    justify-self: center;
     max-width: 1400px;
+    
+    font-size: 2.25rem;
+    color: #2d3748;
+    margin-bottom: 1rem;
 }
 
-.Cards {
-    margin-left: 80px;
+
+
+.why-us-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 1rem;
+    text-align: center;
+  }
+  
+  .why-us-title {
+    font-size: 2.25rem;
+    font-weight: bold;
+    color: #2d3748;
+    margin-bottom: 1rem;
+  }
+  
+  .why-us-underline {
+    width: 4rem;
+    height: 0.25rem;
+    background-color: #48bb78;
+    margin: 0 auto 2.5rem;
+  }
+  
+  .why-us-features {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  
+  .feature-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #fffed9;
+    min-height: 250px;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .feature-icon-wrapper {
+    width: 5rem;
+    height: 5rem;
+    background-color: #FFF4E6;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-icon {
+    color: #FF8A00;
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .feature-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature-description {
+    color: #718096;
+    font-size: 0.875rem;
+  }
+
+  /* src/App.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+.landing-container {
+  text-align: center;
+  padding: 2rem;
+  margin-bottom: 50px;
 }
+
+.landing-title {
+  color: #333;
+  margin-bottom: 2.5rem;
+  font-size: 2.25rem;
+  font-weight: 600;
+}
+
+.landing-options {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.landing-option {
+  background-color: #fcfac7;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.landing-option:hover {
+  transform: translateY(-10px);
+}
+
+.icon-container {
+  width: 64px;
+  height: 64px;
+  background-color: #e6f3ec;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1rem;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  color: #4caf50;
+  stroke-width: 2;
+}
+
+.landing-option h2 {
+  color: #333;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.landing-option p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.cta-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #45a049;
+}
+
+.intro-container {
+    display: grid;
+    grid-template-columns:  1fr 1fr;
+    max-width: 1000px;
+    justify-self: center;
+    padding: 100px 50px;
+    align-items: center;
+    width: fit-content;
+}
+
+.intro-title {
+    font-weight: 900;
+    font-size: 2rem;
+    padding: 10px 0px;
+}
+
+.intro-des {
+    font-size: 1.15rem;
+    font-weight: 500;
+    width:500px;
+    padding: 10px 0px;
+}
+
+.heart-container {
+    position: relative;
+    cursor: pointer;
+    margin-left: 120px;
+    float: left;
+    transition: transform 0.3s ease;
+  }
+  
+  .heart {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+    background: #ff3366;
+    transform: rotate(45deg);
+  }
+  
+  .heart::before,
+  .heart::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #ff3366;
+  }
+  
+  .heart::before {
+    top: -50px;
+    left: 0;
+  }
+  
+  .heart::after {
+    top: 0;
+    left: -50px;
+  }
+  
+  .donation-message {
+    position: absolute;
+    top: 50%;
+    left: 120%;
+    color: #ff3366;
+    transform: rotate(-45deg);
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+    text-shadow: 0 0 5px rgba(255, 51, 102, 0.3);
+  }
+  
+  .donation-message span {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 5px 0;
+    width: 150px;
+  }
+  
+  .sparkles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  .spark {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: sparkle 1s ease-out forwards;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(45deg); }
+    50% { transform: translateY(-20px) rotate(45deg); }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-50%) translateX(20px) rotate(-45deg); }
+    to { opacity: 1; transform: translateY(-50%) translateX(0) rotate(-45deg); }
+  }
+  
+  @keyframes sparkle {
+    0% {
+      opacity: 1;
+      transform: scale(0) translate(0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1) translate(var(--spark-x), var(--spark-y));
+    }
+  }
+  
+  .heart-container:hover {
+    transform: scale(1.1);
+  }
+  
+  .heart-container.burst .heart {
+    animation: burst 0.5s ease-out forwards;
+  }
+  
+  @keyframes burst {
+    0% { transform: scale(1) rotate(45deg); }
+    50% { transform: scale(1.2) rotate(45deg); opacity: 0.8; }
+    100% { transform: scale(0) rotate(45deg); opacity: 0; }
+  }
+
+  .hearts-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .small-heart {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #ff3366;
+    transform: rotate(45deg);
+    animation: float 4s ease-in-out infinite alternate;
+    opacity: 0.7;
+  }
+  
+  .small-heart::before,
+  .small-heart::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #ff3366;
+  }
+  
+  .small-heart::before {
+    top: -15px;
+    left: 0;
+  }
+  
+  .small-heart::after {
+    left: -15px;
+    top: 0;
+  }
+  
+  .small-heart-1 {
+    top: -40px;
+    left: -100px;
+    animation-delay: 0.3s;
+  }
+  
+  .small-heart-2 {
+    top: -100px;
+    right: -80px;
+    animation-delay: 0.6s;
+  }
+  
+  .small-heart-3 {
+    bottom: -60px;
+    left: 50px;
+    animation-delay: 0.9s;
+  }
+  .small-heart-4 {
+    bottom: -70px;
+    left: -140px;
+    animation-delay: 0.9s;
+  }
+
+  .small-heart-5 {
+    bottom: -170px;
+    left: 180px;
+    animation-delay: 0.9s;
+  }
+
+  .small-heart-6 {
+    bottom: -190px;
+    left: -80px;
+    animation-delay: 0.9s;
+  }
+  

@@ -16,7 +16,7 @@ export default function Login() {
       username: 'Guest',
       email
     });
-    navigate('/home');
+    navigate('/');
   };
 
   return (

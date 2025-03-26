@@ -1,0 +1,178 @@
+  .approach-container {
+    display: grid;
+    grid-template-rows: 1fr;
+    max-width: 1600px;
+    margin: 0 auto;
+    justify-items: center;
+    padding: 2rem;
+    background: linear-gradient(to bottom, #fff3e0, #ffffff);
+  }
+
+  .approach-stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 40px;
+  }
+  
+  .stat {
+    margin-bottom: 1.5rem;
+    padding: 2rem;
+    width: fit-content;
+  }
+  
+  .stat h2 {
+    color: #ffc107;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat p {
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  
+  .approach-content {
+    width: 75%;
+    padding-left: 2rem;
+  }
+  
+  .approach-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+  
+  .approach-card {
+    width: 48%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .approach-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .approach-card h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  
+  .approach-card p {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .donate-buttons {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .donate-buttons button {
+    background-color: #ffc107;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .donate-button button:hover {
+    background-color: #ffca28;
+  }
+  
+
+  /* DonationFlow.css */
+.donation-flow-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .donation-flow-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-left: auto;
+  }
+  
+  .donation-flow-buttons button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 2px solid #FFD700;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .donation-flow-buttons .ngo-button.active {
+    background-color: #fde352;
+    color: rgb(63, 63, 63);
+  }
+  
+  .donation-flow-buttons .individuals-button.disabled {
+    color:#666;
+    border-color: #666;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .donation-flow-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f6f6f6;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .donation-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 250px;
+  }
+  
+  .step-icon {
+    color: #FFD700;
+    margin-bottom: 15px;
+  }
+  
+  .step-icon svg {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .step-description h3 {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .arrow {
+    font-size: 36px;
+    color: #FFD700;
+    margin: 0 20px;
+  }
+
+  .donation-flow-header {
+    display: flex;
+  }
+
+  .donation-flow-header h1 {
+    color: black;
+    font-size: 2rem;
+  }
