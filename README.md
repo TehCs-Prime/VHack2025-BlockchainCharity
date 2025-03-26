@@ -50,7 +50,7 @@ Ensure you have the following installed:
 - Docker (optional)  
 - MetaMask Wallet (for testing transactions)  
 
-### **Installation**  
+## **Installation**  
 1. **Clone the Repository**  
    ```bash
    git clone https://github.com/TehCs-Prime/VHack2025-BlockchainCharity.git
@@ -74,32 +74,64 @@ Once the server starts, open your browser and navigate to the URL provided in th
   ```bash
   docker-compose up --build
 
-### **Usage**
+## **Usage**
 
-#### **Dashboard**
+### **Dashboard**
 After launching the application, create an account or log in to access your personalized dashboard. Here you can track your donation history and view gamified achievements.
 
-#### **Making a Donation**
+### **Making a Donation**
 1. Choose a cause or charity from the list on the platform.
 2. Enter the donation amount.
 3. Confirm the donation via your MetaMask wallet.
 4. The transaction is recorded on the blockchain ensuring transparency and security.
 
-#### **Tracking Donations**
+### **Tracking Donations**
 Each donation is recorded with a unique transaction ID. You can:
 - Review your donation history via the dashboard.
 - Verify transactions using a blockchain explorer.
 
-#### **Achievements & Rewards**
+## **Achievements & Rewards**
 Earn badges and rewards as you contribute. Your profile will display achievements that reflect your support and engagement with various charitable causes.
 
 
-### **Roadmap**
+## Roadmap
 
-## **Contributing**
+### **Q1 2025:**
+- Complete developing the working prototype of the website
 
-## **Licence**
+---
 
-## **Contact**
+## Contributing
+
+Contributions are welcome! Please follow these steps if you wish to contribute:
+
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature/YourFeatureName
+
+3. Make your changes and commit them:
+
+   git commit -m 'Add some feature'
+
+4. Push to the branch:
+   ```bash
+   git push origin feature/YourFeatureName
+   
+5. Open a pull request detailing your changes.
+
+For any major changes, please open an issue first to discuss what you would like to change.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contact
+For further inquiries or support, please contact:
+
+Email: support@lacial.org
+
+Twitter: @LacialCharity
+
+GitHub: TehCs-Prime
 
 
