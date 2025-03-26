@@ -1,6 +1,6 @@
 # **Lacial - Blockchain-Based Charity Platform**  
 
-![Lacial Logo]((https://github.com/TehCs-Prime/VHack2025-BlockchainCharity/blob/main/public/assets/Logo.png))  
+![Lacial Logo](https://github.com/TehCs-Prime/VHack2025-BlockchainCharity/blob/main/public/assets/Logo.png)
 
 > A blockchain-powered charity platform that ensures **transparent and secure** donations using cryptocurrency.
 
