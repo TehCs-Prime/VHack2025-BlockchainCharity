@@ -106,13 +106,23 @@ Once the server starts, open your browser and navigate to the URL provided in th
 ## **Usage**
 
 ### **Dashboard**
-After launching the application, sign up or log in as either a User or a Charity Organization to access your personalized dashboard.
+After launching the application, sign up or log in as either a **User** or a **Charity Organization** to access your personalized dashboard.
 
-#### User Role:
-Access a personalized profile, track your donation history, and view your gamified achievements.
+#### **User Role**
+- Access a personalized profile.
+- Track your donation history.
+- View your gamified achievements.
 
-#### Charity Organization Role:
-View your created campaigns, and if you are a verified charity, you can also create new campaigns. To log in to your verified charity account, use the email verifiedcharity@gmail.com.
+#### **Charity Organization Role**
+- View your created campaigns.
+- If you are a verified charity, you can also create new campaigns.
+  
+
+| **Verified Charity Organization Login**       |
+|----------------------------------|
+| **Email:** verifiedcharity@gmail.com |
+
+---
 
 ### **Making a Donation**
 1. Choose a cause or charity from the list on the platform.
@@ -120,13 +130,18 @@ View your created campaigns, and if you are a verified charity, you can also cre
 3. Confirm the donation via your MetaMask wallet.
 4. The transaction is recorded on the blockchain ensuring transparency and security.
 
+---
+
 ### **Tracking Donations**
 Each donation is recorded with a unique transaction ID. You can:
 - Review your donation history via the dashboard.
 - Verify transactions using a blockchain explorer.
 
+---
+
 ### **Achievements & Rewards**
 Earn badges and rewards as you contribute. Your profile will display achievements that reflect your support and engagement with various charitable causes.
+
 
 
 ## Roadmap
