@@ -14,6 +14,7 @@ import ProfilePage from './ProfilePage';  // New combined profile page
 import Home from './Home';
 import Approach from './Page-Approach'
 import './App.css';
+import CharityProfile from './CharityProfile';
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/charity-profile" element={<CharityProfile />} />
             <Route path="/impact" element={<ImpactReport />} />
             <Route path="/approach" element={<Approach />} />
             <Route path="/settings" element={<Settings />} />

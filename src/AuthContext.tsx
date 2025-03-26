@@ -4,6 +4,10 @@ interface User {
   username: string
   email: string
   signupDate: string
+  role: 'user' | 'charity'
+  // Add charity-specific fields that might be needed across the app
+  organizationName?: string
+  missionStatement?: string
 }
 
 interface AuthContextType {
@@ -25,7 +29,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = (userData: Omit<User, 'signupDate'>) => {
     setUser({ 
       ...userData, 
-      signupDate: new Date().toISOString() 
+      signupDate: new Date().toISOString(),
+      // Initialize optional fields
+      organizationName: userData.organizationName || '',
+      missionStatement: userData.missionStatement || ''
     })
   }
   
