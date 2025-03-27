@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault();
     // Add role-specific authentication logic
     login({
-      username: role === 'user' ? 'Guest User' : 'Charity Organization',
+      username: role === 'user' ? 'Ben' : 'Charity Organization',
       email,
       role
     });
@@ -55,7 +55,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login as {role}</button>
+        <button type="submit">Login</button>
       </form>
     </div>
   );

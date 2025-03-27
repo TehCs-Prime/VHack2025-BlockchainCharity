@@ -103,7 +103,7 @@
 
   /* Add these to both Login.css and Signup.css */
 .role-switcher {
-  display: flex;
+  display: none;
   gap: 1rem;
   margin-bottom: 2rem;
 }

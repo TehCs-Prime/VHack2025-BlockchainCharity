@@ -180,7 +180,7 @@ const Signup: React.FC = () => {
             </div>
           </>
         )}
-        <button type="submit">Sign Up as {role}</button>
+        <button type="submit">Sign Up {role}</button>
       </form>
 
       {/* Verification Card Modal for charity sign-ups */}
