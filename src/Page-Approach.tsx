@@ -13,6 +13,39 @@ const DonorIcon = () => (
 </svg>
   );
   
+  const MoneyIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      style={{ fill: 'rgba(255, 215, 0, 1)', transform: '', msFilter: '' }}
+    >
+  <path d="M12 15c-1.84 0-2-.86-2-1H8c0 .92.66 2.55 3 2.92V18h2v-1.08c2-.34 3-1.63 3-2.92 0-1.12-.52-3-4-3-2 0-2-.63-2-1s.7-1 2-1 1.39.64 1.4 1h2A3 3 0 0 0 13 7.12V6h-2v1.09C9 7.42 8 8.71 8 10c0 1.12.52 3 4 3 2 0 2 .68 2 1s-.62 1-2 1z"></path><path d="M5 2H2v2h2v17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4h2V2H5zm13 18H6V4h12z"></path>    </svg>
+      );
+
+  const CheckIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      style={{ fill: 'rgba(255, 215, 0, 1)', transform: '', msFilter: '' }}
+    >
+    <path d="M8 12.052c1.995 0 3.5-1.505 3.5-3.5s-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5 1.505 3.5 3.5 3.5zM9 13H7c-2.757 0-5 2.243-5 5v1h12v-1c0-2.757-2.243-5-5-5zm11.294-4.708-4.3 4.292-1.292-1.292-1.414 1.414 2.706 2.704 5.712-5.702z"></path>    </svg>
+      );
+
+  const GovIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      style={{ fill: 'rgba(255, 215, 0, 1)', transform: '', msFilter: '' }}
+    >
+  <path d="M2 8v4.001h1V18H2v3h16l3 .001V21h1v-3h-1v-5.999h1V8L12 2 2 8zm4 10v-5.999h2V18H6zm5 0v-5.999h2V18h-2zm7 0h-2v-5.999h2V18zM14 8a2 2 0 1 1-4.001-.001A2 2 0 0 1 14 8z"></path>    </svg>
+      );
+  
   const CharityIcon = () => (
     <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -21,8 +54,7 @@ const DonorIcon = () => (
   viewBox="0 0 24 24"
   style={{ fill: 'rgba(255, 215, 0, 1)', transform: '', msFilter: '' }}
 >
-<path d="M17.726 13.02 14 16H9v-1h4.065a.5.5 0 0 0 .416-.777l-.888-1.332A1.995 1.995 0 0 0 10.93 12H3a1 1 0 0 0-1 1v6a2 2 0 0 0 2 2h9.639a3 3 0 0 0 2.258-1.024L22 13l-1.452-.484a2.998 2.998 0 0 0-2.822.504zm1.532-5.63c.451-.465.73-1.108.73-1.818s-.279-1.353-.73-1.818A2.447 2.447 0 0 0 17.494 3S16.25 2.997 15 4.286C13.75 2.997 12.506 3 12.506 3a2.45 2.45 0 0 0-1.764.753c-.451.466-.73 1.108-.73 1.818s.279 1.354.73 1.818L15 12l4.258-4.61z"></path></svg>
-  );
+  <path d="M16 12h2v4h-2z"></path><path d="M20 7V5c0-1.103-.897-2-2-2H5C3.346 3 2 4.346 2 6v12c0 2.201 1.794 3 3 3h15c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2zM5 5h13v2H5a1.001 1.001 0 0 1 0-2zm15 14H5.012C4.55 18.988 4 18.805 4 18V8.815c.314.113.647.185 1 .185h15v10z"></path></svg>  );
   
   const LocalNGOIcon = () => (
     <svg
@@ -119,6 +151,61 @@ const ApproachPage: React.FC = () => {
       </div>
 
       <div className="donation-flow-container">
+      <div className='donation-flow-header'>
+            <h1>Charity Identity Verification Flow</h1>
+        </div>
+      
+      
+      <div className="donation-flow-steps">
+        <div className="donation-step">
+          <div className="step-icon">
+            <ProofIcon />
+          </div>
+          <div className="step-description">
+            <h3>Charity organisation provided <strong>official documentations</strong>.</h3>
+          </div>
+        </div>
+        
+        <div className="arrow">
+          <span>»</span>
+        </div>
+        
+        <div className="donation-step">
+          <div className="step-icon">
+            <GovIcon />
+          </div>
+          <div className="step-description">
+            <h3>Charity Profile verified for Official Government Registration and Legal Existence via <strong> API call</strong> to government database.</h3>
+          </div>
+        </div>
+        
+        <div className="arrow">
+          <span>»</span>
+        </div>
+        
+        <div className="donation-step">
+          <div className="step-icon">
+            <CheckIcon />
+          </div>
+          <div className="step-description">
+            <h3>Further verification through comprehensive<strong> Global Know-Your-Customer (KYC) </strong> in background screening</h3>
+          </div>
+        </div>
+
+        <div className="arrow">
+          <span>»</span>
+        </div>
+
+        <div className="donation-step">
+          <div className="step-icon">
+            <MoneyIcon />
+          </div>
+          <div className="step-description">
+            <h3>To conduct a fundraising project, charity organisation are required to submit a <strong>detailed proposal.</strong></h3>
+          </div>
+        </div>
+      </div>
+
         <div className='donation-flow-header'>
             <h1>Donation Flow</h1>
             <div className="donation-flow-buttons">
@@ -131,7 +218,7 @@ const ApproachPage: React.FC = () => {
                 </div>
 
                 <button className="ngo-button active">
-                LaCial Charity
+                Smart Contract Escrow
                 </button>
 
                 <div className="arrow">
