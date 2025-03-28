@@ -1,15 +1,22 @@
 import { useState } from "react";
-import "./Leaderboard.css"
+import "./Leaderboard.css";
 
+// Define LeaderboardEntry with proper properties
 interface LeaderboardEntry {
   id: number;
   name: string;
-  amount?: string;
-  funds?: string;
-  events?: number;
+  totalDonations?: number;
+  singleDonation?: number;
+  donationCount?: number;
+  topSupportedProject?: string;
+  supportedProject?: string;
+  avgDonationSize?: number;
+  badgeTitle?: string;
+  amount?: number;
   img?: string;
 }
 
+// Define LeaderboardData structure
 interface LeaderboardData {
   [key: string]: {
     allTime: LeaderboardEntry[];
@@ -17,78 +24,96 @@ interface LeaderboardData {
   };
 }
 
+// Leaderboard Data
 const leaderboardData: LeaderboardData = {
   TopContributors: {
     allTime: [
-      { id: 1, name: "Alice Johnson", amount: "$10,000", img: "./assets/dummy-female.png" },
-      { id: 2, name: "Bob Smith", amount: "$9,500", img: "./assets/dummy-male.png" },
-      { id: 3, name: "Charlie Davis", amount: "$9,000", img: "./assets/dummy-male.png" },
-      { id: 4, name: "Daniel Lee", amount: "$8,500", img: "./assets/dummy-male.png" },
-      { id: 5, name: "Emma Watson", amount: "$8,000", img: "./assets/dummy-female.png" },
+      { id: 1, name: "Ben", totalDonations: 10000, topSupportedProject: "Clean Water Initiative", img: "./assets/dummy-male.png", badgeTitle: "Philanthropy Champion" },
+      { id: 2, name: "Bob Smith", totalDonations: 9500, topSupportedProject: "Education for All", img: "./assets/dummy-male.png", badgeTitle: "Generous Giver" },
+      { id: 3, name: "Charlie Davis", totalDonations: 9000, topSupportedProject: "Eco-Friendly Homes", img: "./assets/dummy-male.png", badgeTitle: "Star Donor" },
+      { id: 4, name: "Daniel Lee", totalDonations: 8700, topSupportedProject: "Medical Aid", img: "./assets/dummy-male.png" },
+      { id: 5, name: "Emma Watson", totalDonations: 8200, topSupportedProject: "Solar Power Schools", img: "./assets/dummy-female.png" },
+      { id: 6, name: "Franklin Harris", totalDonations: 8000, topSupportedProject: "Refugee Support Fund", img: "./assets/dummy-male.png" },
+      { id: 7, name: "Grace Miller", totalDonations: 7800, topSupportedProject: "Wildlife Protection", img: "./assets/dummy-female.png" },
+      { id: 8, name: "Jack Wilson", totalDonations: 7600, topSupportedProject: "Disaster Relief", img: "./assets/dummy-male.png" },
+      { id: 9, name: "Sophia Green", totalDonations: 7400, topSupportedProject: "Mental Health Awareness", img: "./assets/dummy-female.png" },
     ],
     monthly: [
-      { id: 1, name: "Grace Miller", amount: "$2,500", img: "./assets/dummy-female.png" },
-      { id: 2, name: "Henry Clark", amount: "$2,200", img: "./assets/dummy-male.png" },
-      { id: 3, name: "Isabel Moore", amount: "$2,100", img: "./assets/dummy-female.png" },
+      { id: 1, name: "Grace Miller", totalDonations: 2500, topSupportedProject: "Medical Aid", img: "./assets/dummy-female.png", badgeTitle: "Star Donor" },
+      { id: 2, name: "Henry Clark", totalDonations: 2200, topSupportedProject: "Eco-Friendly Homes", img: "./assets/dummy-male.png", badgeTitle: "Monthly Hero" },
+      { id: 3, name: "Isabel Moore", totalDonations: 2100, topSupportedProject: "Education for All", img: "./assets/dummy-female.png", badgeTitle: "Generous Soul" },
+      { id: 4, name: "Ethan Carter", totalDonations: 1900, topSupportedProject: "Wildlife Protection", img: "./assets/dummy-male.png" },
+      { id: 5, name: "Ava Martinez", totalDonations: 1800, topSupportedProject: "Mental Health Awareness", img: "./assets/dummy-female.png" },
+      { id: 6, name: "Michael Brown", totalDonations: 1750, topSupportedProject: "Disaster Relief", img: "./assets/dummy-male.png" },
+      { id: 7, name: "Sophia Green", totalDonations: 1600, topSupportedProject: "Food Aid Program", img: "./assets/dummy-female.png" },
     ],
   },
-  BestFundedProjects: {
+  OneTimeTopDonation: {
     allTime: [
-      { id: 1, name: "Clean Water Initiative", amount: "$100,000" },
-      { id: 2, name: "Education for All", amount: "$95,000" },
-      { id: 3, name: "Eco-Friendly Homes", amount: "$90,000" },
+      { id: 1, name: "Sophie Tan", singleDonation: 10000, supportedProject: "Medical Aid for Refugees", img: "./assets/dummy-female.png", badgeTitle: "Legendary Supporter" },
+      { id: 2, name: "Daniel Carter", singleDonation: 9500, supportedProject: "Education for Girls", img: "./assets/dummy-male.png", badgeTitle: "Gold Benefactor" },
+      { id: 3, name: "Zhang Wei", singleDonation: 9000, supportedProject: "Emergency Food Aid", img: "./assets/dummy-male.png", badgeTitle: "Platinum Donor" },
+      { id: 4, name: "Ava Martinez", singleDonation: 8500, supportedProject: "Eco-Friendly Homes", img: "./assets/dummy-female.png" },
+      { id: 5, name: "William Jones", singleDonation: 8200, supportedProject: "Wildlife Protection", img: "./assets/dummy-male.png" },
+      { id: 6, name: "Emily Davis", singleDonation: 8000, supportedProject: "Solar Power Schools", img: "./assets/dummy-female.png" },
+      { id: 7, name: "Christopher Lee", singleDonation: 7800, supportedProject: "Clean Water Initiative", img: "./assets/dummy-male.png" },
     ],
     monthly: [
-      { id: 1, name: "Solar Power Schools", amount: "$20,000" },
-      { id: 2, name: "Medical Aid", amount: "$18,000" },
+      { id: 1, name: "Ethan Brown", singleDonation: 3000, supportedProject: "Clean Water Initiative", img: "./assets/dummy-male.png", badgeTitle: "Generous Heart" },
+      { id: 2, name: "Olivia Wilson", singleDonation: 2800, supportedProject: "Eco-Friendly Homes", img: "./assets/dummy-female.png", badgeTitle: "Giving Star" },
+      { id: 3, name: "Benjamin Taylor", singleDonation: 2700, supportedProject: "Education for Girls", img: "./assets/dummy-male.png", badgeTitle: "Top Contributor" },
+      { id: 4, name: "Sophia Green", singleDonation: 2500, supportedProject: "Medical Aid", img: "./assets/dummy-female.png" },
+      { id: 5, name: "David Clark", singleDonation: 2300, supportedProject: "Disaster Relief", img: "./assets/dummy-male.png" },
+      { id: 6, name: "Lily Carter", singleDonation: 2200, supportedProject: "Food Aid Program", img: "./assets/dummy-female.png" },
     ],
   },
   MostActiveSupporters: {
     allTime: [
-      { id: 1, name: "Daniel Lee", events: 30, img: "./assets/dummy-male.png" },
-      { id: 2, name: "Emma Watson", events: 28, img: "./assets/dummy-female.png" },
+      { id: 1, name: "Daniel Lee", donationCount: 30, avgDonationSize: 300, img: "./assets/dummy-male.png", badgeTitle: "Super Supporter" },
+      { id: 2, name: "Emma Watson", donationCount: 28, avgDonationSize: 280, img: "./assets/dummy-female.png", badgeTitle: "Donation Dynamo" },
+      { id: 3, name: "Oliver White", donationCount: 26, avgDonationSize: 260, img: "./assets/dummy-male.png", badgeTitle: "Charity Champion" },
+      { id: 4, name: "Sophia Brown", donationCount: 24, avgDonationSize: 250, img: "./assets/dummy-female.png" },
+      { id: 5, name: "Henry Adams", donationCount: 22, avgDonationSize: 230, img: "./assets/dummy-male.png" },
+      { id: 6, name: "Lucas Martinez", donationCount: 21, avgDonationSize: 220, img: "./assets/dummy-male.png" },
+      { id: 7, name: "Emily Wilson", donationCount: 20, avgDonationSize: 210, img: "./assets/dummy-female.png" },
     ],
     monthly: [
-      { id: 1, name: "Charlie Davis", events: 10, img: "./assets/dummy-male.png" },
-      { id: 2, name: "Alice Johnson", events: 9, img: "./assets/dummy-female.png" },
-    ],
-  },
-  TopFundraisers: {
-    allTime: [
-      { id: 1, name: "Grace Miller", funds: "$50,000", img: "./assets/dummy-female.png" },
-      { id: 2, name: "Henry Clark", funds: "$45,000", img: "./assets/dummy-male.png" },
-    ],
-    monthly: [
-      { id: 1, name: "Isabel Moore", funds: "$15,000", img: "./assets/dummy-female.png" },
-      { id: 2, name: "Emma Watson", funds: "$12,000", img: "./assets/dummy-female.png" },
+      { id: 1, name: "Charlie Davis", donationCount: 10, avgDonationSize: 100, img: "./assets/dummy-male.png", badgeTitle: "Active Star" },
+      { id: 2, name: "Alice Johnson", donationCount: 9, avgDonationSize: 110, img: "./assets/dummy-female.png", badgeTitle: "Giving Hero" },
+      { id: 3, name: "Jack Thompson", donationCount: 8, avgDonationSize: 105, img: "./assets/dummy-male.png", badgeTitle: "Monthly Donor" },
+      { id: 4, name: "Sophia Green", donationCount: 7, avgDonationSize: 98, img: "./assets/dummy-female.png" },
+      { id: 5, name: "Ryan Evans", donationCount: 6, avgDonationSize: 95, img: "./assets/dummy-male.png" },
+      { id: 6, name: "Natalie Foster", donationCount: 6, avgDonationSize: 92, img: "./assets/dummy-female.png" },
     ],
   },
 };
 
+// Leaderboard Component
 export default function Leaderboard() {
-  const [activeTab, setActiveTab] = useState<keyof LeaderboardData>("TopContributors");
+  const [activeTab, setActiveTab] = useState<keyof typeof leaderboardData>("TopContributors");
   const [timeFrame, setTimeFrame] = useState<"allTime" | "monthly">("allTime");
 
-  const top3 = leaderboardData[activeTab][timeFrame].slice(0, 3);
-  const others = leaderboardData[activeTab][timeFrame].slice(3);
+  // Extract relevant data based on the selected tab and timeframe
+  const entries = leaderboardData[activeTab][timeFrame] || [];
+  const top3 = entries.slice(0, 3);
+  const others = entries.slice(3);
 
-  const first = top3[0] || { name: "N/A", amount: "$0", img: "/default.jpg" };
-  const second = top3[1] || { name: "N/A", amount: "$0", img: "/default.jpg" };
-  const third = top3[2] || { name: "N/A", amount: "$0", img: "/default.jpg" };
+  // Default values for missing data
+  const defaultEntry: LeaderboardEntry = { id: 0, name: "N/A", img: "./assets/default.jpg" };
 
   return (
     <div className="leaderboard-container">
-
       <div className="leaderboard-title-container">
         <h1 className="leaderboard-title">Leaderboard</h1>
       </div>
 
+      {/* Tabs to switch between leaderboard categories */}
       <div className="leaderboard-tabs">
         {Object.keys(leaderboardData).map((key) => (
           <button
             key={key}
             className={`tabs-button ${activeTab === key ? "active" : ""}`}
-            onClick={() => setActiveTab(key as keyof LeaderboardData)}
+            onClick={() => setActiveTab(key as keyof typeof leaderboardData)}
           >
             {key.replace(/([A-Z])/g, " $1").trim()}
           </button>
@@ -97,6 +122,7 @@ export default function Leaderboard() {
 
       <div className="breaker"></div>
 
+      {/* Timeframe selection buttons */}
       <div className="timeframe-buttons">
         {["allTime", "monthly"].map((tf) => (
           <button
@@ -109,27 +135,40 @@ export default function Leaderboard() {
         ))}
       </div>
 
+      {/* Leaderboard ranking */}
       <div className="leaderboard-list">
+        {/* Top 3 Podium Display */}
         <div className="top-three">
-          {[second, first, third].map((person, index) => (
+          {[top3[1] || defaultEntry, top3[0] || defaultEntry, top3[2] || defaultEntry].map((person, index) => (
             <div key={index} className={`leaderboard-card position-${index}`}>
-              <img src={person.img || "./dummy.png"} alt={person.name} className="avatar" />
+              <img src={person.img || "./assets/default.jpg"} alt={person.name} className="avatar" />
               <p className="name">{person.name}</p>
-              <p className="ach-amount">{person.amount}</p>
+
+              {/* Dynamically show relevant value based on activeTab */}
+              {activeTab === "TopContributors" && <p className="ach-amount">${person.totalDonations}</p>}
+              {activeTab === "OneTimeTopDonation" && <p className="ach-amount">${person.singleDonation}</p>}
+              {activeTab === "MostActiveSupporters" && <p className="ach-amount">{person.donationCount} donations</p>}
+
+              <div className="badges">{person.badgeTitle}</div>
             </div>
           ))}
         </div>
 
+        {/* List of other ranked donors/projects */}
         {others.length > 0 && (
           <div className="other-entries">
             {others.map((entry, index) => (
               <div key={entry.id} className="leaderboard-entry">
                 <div className="entry-details">
                   <span className="rank">{index + 4}</span>
-                  <img src={entry.img} alt={entry.name} className="avatar" />
+                  <img src={entry.img || "./assets/default.jpg"} alt={entry.name} className="avatar" />
                   <p className="name">{entry.name}</p>
                 </div>
-                <p className="ach-amount">{entry.amount}</p>
+
+                {/* Dynamically show relevant value */}
+                {activeTab === "TopContributors" && <p className="ach-amount">${entry.totalDonations}</p>}
+                {activeTab === "OneTimeTopDonation" && <p className="ach-amount">${entry.singleDonation}</p>}
+                {activeTab === "MostActiveSupporters" && <p className="ach-amount">{entry.donationCount} donations</p>}
               </div>
             ))}
           </div>

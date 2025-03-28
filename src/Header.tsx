@@ -36,7 +36,7 @@ const Header: React.FC = () => {
               <NavLink to="/explore" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Explore</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/approach" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>How We Do It</NavLink>
+              <NavLink to="/approach" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>How We Works</NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/impact" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Impact</NavLink>
@@ -51,9 +51,8 @@ const Header: React.FC = () => {
         <div className="auth-section">
           {user ? (
             <div className="user-menu">
-              <Link to={profileRoute} className="profile-link">
-                Profile
-              </Link>
+              <Link to={profileRoute} className="login-link">Profile</Link>
+              <span className="divider">|</span>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
             </div>
           ) : (

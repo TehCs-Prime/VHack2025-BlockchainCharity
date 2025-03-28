@@ -83,29 +83,27 @@ export function AchievementDashboard() {
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
-            <div className="achievement-modal-content">
-              <div className="achievement-modal-list">
-                {(viewCompleted ? completedAchievements : inProgressAchievements).map((ach) => (
-                  <div key={ach.id} className="achievement-card">
-                    <div className="achievement-card-header">
-                      <div className="achievement-avatar">
-                        <i className={`fas ${ach.icon} achievement-icon`}></i>
-                      </div>
-                      <div className="achievement-info">
-                        <h2 className="achievement-card-title">{ach.title}</h2>
-                        <p className="achievement-card-criteria">{ach.criteria}</p>
-                        <p className="achievement-progress-percent">{ach.progress}%</p>
-                        <div className="achievement-progress-container">
-                          <div
-                            className={`achievement-progress-bar ${ach.progress === 100 ? 'complete' : 'incomplete'}`}
-                            style={{ width: `${ach.progress}%` }}
-                          ></div>
-                        </div>
+            <div className="achievement-modal-list">
+              {(viewCompleted ? completedAchievements : inProgressAchievements).map((ach) => (
+                <div key={ach.id} className="achievement-card">
+                  <div className="achievement-card-header">
+                    <div className="achievement-avatar">
+                      <i className={`fas ${ach.icon} achievement-icon`}></i>
+                    </div>
+                    <div className="achievement-info">
+                      <h2 className="achievement-card-title">{ach.title}</h2>
+                      <p className="achievement-card-criteria">{ach.criteria}</p>
+                      <p className="achievement-progress-percent">{ach.progress}%</p>
+                      <div className="achievement-progress-container">
+                        <div
+                          className={`achievement-progress-bar ${ach.progress === 100 ? 'complete' : 'incomplete'}`}
+                          style={{ width: `${ach.progress}%` }}
+                        ></div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

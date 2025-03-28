@@ -28,7 +28,7 @@
   .why-us-underline {
     width: 4rem;
     height: 0.25rem;
-    background-color: #48bb78;
+    background-color: #e7b718;
     margin: 0 auto 2.5rem;
   }
   
@@ -37,6 +37,7 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 1.5rem;
+    user-select: none;
   }
   
   .feature-card {
@@ -106,7 +107,7 @@
 .landing-options {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 4rem;
 }
 
 .landing-option {
@@ -118,14 +119,14 @@
   transition: transform 0.3s ease;
 }
 
-.landing-option:hover {
+/* .landing-option:hover {
   transform: translateY(-10px);
-}
+} */
 
 .icon-container {
   width: 64px;
   height: 64px;
-  background-color: #e6f3ec;
+  background-color: #f6dd23;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -134,16 +135,18 @@
 }
 
 .icon {
-  width: 32px;
-  height: 32px;
-  color: #4caf50;
+  width: 36px;
+  height: 36px;
+  color: white;
   stroke-width: 2;
+  margin: 0;
 }
 
 .landing-option h2 {
   color: #333;
   margin-bottom: 0.75rem;
   font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .landing-option p {
@@ -152,19 +155,20 @@
   line-height: 1.5;
 }
 
-.cta-button {
-  background-color: #4caf50;
+.ctas-button {
+  background-color: #f6dd23;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
-.cta-button:hover {
-  background-color: #45a049;
+.ctas-button:hover {
+  transform: scale(1.1);
+  color: white;
 }
 
 .intro-container {

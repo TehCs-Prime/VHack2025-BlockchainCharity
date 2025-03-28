@@ -11,7 +11,7 @@ const badges: Badge[] = [
   { id: 1, title: "First-Time Donor", icon: "fa-heart" },
   { id: 2, title: "Top Fundraiser", icon: "fa-star" },
   { id: 3, title: "Generous Donor", icon: "fa-gift" },
-  { id: 4, title: "Active Supporter", icon: "fa-users" },
+  { id: 4, title: "Philantrophy Champion", icon: "fa-users" },
 ];
 
 export function BadgeShowcase() {

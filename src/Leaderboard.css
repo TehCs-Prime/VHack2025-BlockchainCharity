@@ -7,8 +7,8 @@
 }
 
 .leaderboard-title-container {
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-  margin: -2rem -2rem 2.5rem -2rem;
+  background: linear-gradient(135deg, #ea7014 0%, #eeaf1b 50%, #e6c910 100%);
+  margin: -2rem -2rem 0rem -2rem;
   padding: 3rem 2rem;
   text-align: center;
   position: relative;
@@ -40,7 +40,7 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin: 1.5rem 0;
 }
 
 .breaker {
@@ -121,6 +121,25 @@ h1 {
   margin-bottom: 50px;
 }
 
+.badges{
+  background-color: #eeaf1b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  padding: 3px 16px;
+  margin-top: 0.6rem;
+  border-radius: 20px;
+  width: 70%;
+}
+
+.position-0 .badges{
+  background-color: #c3c3c3;
+}
+
+.position-2 .badges{
+  background-color: #b4370d;
+}
+
 .leaderboard-card {
   display: flex;
   flex-direction: column;
@@ -133,10 +152,6 @@ h1 {
   text-align: center;
   width: 200px;
   transition: transform 0.3s ease-in-out;
-}
-
-.leaderboard-card:hover {
-  transform: translateY(-5px);
 }
 
 .leaderboard-card .avatar {
