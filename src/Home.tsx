@@ -93,7 +93,8 @@ const Home: React.FC = () => {
       </div>
     </div>
       <div className="landing-container">
-        <h1 className="landing-title">Ready to Start?</h1>
+        <h2 className="why-us-title">Ready to Start?</h2>
+        <div className="why-us-underline"></div>
         <div className="landing-options">
           <div className="landing-option">
             <div className="icon-container">
@@ -103,7 +104,7 @@ const Home: React.FC = () => {
             </div>
             <h2>Donate</h2>
             <p>Explore projects to contribute to around the world.</p>
-            <button className="cta-button"><a href='/explore'>Discover Projects</a></button>
+            <button className="ctas-button"><a href='/explore'>Discover Projects</a></button>
           </div>
           <div className="landing-option">
             <div className="icon-container">
@@ -114,7 +115,7 @@ const Home: React.FC = () => {
             </div>
             <h2>Start a Project</h2>
             <p>Nonprofits ready to fundraise can start a project here.</p>
-            <button className="cta-button"><a href='/login'>Fundraise</a></button>
+            <button className="ctas-button"><a href='/login'>Fundraise</a></button>
           </div>
         </div>
       </div>

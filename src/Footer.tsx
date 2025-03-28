@@ -8,12 +8,12 @@ const Footer: React.FC = () => {
       <div className="footer-container">
 
         <div className="footer-section logo-section">
-          <div className="binance-logo-container">
+          <div className="lacial-logo-container">
 
-            <div className="binance-logo">
+            <div className="lacial-logo">
               <img src={Logo} alt='Logo' />
               <div className="logo-text">
-                <span className="binance-text">LACIAL CHARITY</span>
+                <span className="lacial-text">LACIAL CHARITY</span>
               </div>
             </div>
 

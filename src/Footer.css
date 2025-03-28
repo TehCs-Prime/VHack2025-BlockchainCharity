@@ -12,7 +12,7 @@
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 1.5rem;
+    padding: 1rem 1.5rem 0 1.5rem;
   }
   
   .footer-section {
@@ -27,13 +27,13 @@
     min-width: 300px;
   }
   
-  .binance-logo-container {
+  .lacial-logo-container {
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
   }
   
-  .binance-logo {
+  .lacial-logo {
     display: grid;
     grid-template-columns: 1fr ;
     justify-items: center;
@@ -42,9 +42,10 @@
     gap: 0.5rem;
   }
 
-  .binance-logo img {
-    width: 300px;
+  .lacial-logo img {
+    width: 250px;
     height: auto;
+    margin-bottom: 10px;
   }
   
   
@@ -54,7 +55,7 @@
     transform: translateY(2px);
   }
   
-  .binance-text {
+  .lacial-text {
     color: #F0B90B;
     font-size: 24px;
     font-weight: 700;

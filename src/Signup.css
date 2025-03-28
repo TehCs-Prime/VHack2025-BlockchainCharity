@@ -1,105 +1,151 @@
 .signup-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-  }
-  
-  .signup-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .signup-container input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .signup-container button {
-    padding: 10px;
-    background-color: #2196F3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+  max-width: 580px;
+  margin: 50px auto;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  padding: 0;
+}
 
-  .signup-container {
-    max-width: 800px;
-  }
-  
-  .form-section {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
-  }
-  
-  .form-section h3 {
-    margin-top: 0;
-    color: #2196F3;
-  }
-  
-  textarea {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  .terms-section {
-    display: flex;
-    gap: 10px;
-    margin: 1.5rem 0;
-  }
-  
-  .uploaded-files {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-  }
+.signup-container h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  padding: 30px 0;
+  text-align: center;
+}
 
-  .signup-container {
-    max-width: 800px;
-  }
-  
-  .form-section {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    border: 1px solid #eee;
-    border-radius: 8px;
-  }
-  
-  .form-section h3 {
-    margin-top: 0;
-    color: #2196F3;
-  }
-  
-  textarea {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  .terms-section {
-    display: flex;
-    gap: 10px;
-    margin: 1.5rem 0;
-  }
-  
-  .uploaded-files {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-  }
+.signup-container form {
+  display: flex;
+  padding: 10px 80px;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.signup-container input {
+  width: 100%;
+  padding: 10px 30px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+}
+
+.signup-container button {
+  padding: 10px;
+  margin: 36px 0;
+  width: 70%;
+  background-color: #f8bd1b;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in;
+}
+
+.signup-container button:hover {
+  background-color: #e98d16;
+}
+/* 
+.signup-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.signup-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.signup-container input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.signup-container button {
+  padding: 10px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.signup-container {
+  max-width: 800px;
+}
+
+.form-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.form-section h3 {
+  margin-top: 0;
+  color: #2196F3;
+}
+
+textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 100px;
+  resize: vertical;
+}
+
+.terms-section {
+  display: flex;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.uploaded-files {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.signup-container {
+  max-width: 800px;
+}
+
+.form-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.form-section h3 {
+  margin-top: 0;
+  color: #2196F3;
+}
+
+textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 100px;
+  resize: vertical;
+}
+
+.terms-section {
+  display: flex;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.uploaded-files {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+} */
 
   /* Add these to both Login.css and Signup.css */
 .role-switcher {
@@ -123,14 +169,14 @@
   color: white;
 }
 
-/* Update signup-container max-width */
+/* Update signup-container max-width
 .signup-container {
   max-width: 600px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-}
+  border-radius: 30px;
+} */
 
 /* Add transition for form changes */
 form {

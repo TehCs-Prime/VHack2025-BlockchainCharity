@@ -1,123 +1,178 @@
 .cards-scroll-container {
-    display: flex;
-    overflow-x: auto;
-    padding: 1rem;
-    gap: 1rem;
-    justify-self: center;
-  }
-  
-  .cards-scroll-container::-webkit-scrollbar {
-    display: none;
-  }
-  .project-cards:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Ensure each card has a minimum width */
-  .project-cards {
-    position: relative; 
-    flex: 0 0 auto;
-    min-width: 250px;
-    background: #f9fbdc;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem;
-    width: 200px;
-    height: auto;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  .project-image {
-    width: 350px;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
+  display: flex;
+  overflow-x: auto;
+  padding: 1rem;
+  gap: 3rem;
+  justify-self: center;
+  justify-content: center;
+}
 
-  .project-progress {
-    margin: 0;
-    margin-bottom: 10px;
-  }
+.cards-scroll-container::-webkit-scrollbar {
+  display: none;
+}
 
-  .project-description {
-    font-size: 14px;
-    margin: 0;
-  }
-  
-  .project-statuss {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    border-bottom-left-radius: 8px;
-    color: rgb(0, 0, 0);
-    font-weight: 500;
-  }
-  
-  .project-statuss[data-status="Funding"] {
-    background-color: #f39c12;
-  }
-  
-  .project-statuss[data-status="Under Implementation"] {
-    background-color: #3498db;
-  }
-  
-  .project-statuss[data-status="Completed"] {
-    background-color: #2ecc71;
-  }
-  
-  .project-statuss[data-status="Cancelled"] {
-    background-color: #e74c3c;
-  }
+.project-card {
+  flex: 0 0 350px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
 
-  .project-titles {
-    margin-top: 20px;
-    font-size: 20px;
-    font-weight: bold;
-  }
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
 
-  .scrollable-cards-wrapper {
-    position: relative; 
-    width: 100%;
-    margin: 2rem auto;
-    max-width: 1200px;
-  }
+.project-status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border-bottom-left-radius: 8px;
+  color: white;
+  font-weight: 500;
+}
 
-  .scroll-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 5;
-    width: 40px;
-    height: 40px;
-    background: #d9d9d9;
-    border: none;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* optional: fade them out until hover */
-    opacity: 0.8;
-  }
-  
-  .scroll-button:hover {
-    opacity: 1;
-  }
-  
-  .scroll-button img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .scroll-button.left {
-    left: -20px; /* or 10px, or wherever you want the button */
-  }
-  
-  .scroll-button.right {
-    right: -20px; 
-  }
-  
+.project-status[data-status="Funding"] {
+  background-color: #f39c12;
+}
+
+.project-status[data-status="Under Implementation"] {
+  background-color: #3498db;
+}
+
+.project-status[data-status="Completed"] {
+  background-color: #2ecc71;
+}
+
+.project-status[data-status="Cancelled"] {
+  background-color: #e74c3c;
+}
+
+.project-title {
+  margin-top: 0.7rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+.project-category {
+  display: inline-block;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.project-image {
+  width: 300px;
+  height: 180px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.project-description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.project-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1rem;
+}
+
+.project-progress {
+  margin: 12px 0;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  background-color: #f0f0f0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Status-specific progress bar colors */
+[data-status="Funding"] .progress-bar-fill {
+  background-color: #FF9800;
+}
+
+[data-status="Completed"] .progress-bar-fill {
+  background-color: #4CAF50;
+}
+
+[data-status="Under Implementation"] .progress-bar-fill {
+  background-color: #2196F3;
+}
+
+[data-status="Cancelled"] .progress-bar-fill {
+  background-color: #F44336;
+}
+
+
+.scrollable-cards-wrapper {
+  position: relative; 
+  width: 100%;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  background: #cdcdcd;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* optional: fade them out until hover */
+  opacity: 0.8;
+}
+
+.scroll-button:hover {
+  opacity: 1;
+}
+
+.scroll-button.left {
+  left: -20px; /* or 10px, or wherever you want the button */
+}
+
+.scroll-button.right {
+  right: -20px; 
+}

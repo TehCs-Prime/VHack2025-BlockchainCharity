@@ -1,495 +1,492 @@
-
-
 .project-discovery-container {
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: #333;
-    background-color: #f8f9fa;
-  }
-  
-  .page-title-container {
-    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-    margin: -2rem -2rem 2.5rem -2rem;
-    padding: 3rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Add some decorative elements to the background */
-  .page-title-container::before {
-    content: "";
-    position: absolute;
-    top: -10%;
-    left: -10%;
-    width: 120%;
-    height: 120%;
-    z-index: 0;
-  }
-  
-  .page-title {
-    font-size: 2.8rem;
-    margin: 0;
-    color: #ffffff;
-    font-weight: 700;
-    position: relative;
-    z-index: 1;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .content-layout {
-    display: flex;
-    gap: 2.5rem;
-    min-height: 70vh;
-  }
-  
-  /* Sidebar styles */
-  .filters-sidebar {
-    flex: 0 0 280px;
-    background-color: #fff;
-    padding: 1.8rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    height: fit-content;
-    position: sticky;
-    top: 1.5rem;
-  }
-  
-  .filters-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .filters-header h2 {
-    font-size: 1.6rem;
-    color: #2c3e50;
-    margin: 0;
-  }
-  
-  .clear-filters-btn {
-    background: none;
-    border: none;
-    color: #3498db;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  
-  .clear-filters-btn:hover {
-    color: #2980b9;
-    text-decoration: underline;
-  }
-  
-  .filter-section {
-    margin-bottom: 2rem;
-    padding-bottom: 1.8rem;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .filter-section:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-  }
-  
-  .filter-section h3 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-    font-weight: 600;
-  }
-  
-  .filter-option {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.7rem;
-  }
-  
-  .filter-option input[type="checkbox"] {
-    margin-right: 0.8rem;
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
-    accent-color: #3498db;
-  }
-  
-  .filter-option label {
-    font-size: 1rem;
-    color: #555;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  
-  .filter-option:hover label {
-    color: #3498db;
-  }
-  
-  .categories-section {
-    max-height: 300px;
-  }
-  
-  .scrollable-categories {
-    max-height: 220px;
-    overflow-y: auto;
-    padding-right: 8px;
-  }
-  
-  .scrollable-categories::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .scrollable-categories::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-  
-  .scrollable-categories::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-  }
-  
-  .scrollable-categories::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
-  }
-  
-  .location-input {
-    position: relative;
-  }
-  
-  .location-input input {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  
-  .location-input input:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
-    outline: none;
-  }
-  
-  .clear-location-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #777;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-  }
-  
-  .clear-location-btn:hover {
-    background-color: #f0f0f0;
-    color: #333;
-  }
-  
-  .active-filters {
-    margin-top: 2rem;
-  }
-  
-  .active-filters-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .no-filters {
-    color: #999;
-    font-style: italic;
-  }
-  
-  .filter-tag {
-    background-color: #ecf0f1;
-    color: #2c3e50;
-    padding: 0.4rem 0.7rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    display: inline-block;
-  }
-  
-  /* Main content styles */
-  .projects-content {
-    flex: 1;
-  }
-  
-  .search-and-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    background-color: #fff;
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  }
-  
-  .search-bar {
-    position: relative;
-    flex: 0 0 60%;
-  }
-  
-  .search-bar input {
-    width: 100%;
-    padding: 0.9rem 1rem 0.9rem 2.8rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  
-  .search-bar input:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
-    outline: none;
-  }
-  
-  .search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #888;
-    font-size: 1.1rem;
-  }
-  
-  .clear-search-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #777;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-  }
-  
-  .clear-search-btn:hover {
-    background-color: #f0f0f0;
-    color: #333;
-  }
-  
-  .sort-controls {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-  }
-  
-  .sort-dropdown {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .sort-dropdown label {
-    font-size: 0.95rem;
-    color: #555;
-  }
-  
-  .sort-dropdown select {
-    padding: 0.6rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: white;
-    font-size: 0.95rem;
-    color: #333;
-    cursor: pointer;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  
-  .sort-dropdown select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
-    outline: none;
-  }
-  
-  .view-toggle {
-    display: flex;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #ddd;
-  }
-  
-  .view-btn {
-    background-color: white;
-    border: none;
-    padding: 0.6rem 1rem;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  .view-btn:not(:last-child) {
-    border-right: 1px solid #ddd;
-  }
-  
-  .view-btn.active {
-    background-color: #3498db;
-    color: white;
-  }
-  
-  .view-btn:not(.active):hover {
-    background-color: #f0f0f0;
-  }
-  
-  /* Project container styles */
-  .projects-container {
-    display: grid;
-    gap: 1.5rem;
-  }
-  
-  .grid-view {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-  
-  .list-view {
-    grid-template-columns: 1fr;
-  }
-  
-  .project-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-  
-  .project-status {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    border-bottom-left-radius: 8px;
-    color: white;
-    font-weight: 500;
-  }
-  
-  .project-status[data-status="Funding"] {
-    background-color: #f39c12;
-  }
-  
-  .project-status[data-status="Under Implementation"] {
-    background-color: #3498db;
-  }
-  
-  .project-status[data-status="Completed"] {
-    background-color: #2ecc71;
-  }
-  
-  .project-status[data-status="Cancelled"] {
-    background-color: #e74c3c;
-  }
-  
-  .project-title {
-    margin-top: 0.7rem;
-    margin-bottom: 0.8rem;
-    font-size: 1.3rem;
-    color: #2c3e50;
-  }
-  
-  .project-category {
-    display: inline-block;
-    background-color: #ecf0f1;
-    color: #2c3e50;
-    padding: 0.3rem 0.6rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
-  }
+  margin: 0 auto;
+  padding: 2rem;
+  color: #333;
+  background-color: #f8f9fa;
+}
 
-  .project-image {
-    width: 350px;
-    height: auto;
-    margin-bottom: 20px;
-    border-radius: 10px;
-  }
-  
-  .project-description {
-    color: #666;
-    margin-bottom: 1.5rem;
-    line-height: 1.5;
-  }
-  
-  .project-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #7f8c8d;
-    font-size: 0.9rem;
-    border-top: 1px solid #f0f0f0;
-    padding-top: 1rem;
-  }
-  
-  .project-progress {
-    margin: 12px 0;
-  }
-  
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-  
-  .progress-bar-container {
-    width: 100%;
-    background-color: #f0f0f0;
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  
-  .progress-bar-fill {
-    height: 100%;
-    background-color: #4CAF50;
-    border-radius: 4px;
-    transition: width 0.3s ease;
-  }
-  
-  /* Status-specific progress bar colors */
-  [data-status="Funding"] .progress-bar-fill {
-    background-color: #FF9800;
-  }
-  
-  [data-status="Completed"] .progress-bar-fill {
-    background-color: #4CAF50;
-  }
-  
-  [data-status="Under Implementation"] .progress-bar-fill {
-    background-color: #2196F3;
-  }
-  
-  [data-status="Cancelled"] .progress-bar-fill {
-    background-color: #F44336;
-  }
+.page-title-container {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  margin: -2rem -2rem 2.5rem -2rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Add some decorative elements to the background */
+.page-title-container::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  z-index: 0;
+}
+
+.page-title {
+  font-size: 2.8rem;
+  margin: 0;
+  color: #ffffff;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.content-layout {
+  display: flex;
+  gap: 2.5rem;
+  min-height: 70vh;
+}
+
+/* Sidebar styles */
+.filters-sidebar {
+  flex: 0 0 280px;
+  background-color: #fff;
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.filters-header h2 {
+  font-size: 1.6rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.clear-filters-btn {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.clear-filters-btn:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+.filter-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid #eee;
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.filter-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+
+.filter-option input[type="checkbox"] {
+  margin-right: 0.8rem;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: #3498db;
+}
+
+.filter-option label {
+  font-size: 1rem;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.filter-option:hover label {
+  color: #3498db;
+}
+
+.categories-section {
+  max-height: 300px;
+}
+
+.scrollable-categories {
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.scrollable-categories::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable-categories::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.scrollable-categories::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.scrollable-categories::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+.location-input {
+  position: relative;
+}
+
+.location-input input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.location-input input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+  outline: none;
+}
+
+.clear-location-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.clear-location-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.active-filters {
+  margin-top: 2rem;
+}
+
+.active-filters-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.no-filters {
+  color: #999;
+  font-style: italic;
+}
+
+.filter-tag {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  padding: 0.4rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: inline-block;
+}
+
+/* Main content styles */
+.projects-content {
+  flex: 1;
+}
+
+.search-and-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar {
+  position: relative;
+  flex: 0 0 60%;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 2.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-bar input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.clear-search-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.sort-controls {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.sort-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-dropdown label {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.sort-dropdown select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.sort-dropdown select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+  outline: none;
+}
+
+.view-toggle {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.view-btn {
+  background-color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.view-btn:not(:last-child) {
+  border-right: 1px solid #ddd;
+}
+
+.view-btn.active {
+  background-color: #3498db;
+  color: white;
+}
+
+.view-btn:not(.active):hover {
+  background-color: #f0f0f0;
+}
+
+/* Project container styles */
+.projects-container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grid-view {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.list-view {
+  grid-template-columns: 1fr;
+}
+
+.project-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.project-status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border-bottom-left-radius: 8px;
+  color: white;
+  font-weight: 500;
+}
+
+.project-status[data-status="Funding"] {
+  background-color: #f39c12;
+}
+
+.project-status[data-status="Under Implementation"] {
+  background-color: #3498db;
+}
+
+.project-status[data-status="Completed"] {
+  background-color: #2ecc71;
+}
+
+.project-status[data-status="Cancelled"] {
+  background-color: #e74c3c;
+}
+
+.project-title {
+  margin-top: 0.7rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+.project-category {
+  display: inline-block;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.project-image {
+  width: 350px;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.project-description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.project-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1rem;
+}
+
+.project-progress {
+  margin: 12px 0;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  background-color: #f0f0f0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Status-specific progress bar colors */
+[data-status="Funding"] .progress-bar-fill {
+  background-color: #FF9800;
+}
+
+[data-status="Completed"] .progress-bar-fill {
+  background-color: #4CAF50;
+}
+
+[data-status="Under Implementation"] .progress-bar-fill {
+  background-color: #2196F3;
+}
+
+[data-status="Cancelled"] .progress-bar-fill {
+  background-color: #F44336;
+}

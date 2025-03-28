@@ -77,22 +77,22 @@ const ScrollableCards: React.FC = () => {
     <div className="scrollable-cards-wrapper">
       {/* Left Arrow Button */}
       <button className="scroll-button left" onClick={scrollLeft}>
-        <i className='NaviArrow'> &#8592; </i>
+        <i className="fa-solid fa-chevron-left"></i>
       </button>
 
       {/* Scrollable container with a ref */}
       <div className="cards-scroll-container" ref={scrollContainerRef}>
         {mockProjects.map((project) => (
           <div
-            className="project-cards"
+            className="project-card"
             key={project.id}
             onClick={() => navigate(`/project/${project.id}`)}
           >
-            <div className="project-statuss" data-status={project.status}>
+            <div className="project-status" data-status={project.status}>
               {project.status}
             </div>
             
-            <h3 className="project-titles">{project.title}</h3>
+            <h3 className="project-title">{project.title}</h3>
             <img
               className="project-image"
               src={project.imageUrl}
@@ -114,7 +114,7 @@ const ScrollableCards: React.FC = () => {
 
       {/* Right Arrow Button */}
       <button className="scroll-button right" onClick={scrollRight}>
-        <i className='NaviArrow'> &#8594; </i>
+        <i className="fa-solid fa-chevron-right"></i>
       </button>
     </div>
   );
