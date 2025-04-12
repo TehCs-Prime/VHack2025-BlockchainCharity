@@ -4,42 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 export default function Login() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [role, setRole] = useState<'user' | 'charity'>('user');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // Add role-specific authentication logic
-    login({
-      username: role === 'user' ? 'Ben' : 'Charity Organization',
-      email,
-      role
-    });
-    navigate('/');
+    try {
+      await login(email, password);
+      navigate('/');
+    } catch (err) {
+      setError('Failed to log in. Please check your credentials.');
+    }
   };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
-      <div className="role-switcher">
-        <button
-          type="button"
-          className={role === 'user' ? 'active' : ''}
-          onClick={() => setRole('user')}
-        >
-          User
-        </button>
-        <button
-          type="button"
-          className={role === 'charity' ? 'active' : ''}
-          onClick={() => setRole('charity')}
-        >
-          Charity
-        </button>
-      </div>
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"

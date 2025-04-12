@@ -1,21 +1,31 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"
 import './Header.css'
 import Logo from '/assets/Logo.png'
 
 const Header: React.FC = () => {
-  const { user, logout } = useAuth()
+  const { userData, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
-  const handleLogout = () => {
-    logout()
-    navigate('/')
+  const handleLogout = async () => {
+    try {
+      await logout()
+      // Redirect to home page except if already on home
+      if (location.pathname !== '/') {
+        navigate('/')
+      }
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
   }
 
-  // Determine which profile route to navigate to based on the user's role
-  const profileRoute = user && user.role === 'charity' ? '/charity-profile' : '/profile'
+  // Determine profile route based on user role
+  const profileRoute = userData?.role === 'charity' 
+    ? '/charity-profile' 
+    : '/profile'
 
   return (
     <header className="header">
@@ -30,36 +40,86 @@ const Header: React.FC = () => {
         <nav className="nav">
           <ul className="nav-list">
             <li className="nav-item">
-              <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
+              <NavLink 
+                to="/" 
+                className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+                end
+              >
+                Home
+              </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/explore" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Explore</NavLink>
+              <NavLink 
+                to="/explore" 
+                className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              >
+                Explore
+              </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/approach" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>How We Works</NavLink>
+              <NavLink 
+                to="/approach" 
+                className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              >
+                How We Work
+              </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/impact" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Impact</NavLink>
+              <NavLink 
+                to="/impact" 
+                className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              >
+                Impact
+              </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/leaderboard" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Leaderboard</NavLink>
+              <NavLink 
+                to="/leaderboard" 
+                className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              >
+                Leaderboard
+              </NavLink>
             </li>
           </ul>
         </nav>
 
         {/* Authentication Section */}
         <div className="auth-section">
-          {user ? (
+          {userData ? (
             <div className="user-menu">
-              <Link to={profileRoute} className="login-link">Profile</Link>
+              <Link 
+                to={profileRoute}
+                className="profile-link"
+                state={{ from: location.pathname }}
+              >
+                Profile
+              </Link>
               <span className="divider">|</span>
-              <button onClick={handleLogout} className="logout-btn">Logout</button>
+              <button 
+                onClick={handleLogout} 
+                className="logout-btn"
+                aria-label="Log out"
+              >
+                Logout
+              </button>
             </div>
           ) : (
             <div className="login-signup">
-              <Link to="/login" className="login-link">Login</Link>
+              <Link 
+                to="/login" 
+                className="login-link"
+                state={{ from: location.pathname }}
+              >
+                Login
+              </Link>
               <span className="divider">|</span>
-              <Link to="/signup" className="signup-link">Sign Up</Link>
+              <Link 
+                to="/signup" 
+                className="signup-link"
+                state={{ from: location.pathname }}
+              >
+                Sign Up
+              </Link>
             </div>
           )}
         </div>
@@ -68,4 +128,4 @@ const Header: React.FC = () => {
   )
 }
 
-export default Header;
+export default Header
