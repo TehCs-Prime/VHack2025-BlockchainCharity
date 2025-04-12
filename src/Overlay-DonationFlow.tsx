@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { ethers } from 'ethers';
 import './Overlay-DonationFlow.css';
+
+// Charity contract ABI
+const CHARITY_CONTRACT_ABI = [
+  "function donate(string memory _message) public payable",
+  "function getDonationCount() public view returns (uint256)",
+  "function getDonation(uint256 index) public view returns (address donor, uint256 amount, uint256 timestamp, string memory message)",
+  "function getContractBalance() public view returns (uint256)",
+  "event DonationReceived(address indexed donor, uint256 amount, uint256 timestamp, string message)"
+];
+
+// Replace with your deployed contract address
+const CHARITY_CONTRACT_ADDRESS = "0xd415ceA038D7829935a9c986e14E348e3b24c3A7"; // Replace this with the address you get from deployment
 
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: {
+      isMetaMask?: boolean;
+      request: (args: { method: string; params?: { chainId: string }[] }) => Promise<unknown>;
+      on: (event: string, callback: (accounts: string[]) => void) => void;
+      removeListener: (event: string, callback: (accounts: string[]) => void) => void;
+    };
   }
 }
 
@@ -53,6 +71,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
   const [walletAddress, setWalletAddress] = useState('');
   const [error, setError] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [transactionStatus, setTransactionStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
+  const [transactionHash, setTransactionHash] = useState<string>('');
 
   const getExchangeRate = (crypto: string, fiat: string): number => {
     return exchangeRates[crypto]?.[fiat] || 1;
@@ -77,28 +97,81 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
   };
   
   // Check if MetaMask is installed
-const isMetaMaskInstalled = () => {
-  return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
-};
+  const isMetaMaskInstalled = () => {
+    return typeof window.ethereum !== 'undefined' && window.ethereum?.isMetaMask;
+  };
 
-// Connect to MetaMask wallet
-const connectWallet = async () => {
-  if (!isMetaMaskInstalled()) {
-    setError('MetaMask is not installed. Please install it to continue.');
-    return;
-  }
+  const processDonation = async () => {
+    if (!window.ethereum) {
+      setError('MetaMask is not installed');
+      return;
+    }
 
-  try {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    setWalletAddress(accounts[0]);
-    setWalletConnected(true);
-    setError('');
-    // For prototype, just proceed to next step after connecting
-    setStep('appreciation');
-  } catch (err) {
-    setError('Failed to connect wallet: ' + (err as Error).message);
-  }
-};
+    try {
+      setTransactionStatus('pending');
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      
+      // First, let's check if we're connected to the right network
+      const network = await provider.getNetwork();
+      if (network.chainId !== 11155111) { // Sepolia chain ID
+        // Request to switch to Sepolia
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0xaa36a7' }], // Sepolia chain ID in hex
+        });
+      }
+
+      const charityContract = new ethers.Contract(CHARITY_CONTRACT_ADDRESS, CHARITY_CONTRACT_ABI, signer);
+
+      // Convert crypto amount to Wei (smallest unit of ETH)
+      const amountInWei = ethers.utils.parseEther(donationData.cryptoAmount);
+
+      // Send transaction with message
+      const tx = await charityContract.donate(donationData.message || "", {
+        value: amountInWei,
+        gasLimit: 300000
+      });
+
+      setTransactionHash(tx.hash);
+
+      // Wait for transaction confirmation
+      const receipt = await tx.wait();
+      if (receipt.status === 1) {
+        setTransactionStatus('success');
+        setStep('appreciation');
+      } else {
+        setTransactionStatus('error');
+        setError('Transaction failed');
+      }
+    } catch (err) {
+      setTransactionStatus('error');
+      setError(`Transaction failed: ${(err as Error).message}`);
+    }
+  };
+
+  // Connect to MetaMask wallet
+  const connectWallet = async () => {
+    if (!isMetaMaskInstalled()) {
+      setError('MetaMask is not installed. Please install it to continue.');
+      return;
+    }
+
+    try {
+      const accounts = await window.ethereum?.request({ method: 'eth_requestAccounts' }) as string[];
+      if (!accounts?.[0]) {
+        throw new Error('No accounts found');
+      }
+      setWalletAddress(accounts[0]);
+      setWalletConnected(true);
+      setError('');
+      
+      // After connecting wallet, process the donation
+      await processDonation();
+    } catch (err) {
+      setError('Failed to connect wallet: ' + (err as Error).message);
+    }
+  };
 
   const handleBackStep = () => {
     if (step === 'info') setStep('donation');
@@ -408,6 +481,35 @@ const connectWallet = async () => {
     <p className="note">
       *Please note donations may not be reflected on the website or calculated in the total amount immediately. If your donation is missing, check back later.
     </p>
+
+    {/* Add transaction status display */}
+    {transactionStatus === 'pending' && (
+      <div className="transaction-status pending">
+        <p>Processing your donation...</p>
+        <p>Transaction Hash: {transactionHash}</p>
+      </div>
+    )}
+    
+    {transactionStatus === 'success' && (
+      <div className="transaction-status success">
+        <p>Donation successful!</p>
+        <p>Transaction Hash: {transactionHash}</p>
+        <a 
+          href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on Etherscan
+        </a>
+      </div>
+    )}
+    
+    {transactionStatus === 'error' && (
+      <div className="transaction-status error">
+        <p>Transaction failed. Please try again.</p>
+        <p>{error}</p>
+      </div>
+    )}
 
     <button className="done-btn" onClick={onClose}>Done</button>
   </div>
