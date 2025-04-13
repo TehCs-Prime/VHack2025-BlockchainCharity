@@ -1,156 +1,142 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { useAuth } from './AuthContext';
-import { Link } from 'react-router-dom';
+import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { db } from './firebase';
 import './Profile.css';
-import LocalAvatar from './LocalAvatar';
-
-interface User {
-  username: string;
-  email: string;
-  profilePicture: string;
-  signupDate: string;
-}
 
 interface Donation {
-  id: number;
-  campaign: string;
-  amount: string;
+  id: string;
+  amount: number;
   currency: string;
   date: string;
-  type: "cash" | "crypto";
+  campaign: string;
+  type: 'cash' | 'crypto';
+}
+
+interface UserData {
+  uid: string;
+  email: string;
+  role: 'user' | 'charity';
+  username?: string;
+  profilePicture?: string;
+  createdAt: string;
+  organizationName?: string;
+  missionStatement?: string;
+  registrationNumber?: string;
+  documentUrl?: string;
+  verified?: boolean;
 }
 
 export default function Profile() {
-  const { user, updateUser } = useAuth() as unknown as { user: User; updateUser: (updatedUser: User) => void };
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [newUsername, setNewUsername] = useState<string>(user.username);
-  const [previewUrl, setPreviewUrl] = useState<string>(user.profilePicture);
+  const { currentUser, userData, updateProfile } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [newUsername, setNewUsername] = useState(userData?.username || '');
+  const [previewUrl, setPreviewUrl] = useState(userData?.profilePicture || '');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showMore, setShowMore] = useState<boolean>(false);
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    setNewUsername(user.username);
-    setPreviewUrl(user.profilePicture);
-  }, [user]);
+    const fetchDonations = async () => {
+      if (!currentUser) return;
+      
+      const donationsRef = collection(db, 'donations');
+      const q = query(donationsRef, where('userId', '==', currentUser.uid));
+      const snapshot = await getDocs(q);
+      setDonations(snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }) as Donation));
+    };
+
+    fetchDonations();
+  }, [currentUser]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result as string);
-      };
+      reader.onloadend = () => setPreviewUrl(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSave = () => {
-    updateUser({
-      ...user,
-      username: newUsername,
-      profilePicture: previewUrl
-    });
-    setIsEditing(false);
-  };
+  const uploadToImgBB = async (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
 
-  const handleCancel = () => {
-    setNewUsername(user.username);
-    setPreviewUrl(user.profilePicture);
-    setSelectedFile(null);
-    setIsEditing(false);
-  };
+    try {
+      const apiKey = import.meta.env.VITE_IMG_BB_API_KEY;
+      if (!apiKey) throw new Error('Missing ImgBB API key');
 
-  // Extended mock donation history (10 items)
-  const donationHistory: Donation[] = [
-    {
-      id: 1,
-      campaign: "Children's Education Fund",
-      amount: "100.00",
-      currency: "USD",
-      date: "2024-03-15",
-      type: "cash"
-    },
-    {
-      id: 2,
-      campaign: "Climate Action Initiative",
-      amount: "0.5",
-      currency: "ETH",
-      date: "2024-02-28",
-      type: "crypto"
-    },
-    {
-      id: 3,
-      campaign: "Health for All",
-      amount: "50.00",
-      currency: "USD",
-      date: "2024-01-20",
-      type: "cash"
-    },
-    {
-      id: 4,
-      campaign: "Clean Water Project",
-      amount: "75.00",
-      currency: "USD",
-      date: "2023-12-10",
-      type: "cash"
-    },
-    {
-      id: 5,
-      campaign: "Animal Welfare Support",
-      amount: "25.00",
-      currency: "USD",
-      date: "2023-11-05",
-      type: "cash"
-    },
-    {
-      id: 6,
-      campaign: "Renewable Energy Fund",
-      amount: "1.0",
-      currency: "BTC",
-      date: "2023-10-15",
-      type: "crypto"
-    },
-    {
-      id: 7,
-      campaign: "Disaster Relief",
-      amount: "150.00",
-      currency: "USD",
-      date: "2023-09-01",
-      type: "cash"
-    },
-    {
-      id: 8,
-      campaign: "Food Security Initiative",
-      amount: "80.00",
-      currency: "USD",
-      date: "2023-08-20",
-      type: "cash"
-    },
-    {
-      id: 9,
-      campaign: "Community Empowerment",
-      amount: "60.00",
-      currency: "USD",
-      date: "2023-07-30",
-      type: "cash"
-    },
-    {
-      id: 10,
-      campaign: "Sustainable Agriculture",
-      amount: "90.00",
-      currency: "USD",
-      date: "2023-06-25",
-      type: "cash"
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=${apiKey}`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error?.message || 'Image upload failed');
+      }
+      
+      return data.data.url;
+    } catch (err) {
+      console.error('ImgBB upload error:', err);
+      throw new Error(
+        err instanceof Error ? err.message : 'Failed to upload image'
+      );
     }
-  ];
+  };
 
-  // Determine how many donations to display based on showMore state
-  const displayedDonations = showMore ? donationHistory.slice(0, 10) : donationHistory.slice(0, 5);
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) return error.message;
+    return String(error);
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const updates: Partial<UserData> = { username: newUsername };
+
+      if (selectedFile) {
+        if (!selectedFile.type.startsWith('image/')) {
+          throw new Error('Only image files are allowed');
+        }
+        if (selectedFile.size > 5 * 1024 * 1024) {
+          throw new Error('File size must be less than 5MB');
+        }
+
+        const imageUrl = await uploadToImgBB(selectedFile);
+        updates.profilePicture = imageUrl;
+      }
+
+      if (currentUser) {
+        await updateDoc(doc(db, 'users', currentUser.uid), updates);
+        updateProfile(updates);
+      }
+
+      setIsEditing(false);
+    } catch (err) {
+      setError(getErrorMessage(err));
+      console.error('Update failed:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!userData) return <div>Loading...</div>;
 
   return (
     <div className="profile-page">
-      {/* Profile Header */}
+      {error && <div className="error-message">{error}</div>}
+
       <header className="profile-header">
         <div className="avatar-section">
           {isEditing ? (
@@ -161,17 +147,19 @@ export default function Profile() {
                 onChange={handleFileChange}
                 style={{ display: 'none' }}
               />
-              <LocalAvatar 
-                user={{ 
-                  ...user,
-                  profilePicture: previewUrl 
-                }}
+              <img
+                src={previewUrl || '/default-avatar.png'}
+                alt="Profile"
                 className="editable"
               />
               <span className="edit-overlay">✎</span>
             </label>
           ) : (
-            <LocalAvatar user={user} className="static" />
+            <img
+              src={userData.profilePicture || '/default-avatar.png'}
+              alt="Profile"
+              className="static"
+            />
           )}
         </div>
         <div className="info-section">
@@ -184,30 +172,35 @@ export default function Profile() {
                 className="edit-input"
               />
               <div className="edit-buttons">
-                <button className="save-btn" onClick={handleSave}>Save</button>
-                <button className="cancel-btn" onClick={handleCancel}>Cancel</button>
+                <button className="save-btn" onClick={handleSave} disabled={loading}>
+                  {loading ? 'Saving...' : 'Save'}
+                </button>
+                <button className="cancel-btn" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button>
               </div>
             </>
           ) : (
             <>
-              <h1>{user.username}</h1>
-              <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>Edit Profile</button>
+              <h1>{userData.username}</h1>
+              <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>
+                Edit Profile
+              </button>
             </>
           )}
-          <p className="email">{user.email}</p>
-          <p className="signup-date">Member since: {new Date(user.signupDate).toLocaleDateString()}</p>
+          <p className="email">{userData.email}</p>
+          <p className="signup-date">
+            Member since: {new Date(userData.createdAt).toLocaleDateString()}
+          </p>
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="profile-content">
-        {/* Content Box with Shadow */}
         <div className="content-box">
-          {/* Donation History Section */}
           <section className="section donation-history">
             <h2>Donation History</h2>
-            <div className={`donation-list ${showMore ? 'scrollable' : ''}`}>
-              {displayedDonations.map(donation => (
+            <div className="donation-list">
+              {donations.map(donation => (
                 <div key={donation.id} className="donation-item">
                   <div className="donation-main">
                     <h3>{donation.campaign}</h3>
@@ -215,29 +208,11 @@ export default function Profile() {
                       {donation.amount} {donation.currency}
                     </p>
                   </div>
-                  <p className="donation-date">{new Date(donation.date).toLocaleDateString()}</p>
+                  <p className="donation-date">
+                    {new Date(donation.date).toLocaleDateString()}
+                  </p>
                 </div>
               ))}
-            </div>
-            {!showMore && (
-              <button className="view-more-btn" onClick={() => setShowMore(true)}>
-                View More
-              </button>
-            )}
-          </section>
-
-          {/* Account Settings Section */}
-          <section className="section account-settings">
-            <h2>Account Settings</h2>
-            <div className="account-item">
-              <h3>Manage Your Account</h3>
-              <Link 
-                to="/settings" 
-                className="settings-btn"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Go to Settings
-              </Link>
             </div>
           </section>
         </div>
