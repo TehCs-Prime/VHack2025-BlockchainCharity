@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { ethers } from 'ethers';
+import { getCharityContract } from './hooks/useCharityContract';
 import './Overlay-DonationFlow.css';
 
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: ethers.Eip1193Provider;
   }
 }
 
@@ -77,28 +79,75 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
   };
   
   // Check if MetaMask is installed
-const isMetaMaskInstalled = () => {
-  return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
-};
-
-// Connect to MetaMask wallet
-const connectWallet = async () => {
-  if (!isMetaMaskInstalled()) {
-    setError('MetaMask is not installed. Please install it to continue.');
-    return;
-  }
-
-  try {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    setWalletAddress(accounts[0]);
-    setWalletConnected(true);
-    setError('');
-    // For prototype, just proceed to next step after connecting
-    setStep('appreciation');
-  } catch (err) {
-    setError('Failed to connect wallet: ' + (err as Error).message);
-  }
-};
+  const isMetaMaskInstalled = () => {
+    return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
+  };
+  
+  // Connect to MetaMask wallet and make donation
+  const connectWallet = async () => {
+    if (!isMetaMaskInstalled()) {
+      setError('MetaMask is not installed. Please install it to continue.');
+      return;
+    }
+  
+    try {
+      // Connect wallet
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setWalletAddress(accounts[0]);
+      setWalletConnected(true);
+      setError('');
+  
+      // Get contract instance
+      const contract = await getCharityContract();
+      
+      // Convert crypto amount to wei
+      const amountInWei = ethers.parseEther(donationData.cryptoAmount);
+      
+      // Call donate function (using campaignId 0 for now - should be passed as prop)
+      console.log('Sending donation of', amountInWei.toString(), 'wei to campaign 0');
+      const tx = await contract.donate(0, { value: amountInWei });
+      console.log('Transaction submitted:', {
+        hash: tx.hash,
+        from: tx.from,
+        to: tx.to,
+        value: tx.value.toString()
+      });
+      
+      // Wait for transaction to be mined
+      const receipt = await tx.wait();
+      if (!receipt) throw new Error('No transaction receipt received');
+      
+      console.log('Transaction mined:', {
+        hash: receipt.hash,
+        blockNumber: receipt.blockNumber,
+        gasUsed: receipt.gasUsed.toString(),
+        status: receipt.status === 1 ? 'success' : 'failed'
+      });
+      
+      // Try to verify contract state (optional)
+      try {
+        const campaign = await contract.getCampaign(0).catch(() => null);
+        if (campaign) {
+          console.log('Updated campaign state:', {
+            totalDonated: campaign[3].toString(),
+            donorAmount: (await contract.getDonationDetails(walletAddress, 0))[1].toString()
+          });
+        } else {
+          console.log('Campaign 0 not found - skipping state verification');
+        }
+      } catch (err) {
+        console.warn('State verification failed:', err);
+      }
+      
+      // Proceed to thank you page
+      setStep('appreciation');
+      
+      // Proceed to thank you page
+      setStep('appreciation');
+    } catch (err) {
+      setError('Transaction failed: ' + (err as Error).message);
+    }
+  };
 
   const handleBackStep = () => {
     if (step === 'info') setStep('donation');
@@ -408,6 +457,12 @@ const connectWallet = async () => {
     <p className="note">
       *Please note donations may not be reflected on the website or calculated in the total amount immediately. If your donation is missing, check back later.
     </p>
+    
+    {donationData.paymentMethod === 'wallet' && walletAddress && (
+      <p className="txid-message">
+        Transaction completed from: {walletAddress.substring(0, 6)}...{walletAddress.substring(walletAddress.length - 4)}
+      </p>
+    )}
 
     <button className="done-btn" onClick={onClose}>Done</button>
   </div>
