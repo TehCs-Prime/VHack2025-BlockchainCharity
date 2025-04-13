@@ -8,4 +8,20 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  define: {
+    'process.env': {},
+    global: 'window',
+  },
+  resolve: {
+    alias: {
+      buffer: 'buffer/',
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
+  },
 })

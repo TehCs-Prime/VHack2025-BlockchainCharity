@@ -1,6 +1,7 @@
 // OverlayDonationFlow.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { ethers } from 'ethers';
 import {
   collection,
   addDoc,
@@ -12,9 +13,26 @@ import {
 import { db } from './firebase';
 import './Overlay-DonationFlow.css';
 
+// Charity contract ABI
+const CHARITY_CONTRACT_ABI = [
+  "function donate(string memory _message) public payable",
+  "function getDonationCount() public view returns (uint256)",
+  "function getDonation(uint256 index) public view returns (address donor, uint256 amount, uint256 timestamp, string memory message)",
+  "function getContractBalance() public view returns (uint256)",
+  "event DonationReceived(address indexed donor, uint256 amount, uint256 timestamp, string message)"
+];
+
+// Replace with your deployed contract address
+const CHARITY_CONTRACT_ADDRESS = "0xd415ceA038D7829935a9c986e14E348e3b24c3A7"; // Replace this with the address you get from deployment
+
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: {
+      isMetaMask?: boolean;
+      request: (args: { method: string; params?: { chainId: string }[] }) => Promise<unknown>;
+      on: (event: string, callback: (accounts: string[]) => void) => void;
+      removeListener: (event: string, callback: (accounts: string[]) => void) => void;
+    };
   }
 }
 
@@ -65,6 +83,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
   const [walletAddress, setWalletAddress] = useState('');
   const [error, setError] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [transactionStatus, setTransactionStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
+  const [transactionHash, setTransactionHash] = useState<string>('');
   const [processingDonation, setProcessingDonation] = useState(false);
 
   // Pre-fill name and email if userData exists.
@@ -107,7 +127,56 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
 
   // Check if MetaMask is installed
   const isMetaMaskInstalled = () => {
-    return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
+    return typeof window.ethereum !== 'undefined' && window.ethereum?.isMetaMask;
+  };
+
+  const processDonation = async () => {
+    if (!window.ethereum) {
+      setError('MetaMask is not installed');
+      return;
+    }
+
+    try {
+      setTransactionStatus('pending');
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      
+      // First, let's check if we're connected to the right network
+      const network = await provider.getNetwork();
+      if (network.chainId !== 11155111) { // Sepolia chain ID
+        // Request to switch to Sepolia
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0xaa36a7' }], // Sepolia chain ID in hex
+        });
+      }
+
+      const charityContract = new ethers.Contract(CHARITY_CONTRACT_ADDRESS, CHARITY_CONTRACT_ABI, signer);
+
+      // Convert crypto amount to Wei (smallest unit of ETH)
+      const amountInWei = ethers.utils.parseEther(donationData.cryptoAmount);
+
+      // Send transaction with message
+      const tx = await charityContract.donate(donationData.message || "", {
+        value: amountInWei,
+        gasLimit: 300000
+      });
+
+      setTransactionHash(tx.hash);
+
+      // Wait for transaction confirmation
+      const receipt = await tx.wait();
+      if (receipt.status === 1) {
+        setTransactionStatus('success');
+        setStep('appreciation');
+      } else {
+        setTransactionStatus('error');
+        setError('Transaction failed');
+      }
+    } catch (err) {
+      setTransactionStatus('error');
+      setError(`Transaction failed: ${(err as Error).message}`);
+    }
   };
 
   // Connect to MetaMask wallet
@@ -116,13 +185,18 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
       setError('MetaMask is not installed. Please install it to continue.');
       return;
     }
+
     try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await window.ethereum?.request({ method: 'eth_requestAccounts' }) as string[];
+      if (!accounts?.[0]) {
+        throw new Error('No accounts found');
+      }
       setWalletAddress(accounts[0]);
       setWalletConnected(true);
       setError('');
-      // Proceed to final step for crypto donation
-      setStep('appreciation');
+      
+      // After connecting wallet, process the donation
+      await processDonation();
     } catch (err) {
       setError('Failed to connect wallet: ' + (err as Error).message);
     }
@@ -476,42 +550,76 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
           </div>
         )}
 
-        {/* Appreciation / Final Step */}
-        {step === 'appreciation' && (
-          <div className="step-appreciation">
-            <div className="modal-header">
-              <button className="back-btn" onClick={handleBackStep}>⬅</button>
-              <button className="close-btn" onClick={onClose}>✖</button>
-            </div>
-            <img src="/assets/appreciation.png" alt="Thank You" className="thank-you-logo" />
-            <h2 className="thank-you-message">Thank You for Your Kindness!</h2>
-            <div className="donation-summary">
-              <p>
-                Amount: {donationData.cryptoAmount} {donationData.cryptoType}
-              </p>
-              <p>
-                Equivalent: {donationData.fiatAmount} {donationData.fiatType}
-              </p>
-              <p>
-                <span style={{ fontWeight: 'bold' }}>{projectName || 'Unknown Project'}</span>
-              </p>
-            </div>
-            <p className="txid-message">
-              {donationData.paymentMethod === 'card'
-                ? 'Your card payment is being processed. You will receive an email confirmation within 24 hours.'
-                : 'Your donation record will be updated after the TxID is verified.'}
-            </p>
-            <div className="donation-card">
-              <p>{donationData.message || 'No message provided'}</p>
-            </div>
-            <p className="note">
-              *Please note that donations may not be reflected on the website immediately. If your donation is missing, please check back later.
-            </p>
-            <button className="done-btn" onClick={handleDonationComplete} disabled={processingDonation}>
-              {processingDonation ? 'Processing...' : 'Done'}
-            </button>
-          </div>
-        )}
+
+{step === 'appreciation' && (
+  <div className="step-appreciation">
+    <div className="modal-header">
+      <button className='baack-btn' onClick={handleBackStep}>⬅</button>
+      <button className="close-btn" onClick={onClose}>✖</button>
+    </div>
+
+    {/* Add Thank You Image */}
+    <img src="\assets\appreciation.png" alt="Thank You" className="thank-you-logo" />
+
+    <h2 className="thank-you-message">Thank You for Your Kindness!</h2>
+
+    <div className="donation-summary">
+      <p>Amount: {donationData.cryptoAmount} {donationData.cryptoType}</p>
+      <p>Equivalent: {donationData.fiatAmount} {donationData.fiatType}</p>
+      <p><span style={{ fontWeight: 'bold' }}>{projectName || "Unknown Project"}</span></p>
+    </div>
+
+    {/* Add TxID Message */}
+    <p className="txid-message">
+      {donationData.paymentMethod === 'card'
+        ? "Your card payment is being processed. You'll receive email confirmation within 24 hours."
+        : "Your donation records will be shown on the website after the TxID is verified."}
+    </p>
+
+    {/* Display donor message */}
+    <div className="donation-card">
+      <p>{donationData.message || 'No message provided'}</p>
+    </div>
+
+    {/* Add Processing Note */}
+    <p className="note">
+      *Please note donations may not be reflected on the website or calculated in the total amount immediately. If your donation is missing, check back later.
+    </p>
+
+    {/* Add transaction status display */}
+    {transactionStatus === 'pending' && (
+      <div className="transaction-status pending">
+        <p>Processing your donation...</p>
+        <p>Transaction Hash: {transactionHash}</p>
+      </div>
+    )}
+    
+    {transactionStatus === 'success' && (
+      <div className="transaction-status success">
+        <p>Donation successful!</p>
+        <p>Transaction Hash: {transactionHash}</p>
+        <a 
+          href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on Etherscan
+        </a>
+      </div>
+    )}
+    
+    {transactionStatus === 'error' && (
+      <div className="transaction-status error">
+        <p>Transaction failed. Please try again.</p>
+        <p>{error}</p>
+      </div>
+    )}
+
+    <button className="done-btn" onClick={onClose}>Done</button>
+  </div>
+)}
+
+
       </div>
     </div>
   );
