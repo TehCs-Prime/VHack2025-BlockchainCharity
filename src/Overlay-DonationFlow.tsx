@@ -555,24 +555,28 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
             <p className="note">
               *Please note donations may not be reflected on the website or calculated in the total amount immediately. If your donation is missing, check back later.
             </p>
-            {transactionStatus === 'pending' && (
-              <div className="transaction-status pending">
-                <p>Processing your donation...</p>
-                <p>Transaction Hash: {transactionHash}</p>
-              </div>
-            )}
-            {transactionStatus === 'success' && (
-              <div className="transaction-status success">
-                <p>Donation successful!</p>
-                <p>Transaction Hash: {transactionHash}</p>
-                <a
-                  href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View on Etherscan
-                </a>
-              </div>
+            {donationData.paymentMethod === 'wallet' && (
+              <>
+                {transactionStatus === 'pending' && (
+                  <div className="transaction-status pending">
+                    <p>Processing your donation...</p>
+                    <p>Transaction Hash: {transactionHash}</p>
+                  </div>
+                )}
+                {transactionStatus === 'success' && (
+                  <div className="transaction-status success">
+                    <p>Donation successful!</p>
+                    <p>Transaction Hash: {transactionHash}</p>
+                    <a
+                      href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View on Etherscan
+                    </a>
+                  </div>
+                )}
+              </>
             )}
             {transactionStatus === 'error' && (
               <div className="transaction-status error">
