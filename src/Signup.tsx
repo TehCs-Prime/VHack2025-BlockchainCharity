@@ -1,12 +1,13 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { useAuth } from './AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from './firebase';
+import { FaArrowLeft} from 'react-icons/fa';
 import './Signup.css';
 
 export default function Signup() {
-  const { signup } = useAuth();
+  const { signup, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [role, setRole] = useState<'user' | 'charity'>('user');
   const [error, setError] = useState('');
@@ -48,7 +49,6 @@ export default function Signup() {
           throw new Error('Please upload a document');
         }
 
-        // Upload document
         const storageRef = ref(storage, `documents/${Date.now()}_${documentFile.name}`);
         const snapshot = await uploadBytes(storageRef, documentFile);
         const documentUrl = await getDownloadURL(snapshot.ref);
@@ -72,6 +72,16 @@ export default function Signup() {
     }
   };
 
+  const handleGoogleSignup = async () => {
+    try {
+      await signInWithGoogle(role);
+      navigate(role === 'user' ? '/' : '/verification-pending');
+    } catch (error: unknown) {
+      setError('Failed to sign up with Google. Please try again.');
+      console.error(error);
+    }
+  };
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setDocumentFile(e.target.files[0]);
@@ -80,7 +90,12 @@ export default function Signup() {
 
   return (
     <div className="signup-container">
+      <button onClick={() => navigate('/')} className="back-button">
+        <FaArrowLeft /> Back to Home
+      </button>
+
       <h2>Sign Up</h2>
+      
       <div className="role-switcher">
         <button
           type="button"
@@ -117,13 +132,29 @@ export default function Signup() {
         />
 
         {role === 'user' ? (
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+          <>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={loading} className="signup-button">
+              {loading ? 'Processing...' : 'Sign Up'}
+            </button>
+
+            <div className="divider">or</div>
+
+            <button 
+              type="button" 
+              onClick={handleGoogleSignup}
+              className="google-signup-button"
+            >
+              <span className="google-logo"></span>
+              <span>Continue with Google</span>
+            </button>
+          </>
         ) : (
           <>
             <input
@@ -138,6 +169,7 @@ export default function Signup() {
               value={missionStatement}
               onChange={(e) => setMissionStatement(e.target.value)}
               required
+              className="mission-statement"
             />
             <input
               type="text"
@@ -156,15 +188,20 @@ export default function Signup() {
                   required
                 />
               </label>
-              {documentFile && <span>{documentFile.name}</span>}
+              {documentFile && <span className="file-name">{documentFile.name}</span>}
             </div>
+            <button type="submit" disabled={loading} className="signup-button">
+              {loading ? 'Processing...' : 'Sign Up'}
+            </button>
           </>
         )}
-
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : 'Sign Up'}
-        </button>
       </form>
+
+      {role === 'user' && (
+        <div className="login-redirect">
+          Already have an account? <Link to="/login">Log in</Link>
+        </div>
+      )}
     </div>
   );
 }

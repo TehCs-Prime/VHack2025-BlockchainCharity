@@ -6,7 +6,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  AuthError
+  AuthError,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import {
   doc,
@@ -44,6 +46,7 @@ interface AuthContextType {
   ) => Promise<void>;
   logout: () => Promise<void>;
   updateProfile: (updates: Partial<UserData>) => Promise<void>;
+  signInWithGoogle: (role?: 'user' | 'charity') => Promise<void>;
   loading: boolean;
   error: string | null;
 }
@@ -186,6 +189,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Google Sign In
+  const signInWithGoogle = async (role: 'user' | 'charity' = 'user') => {
+    try {
+      setLoading(true);
+      setError(null);
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      
+      // Check if user already exists
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+      
+      if (!docSnap.exists()) {
+        // Create new user document
+        const userData: UserData = {
+          uid: user.uid,
+          email: user.email || '',
+          role,
+          username: user.displayName || '',
+          profilePicture: user.photoURL || '',
+          createdAt: new Date().toISOString()
+        };
+        await setDoc(doc(db, 'users', user.uid), userData);
+        setUserData(userData);
+      }
+    } catch (error) {
+      handleAuthError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -195,6 +231,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signup,
         logout,
         updateProfile,
+        signInWithGoogle,
         loading,
         error
       }}
