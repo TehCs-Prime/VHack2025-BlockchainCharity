@@ -490,3 +490,128 @@
 [data-status="Cancelled"] .progress-bar-fill {
   background-color: #F44336;
 }
+
+/* Modal Background */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Container for the Form */
+.add-project-form-container {
+  background-color: #fff;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeInScale 0.3s ease-in-out;
+}
+
+/* Form Heading */
+.add-project-form h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Form Labels & Inputs */
+.add-project-form label {
+  display: block;
+  margin: 0.75rem 0 0.25rem;
+  font-weight: bold;
+}
+
+.add-project-form input[type="text"],
+.add-project-form input[type="number"],
+.add-project-form select,
+.add-project-form textarea,
+.add-project-form input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Textarea Specific */
+.add-project-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Uploaded Image Preview */
+.uploaded-preview {
+  margin-top: 0.5rem;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+/* Form Buttons */
+.form-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-buttons button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-buttons button[type="submit"] {
+  background-color: #007BFF;
+  color: #fff;
+}
+
+.form-buttons button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Simple fade-in/scale animation for modal */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Admin Toolbar styling */
+.admin-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem 0;
+}
+
+.admin-toolbar .add-project-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-toolbar .add-project-btn:hover {
+  background-color: #218838;
+}
