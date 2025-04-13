@@ -9,7 +9,12 @@ const CHARITY_CONTRACT_ABI = [
   "function getDonationCount() public view returns (uint256)",
   "function getDonation(uint256 index) public view returns (address donor, uint256 amount, uint256 timestamp, string memory message)",
   "function getContractBalance() public view returns (uint256)",
-  "event DonationReceived(address indexed donor, uint256 amount, uint256 timestamp, string message)"
+  "function getMilestoneCount() public view returns (uint256)",
+  "function getMilestone(uint256 index) public view returns (uint256 amount, bool released, string memory description)",
+  "function paused() public view returns (bool)",
+  "event DonationReceived(address indexed donor, uint256 amount, uint256 timestamp, string message)",
+  "event MilestoneReached(uint256 milestoneIndex, uint256 amount)",
+  "event ContractPaused(bool paused)"
 ];
 
 // Replace with your deployed contract address
@@ -73,6 +78,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
   const [isChecked, setIsChecked] = useState(false);
   const [transactionStatus, setTransactionStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
   const [transactionHash, setTransactionHash] = useState<string>('');
+  const [isContractPaused, setIsContractPaused] = useState(false);
+  const [milestones, setMilestones] = useState<Array<{amount: string, released: boolean, description: string}>>([]);
 
   const getExchangeRate = (crypto: string, fiat: string): number => {
     return exchangeRates[crypto]?.[fiat] || 1;
@@ -101,9 +108,45 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
     return typeof window.ethereum !== 'undefined' && window.ethereum?.isMetaMask;
   };
 
+  // Add function to check contract status
+  const checkContractStatus = async () => {
+    if (!window.ethereum) return;
+    
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const charityContract = new ethers.Contract(CHARITY_CONTRACT_ADDRESS, CHARITY_CONTRACT_ABI, provider);
+    
+    try {
+      const paused = await charityContract.paused();
+      setIsContractPaused(paused);
+      
+      const milestoneCount = await charityContract.getMilestoneCount();
+      const milestonePromises = Array.from({length: milestoneCount}, (_, i) => 
+        charityContract.getMilestone(i)
+      );
+      const milestoneResults = await Promise.all(milestonePromises);
+      
+      setMilestones(milestoneResults.map(([amount, released, description]) => ({
+        amount: ethers.utils.formatEther(amount),
+        released,
+        description
+      })));
+    } catch (err) {
+      console.error('Error checking contract status:', err);
+    }
+  };
+
+  useEffect(() => {
+    checkContractStatus();
+  }, []);
+
   const processDonation = async () => {
     if (!window.ethereum) {
       setError('MetaMask is not installed');
+      return;
+    }
+
+    if (isContractPaused) {
+      setError('Contract is currently paused. Please try again later.');
       return;
     }
 
@@ -140,6 +183,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
       if (receipt.status === 1) {
         setTransactionStatus('success');
         setStep('appreciation');
+        // Refresh contract status after successful donation
+        await checkContractStatus();
       } else {
         setTransactionStatus('error');
         setError('Transaction failed');
@@ -440,6 +485,27 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({ onClose, proj
           </button>
         )}
       </>
+    )}
+
+    {isContractPaused && (
+      <div className="warning-message">
+        <p>⚠️ Contract is currently paused. Donations are temporarily disabled.</p>
+      </div>
+    )}
+
+    {milestones.length > 0 && (
+      <div className="milestones-section">
+        <h3>Milestones</h3>
+        <div className="milestones-list">
+          {milestones.map((milestone, index) => (
+            <div key={index} className={`milestone ${milestone.released ? 'released' : ''}`}>
+              <p>{milestone.description}</p>
+              <p>Amount: {milestone.amount} ETH</p>
+              <p>Status: {milestone.released ? 'Released' : 'Pending'}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     )}
 
     {error && <div className="error-message">{error}</div>}
