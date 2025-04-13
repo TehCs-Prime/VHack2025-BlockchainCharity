@@ -7,7 +7,9 @@ interface DonationListProps {
 }
 
 const DonationList: React.FC<DonationListProps> = ({ projectId }) => {
-  // Delegate data fetching to the DonorTab component by passing the projectId.
+  // Delegates data fetching to the DonorTab component.
+  // Make sure that Tab-Donors subscribes (via snapshot listeners or queries)
+  // so that it automatically displays the updated donor count and progress.
   return <DonorTab projectId={projectId} />;
 };
 
