@@ -15,7 +15,7 @@
   color: #333;
 }
 
-.back-button {
+.return-button {
   background: none;
   border: none;
   color: #666;
@@ -28,7 +28,7 @@
   transition: color 0.2s ease;
 }
 
-.back-button:hover {
+.return-button:hover {
   color: #f8bd1b;
 }
 

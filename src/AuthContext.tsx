@@ -18,8 +18,9 @@ import {
   FirestoreError
 } from 'firebase/firestore';
 
-// Firestore user document structure
-interface UserData {
+// UserData interface includes an optional verified property,
+// which applies only to charity accounts.
+export interface UserData {
   uid: string;
   email: string;
   role: 'user' | 'charity' | 'admin';
@@ -27,13 +28,21 @@ interface UserData {
   profilePicture?: string;
   createdAt: string;
   organizationName?: string;
+  orgType?: string;
+  registeredCountry?: string;
+  businessId?: string;
+  website?: string;
+  description?: string;
+  address?: string;
+  contactPerson?: string;
+  contactPhone?: string;
   missionStatement?: string;
   registrationNumber?: string;
   documentUrl?: string;
-  verified?: boolean;
+  verified?: boolean; // Exists only for charity accounts.
 }
 
-// Context type definition
+// Definition for the authentication context.
 interface AuthContextType {
   currentUser: User | null;
   userData: UserData | null;
@@ -51,20 +60,17 @@ interface AuthContextType {
   error: string | null;
 }
 
-// Create the context
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-// Provider
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Centralized error handling
+  // Centralized error handler to capture and log auth or Firestore errors.
   const handleAuthError = (error: unknown) => {
     let errorMessage = 'An unexpected error occurred';
-
     if (error instanceof Error) {
       const firebaseError = error as AuthError | FirestoreError;
       switch (firebaseError.code) {
@@ -88,12 +94,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           errorMessage = firebaseError.message;
       }
     }
-
     setError(errorMessage);
     throw new Error(errorMessage);
   };
 
-  // Fetch and observe auth state
+  // Listen to authentication state changes.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setLoading(true);
@@ -110,30 +115,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else {
           setUserData(null);
         }
-      } catch (error) {
-        handleAuthError(error);
+      } catch (err) {
+        handleAuthError(err);
       } finally {
         setLoading(false);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
-  // Login
+  // Login using email and password.
   const login = async (email: string, password: string) => {
     try {
       setLoading(true);
       setError(null);
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      handleAuthError(error);
+    } catch (err) {
+      handleAuthError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Signup
+  // Signup for new users.
+  // For charity accounts, we add the verified field with false value.
   const signup = async (
     email: string,
     password: string,
@@ -144,37 +149,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true);
       setError(null);
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      const userData: UserData = {
+
+      // Only charity accounts get the verified field.
+      const charityData = role === 'charity' ? { verified: false } : {};
+      const newUserData: UserData = {
         uid: user.uid,
         email,
         role,
         createdAt: new Date().toISOString(),
+        ...charityData,
         ...additionalData
       };
-      await setDoc(doc(db, 'users', user.uid), userData);
-      setUserData(userData);
-    } catch (error) {
-      handleAuthError(error);
+
+      await setDoc(doc(db, 'users', user.uid), newUserData);
+      setUserData(newUserData);
+    } catch (err) {
+      handleAuthError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Logout
+  // Logout the current user.
   const logout = async () => {
     try {
       setLoading(true);
       setError(null);
       await signOut(auth);
       setUserData(null);
-    } catch (error) {
-      handleAuthError(error);
+    } catch (err) {
+      handleAuthError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Update profile
+  // Update the user profile.
   const updateProfile = async (updates: Partial<UserData>) => {
     try {
       setLoading(true);
@@ -182,14 +192,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!currentUser) throw new Error('Not authenticated');
       await updateDoc(doc(db, 'users', currentUser.uid), updates);
       setUserData((prev) => (prev ? { ...prev, ...updates } : null));
-    } catch (error) {
-      handleAuthError(error);
+    } catch (err) {
+      handleAuthError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Google Sign In
+  // Sign in using Google.
   const signInWithGoogle = async (role: 'user' | 'charity' = 'user') => {
     try {
       setLoading(true);
@@ -197,26 +207,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      
-      // Check if user already exists
+
+      // Check if user document exists.
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      
       if (!docSnap.exists()) {
-        // Create new user document
-        const userData: UserData = {
+        const newUserData: UserData = {
           uid: user.uid,
           email: user.email || '',
           role,
           username: user.displayName || '',
           profilePicture: user.photoURL || '',
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          ...(role === 'charity' ? { verified: false } : {})
         };
-        await setDoc(doc(db, 'users', user.uid), userData);
-        setUserData(userData);
+        await setDoc(doc(db, 'users', user.uid), newUserData);
+        setUserData(newUserData);
       }
-    } catch (error) {
-      handleAuthError(error);
+    } catch (err) {
+      handleAuthError(err);
     } finally {
       setLoading(false);
     }
@@ -241,7 +250,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Hook to access the AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

@@ -15,6 +15,7 @@ import Home from './Home';
 import Approach from './Page-Approach';
 import CharityProfile from './CharityProfile';
 import './App.css';
+import CharitySignup from './CharitySignup';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const AppContent: React.FC = () => {
           <Route path="/project/:projectId" element={<ProjectDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/charity-signup" element={<CharitySignup onSuccess={() => { /* redirect or notify */ }} />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/charity-profile" element={<CharityProfile />} />
           <Route path="/impact" element={<ImpactReport />} />

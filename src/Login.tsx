@@ -35,7 +35,7 @@ export default function Login() {
     <div className="login-container">
       <button 
         onClick={() => navigate('/')} 
-        className="back-button"
+        className="return-button"
       >
         <FaArrowLeft /> Back to Home
       </button>

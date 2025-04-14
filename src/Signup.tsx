@@ -1,75 +1,45 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
-import { useAuth } from './AuthContext';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from './firebase';
+import { useAuth } from './AuthContext';
+import CharitySignup from './CharitySignup';
 import { FaArrowLeft} from 'react-icons/fa';
+
 import './Signup.css';
 
-export default function Signup() {
-  const { signup, signInWithGoogle } = useAuth();
-  const navigate = useNavigate();
+const Signup: React.FC = () => {
+  // 'user' (default) or 'charity' role
   const [role, setRole] = useState<'user' | 'charity'>('user');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  // Common fields
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // State for regular user signup
+  const [userData, setUserData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
 
-  // User fields
-  const [username, setUsername] = useState('');
+  // For regular users, we'll use signup (not login) to create a new account.
+  const { signup , signInWithGoogle} = useAuth();
+  const navigate = useNavigate();
 
-  // Charity fields
-  const [organizationName, setOrganizationName] = useState('');
-  const [missionStatement, setMissionStatement] = useState('');
-  const [registrationNumber, setRegistrationNumber] = useState('');
-  const [documentFile, setDocumentFile] = useState<File | null>(null);
-
-  const getErrorMessage = (error: unknown): string => {
-    if (error instanceof Error) return error.message;
-    return String(error);
+  // Submit for regular user signup
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      // Use the signup function to create the account.
+      await signup(userData.email, userData.password, 'user', {
+        username: userData.username
+      });
+      // Optionally, if you want to automatically sign in after signup, you can do so.
+      navigate('/');
+    } catch (err) {
+      console.error('Error signing up:', err);
+    }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      if (role === 'user') {
-        await signup(email, password, 'user', {
-          username,
-          profilePicture: '',
-          createdAt: new Date().toISOString()
-        });
-        navigate('/');
-      } else {
-        if (!documentFile) {
-          throw new Error('Please upload a document');
-        }
-
-        const storageRef = ref(storage, `documents/${Date.now()}_${documentFile.name}`);
-        const snapshot = await uploadBytes(storageRef, documentFile);
-        const documentUrl = await getDownloadURL(snapshot.ref);
-
-        await signup(email, password, 'charity', {
-          organizationName,
-          missionStatement,
-          registrationNumber,
-          documentUrl,
-          verified: false,
-          profilePicture: '',
-          createdAt: new Date().toISOString()
-        });
-
-        navigate('/verification-pending');
-      }
-    } catch (err) {
-      setError(getErrorMessage(err));
-    } finally {
-      setLoading(false);
-    }
+  // For charity signups, once the charity account is registered the backend
+  // will manage verification status; on success, we navigate to the homepage.
+  const handleCharitySuccess = async () => {
+    navigate('/');
   };
 
   const handleGoogleSignup = async () => {
@@ -82,20 +52,12 @@ export default function Signup() {
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setDocumentFile(e.target.files[0]);
-    }
-  };
-
   return (
     <div className="signup-container">
-      <button onClick={() => navigate('/')} className="back-button">
+      <button onClick={() => navigate('/')} className="return-button">
         <FaArrowLeft /> Back to Home
       </button>
-
       <h2>Sign Up</h2>
-      
       <div className="role-switcher">
         <button
           type="button"
@@ -113,95 +75,55 @@ export default function Signup() {
         </button>
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {role === 'user' ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={userData.username}
+            onChange={(e) =>
+              setUserData({ ...userData, username: e.target.value })
+            }
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={userData.email}
+            onChange={(e) =>
+              setUserData({ ...userData, email: e.target.value })
+            }
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={userData.password}
+            onChange={(e) =>
+              setUserData({ ...userData, password: e.target.value })
+            }
+            required
+          />
+          <button type="submit" className = "signup-button">Sign Up</button>
+          <div className="divider">or</div>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        {role === 'user' ? (
-          <>
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-            <button type="submit" disabled={loading} className="signup-button">
-              {loading ? 'Processing...' : 'Sign Up'}
-            </button>
-
-            <div className="divider">or</div>
-
-            <button 
-              type="button" 
-              onClick={handleGoogleSignup}
-              className="google-signup-button"
-            >
-              <span className="google-logo"></span>
-              <span>Continue with Google</span>
-            </button>
-          </>
-        ) : (
-          <>
-            <input
-              type="text"
-              placeholder="Organization Name"
-              value={organizationName}
-              onChange={(e) => setOrganizationName(e.target.value)}
-              required
-            />
-            <textarea
-              placeholder="Mission Statement"
-              value={missionStatement}
-              onChange={(e) => setMissionStatement(e.target.value)}
-              required
-              className="mission-statement"
-            />
-            <input
-              type="text"
-              placeholder="Registration Number"
-              value={registrationNumber}
-              onChange={(e) => setRegistrationNumber(e.target.value)}
-              required
-            />
-            <div className="file-upload">
-              <label>
-                Upload Official Document (PDF)
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={handleFileChange}
-                  required
-                />
-              </label>
-              {documentFile && <span className="file-name">{documentFile.name}</span>}
-            </div>
-            <button type="submit" disabled={loading} className="signup-button">
-              {loading ? 'Processing...' : 'Sign Up'}
-            </button>
-          </>
-        )}
-      </form>
-
-      {role === 'user' && (
-        <div className="login-redirect">
+<button 
+  type="button" 
+  onClick={handleGoogleSignup}
+  className="google-signup-button"
+>
+  <span className="google-logo"></span>
+  <span>Continue with Google</span>
+</button>
+          <div className="login-redirect">
           Already have an account? <Link to="/login">Log in</Link>
         </div>
+        </form>
+      ) : (
+        <CharitySignup onSuccess={handleCharitySuccess} />
       )}
     </div>
   );
-}
+};
+
+export default Signup;
