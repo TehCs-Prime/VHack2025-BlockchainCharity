@@ -15,12 +15,15 @@
 .overlay-content {
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   width: 90%;
-  max-height: 685px;
+  max-height: 80vh;
   max-width: 500px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
+  overflow-y: auto; /*scroll*/
+  display: flex;
+  flex-direction: column;
 }
 
 /* Common Styles */
@@ -259,48 +262,54 @@
 /* Appreciation Step Styles */
 .step-appreciation {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem;
 }
 
 .thank-you-logo {
-  width: 80px;
-  margin: 1rem auto;
+  width: 60px;
+  margin: 0 auto;
 }
 
 .thank-you-message {
   color: #00b894;
-  margin: 1rem 0;
+  margin: 0;
+  font-size: 1.2rem;
 }
 
 .donation-summary {
   background: #f8f9fa;
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 8px;
-  margin: 1.5rem 0;
+  margin: 0;
 }
 
 .donation-summary p {
   margin: 0.2rem 0;
+  font-size: 0.9rem;
 }
 
 .txid-message {
   color: #636e72;
-  font-size: 0.9rem;
-  margin: 1rem 0;
+  font-size: 0.85rem;
+  margin: 0;
 }
 
 .donation-card {
-  background: lightgreen;
+  background: #e8f5e9;
   border: 1px solid #dfe6e9;
   border-radius: 8px;
-  padding: 1rem;
-  margin: 1.5rem 0;
-  min-height: 100px;
+  padding: 0.8rem;
+  margin: 0;
+  min-height: 80px;
 }
 
 .note {
   color: #636e72;
-  font-size: 0.8rem;
-  margin: 1rem 0;
+  font-size: 0.75rem;
+  margin: 0;
 }
 
 /* Responsive Adjustments */

@@ -8,7 +8,7 @@ import {
   updateDoc,
   doc,
   serverTimestamp,
-  increment
+  increment,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import './Overlay-DonationFlow.css';
@@ -23,13 +23,13 @@ const CHARITY_CONTRACT_ABI = [
 ];
 
 // Replace with your deployed contract address
-const CHARITY_CONTRACT_ADDRESS = "0xd415ceA038D7829935a9c986e14E348e3b24c3A7"; // Replace this with the address you get from deployment
+const CHARITY_CONTRACT_ADDRESS = "0xd415ceA038D7829935a9c986e14E348e3b24c3A7";
 
 declare global {
   interface Window {
     ethereum?: {
       isMetaMask?: boolean;
-      request: (args: { method: string; params?: { chainId: string }[] }) => Promise<unknown>;
+      request: (args: { method: string; params?: any[] }) => Promise<unknown>;
       on: (event: string, callback: (accounts: string[]) => void) => void;
       removeListener: (event: string, callback: (accounts: string[]) => void) => void;
     };
@@ -39,12 +39,13 @@ declare global {
 interface OverlayDonationFlowProps {
   onClose: () => void;
   projectName?: string;
-  projectId: string;             // Firestore document ID of the project
-  currentRaisedAmount: number;   // Current raised amount so far in project
-  onDonationComplete?: () => void; // Callback to trigger after donation completion
+  projectId: string; // Firestore document ID of the project
+  onDonationComplete?: () => void; // Callback to refresh project details
+  currentRaisedAmount?: number;
 }
 
-// Exchange rates used to convert between crypto and fiat values
+// Exchange rates for converting crypto to fiat.
+// Note: We added USD rates for crypto conversion.
 const exchangeRates: { [key: string]: { [key: string]: number } } = {
   BNB: { MYR: 1500, USD: 320 },
   BTC: { MYR: 250000, USD: 55000 },
@@ -55,12 +56,13 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
   onClose,
   projectName,
   projectId,
-  currentRaisedAmount,
   onDonationComplete,
+  currentRaisedAmount,
 }) => {
-  const { userData } = useAuth(); // Available if the user is signed in
+  const { userData } = useAuth();
   const [step, setStep] = useState<'donation' | 'info' | 'wallet' | 'appreciation'>('donation');
 
+  // Extend donationData with card fields when paymentMethod is card.
   const [donationData, setDonationData] = useState({
     cryptoAmount: '',
     cryptoType: 'BNB',
@@ -70,13 +72,14 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
     email: '',
     message: '',
     network: 'erc20',
-    paymentMethod: 'wallet', // "wallet" for crypto, "card" for credit/debit card
+    paymentMethod: 'wallet', // "wallet" for crypto; "card" for card payments
+    displayName: false,
+    marketingUpdates: false,
+    // Card details (for mock credit/debit card)
     cardNumber: '',
     cardExpiry: '',
     cardCvc: '',
     cardName: '',
-    displayName: false,
-    marketingUpdates: false,
   });
 
   const [walletConnected, setWalletConnected] = useState(false);
@@ -86,8 +89,9 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
   const [transactionStatus, setTransactionStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
   const [transactionHash, setTransactionHash] = useState<string>('');
   const [processingDonation, setProcessingDonation] = useState(false);
+  const [donationRecorded, setDonationRecorded] = useState(false);
 
-  // Pre-fill name and email if userData exists.
+  // Pre-fill user's information from auth context.
   useEffect(() => {
     if (userData) {
       setDonationData((prev) => ({
@@ -98,11 +102,12 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
     }
   }, [userData]);
 
-  // Function to return the exchange rate for the given crypto and fiat pair.
+  // Helper: get the exchange rate.
   const getExchangeRate = (crypto: string, fiat: string): number => {
     return exchangeRates[crypto]?.[fiat] || 1;
   };
 
+  // Update fiat equivalent when crypto amount is entered.
   const handleCryptoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDonationData((prev) => ({
@@ -114,6 +119,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
     }));
   };
 
+  // Update crypto equivalent when fiat amount is entered.
   const handleFiatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDonationData((prev) => ({
@@ -125,46 +131,43 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
     }));
   };
 
-  // Check if MetaMask is installed
+  // Check if MetaMask is installed.
   const isMetaMaskInstalled = () => {
     return typeof window.ethereum !== 'undefined' && window.ethereum?.isMetaMask;
   };
 
+  // Process a crypto donation via the smart contract.
   const processDonation = async () => {
     if (!window.ethereum) {
       setError('MetaMask is not installed');
       return;
     }
-
     try {
       setTransactionStatus('pending');
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      
-      // First, let's check if we're connected to the right network
+
+      // Ensure that the user is on the correct network.
       const network = await provider.getNetwork();
-      if (network.chainId !== 11155111) { // Sepolia chain ID
-        // Request to switch to Sepolia
+      // 11155111 is Sepolia chain ID; if not on Sepolia, attempt to switch.
+      if (network.chainId !== 11155111) {
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0xaa36a7' }], // Sepolia chain ID in hex
+          params: [{ chainId: '0xaa36a7' }],
         });
       }
 
-      const charityContract = new ethers.Contract(CHARITY_CONTRACT_ADDRESS, CHARITY_CONTRACT_ABI, signer);
-
-      // Convert crypto amount to Wei (smallest unit of ETH)
+      const charityContract = new ethers.Contract(
+        CHARITY_CONTRACT_ADDRESS,
+        CHARITY_CONTRACT_ABI,
+        signer
+      );
       const amountInWei = ethers.utils.parseEther(donationData.cryptoAmount);
-
-      // Send transaction with message
       const tx = await charityContract.donate(donationData.message || "", {
         value: amountInWei,
-        gasLimit: 300000
+        gasLimit: 300000,
       });
-
       setTransactionHash(tx.hash);
-
-      // Wait for transaction confirmation
       const receipt = await tx.wait();
       if (receipt.status === 1) {
         setTransactionStatus('success');
@@ -179,30 +182,25 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
     }
   };
 
-  // Connect to MetaMask wallet
+  // Connect the wallet (via MetaMask) and initiate donation.
   const connectWallet = async () => {
     if (!isMetaMaskInstalled()) {
       setError('MetaMask is not installed. Please install it to continue.');
       return;
     }
-
     try {
-      const accounts = await window.ethereum?.request({ method: 'eth_requestAccounts' }) as string[];
-      if (!accounts?.[0]) {
-        throw new Error('No accounts found');
-      }
+      const accounts = (await window.ethereum?.request({ method: 'eth_requestAccounts' })) as string[];
+      if (!accounts?.[0]) throw new Error('No accounts found');
       setWalletAddress(accounts[0]);
       setWalletConnected(true);
       setError('');
-      
-      // After connecting wallet, process the donation
       await processDonation();
     } catch (err) {
       setError('Failed to connect wallet: ' + (err as Error).message);
     }
   };
 
-  // Step navigation functions
+  // Step navigation handlers.
   const handleBackStep = () => {
     if (step === 'info') setStep('donation');
     else if (step === 'wallet') setStep('info');
@@ -210,97 +208,102 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
   };
 
   const handleNextStep = () => {
-    if (step === 'donation' && !isChecked) return; // Users must agree to the terms
+    // In the donation step, ensure terms are agreed.
+    if (step === 'donation' && !isChecked) return;
     if (step === 'donation') setStep('info');
     else if (step === 'info') setStep('wallet');
     else if (step === 'wallet') {
       if (donationData.paymentMethod === 'wallet') {
         connectWallet();
       } else {
-        // For card payments, you may later integrate a payment service.
-        setStep('appreciation');
+        // For card payments, simply move on to the appreciation step after a delay.
+        // This simulates card processing. In a production environment, integrate with a payment provider.
+        setTransactionStatus('pending');
+        setTimeout(() => {
+          setTransactionStatus('success');
+          setStep('appreciation');
+        }, 2000);
       }
-    } else {
-      // Final step: complete the donation.
-      handleDonationComplete();
     }
   };
 
-  // Handles donation completion:
-  // 1. Composes a donation record with only the necessary fields depending on the payment method.
-  // 2. Adds the record to Firestore.
-  // 3. Updates the project's raised amount.
-  // 4. Increments the donor count by 1.
+  // Add donation record and update the project document.
   const handleDonationComplete = async () => {
-    if (processingDonation) return;
+    if (processingDonation || donationRecorded) return;
     setProcessingDonation(true);
 
-    // Build the donation record.
-    let donationRecord: any = {
-      donor: userData ? (userData.username || userData.email) : 'anonymous',
-      message: donationData.message,
-      projectId: projectId, // Must be a valid project document ID
-      date: serverTimestamp(),
-      paymentMethod: donationData.paymentMethod === 'card' ? 'card' : 'crypto',
-    };
-
-    if (donationData.paymentMethod === 'card') {
-      // For card payments, include only fiat fields.
-      donationRecord.fiatAmount = donationData.fiatAmount;
-      donationRecord.fiatCurrency = donationData.fiatType;
-    } else {
-      // For crypto donations, include only crypto fields.
-      donationRecord.cryptoAmount = donationData.cryptoAmount;
-      donationRecord.cryptoType = donationData.cryptoType;
-    }
-
-    console.log("Submitting donation record:", donationRecord);
-    console.log("User data:", userData);
-
     try {
-      // Add the donation record to the 'donations' collection.
-      await addDoc(collection(db, 'donations'), donationRecord);
-      console.log("Donation record successfully added.");
+      // Record the donation.
+      await addDoc(collection(db, 'donations'), {
+        donor: userData ? (userData.username || userData.email) : 'anonymous',
+        message: donationData.message,
+        projectId: projectId,
+        date: serverTimestamp(),
+        paymentMethod: donationData.paymentMethod === 'card' ? 'card' : 'crypto',
+        ...(donationData.paymentMethod === 'card'
+          ? { fiatAmount: donationData.fiatAmount, fiatCurrency: donationData.fiatType }
+          : { cryptoAmount: donationData.cryptoAmount, cryptoType: donationData.cryptoType }
+        ),
+      });
+      setDonationRecorded(true);
     } catch (err) {
-      console.error("Error adding donation record:", err);
       setError('Error adding donation record: ' + (err as Error).message);
     }
 
-    try {
-      // Calculate the additional raised amount.
-      const additionalAmount =
-        donationData.paymentMethod === 'card'
-          ? donationData.fiatAmount
-            ? parseFloat(donationData.fiatAmount)
-            : 0
-          : donationData.cryptoAmount
-          ? parseFloat(donationData.cryptoAmount) *
-            getExchangeRate(donationData.cryptoType, donationData.fiatType)
-          : 0;
+    // Calculate the donation amount in USD (the project goal is set in USD)
+    let additionalAmountUSD = 0;
+    if (donationData.paymentMethod === 'card') {
+      const fiatAmount = donationData.fiatAmount ? parseFloat(donationData.fiatAmount) : 0;
+      if (donationData.fiatType === 'USD') {
+        additionalAmountUSD = fiatAmount;
+      } else if (donationData.fiatType === 'MYR') {
+        // Conversion: assume 1 USD = 4.7 MYR. Adjust this rate as needed.
+        const conversionRateMYRtoUSD = 4.7;
+        additionalAmountUSD = fiatAmount / conversionRateMYRtoUSD;
+      } else {
+        additionalAmountUSD = fiatAmount;
+      }
+    } else if (donationData.paymentMethod === 'wallet' && donationData.cryptoAmount) {
+      const cryptoValue = parseFloat(donationData.cryptoAmount);
+      // Always convert the crypto amount to USD, regardless of the chosen fiat display currency.
+      additionalAmountUSD = isNaN(cryptoValue)
+        ? 0
+        : cryptoValue * getExchangeRate(donationData.cryptoType, 'USD');
+    }
+    if (isNaN(additionalAmountUSD)) {
+      additionalAmountUSD = 0;
+    }
 
+    // Log the computed value for debugging.
+    console.log("Updating project:", projectId, "with additionalAmount in USD:", additionalAmountUSD);
+
+    try {
       const projectRef = doc(db, 'projects', projectId);
-      // Update the project document: add to raisedAmount and increment donorsCount by 1.
       await updateDoc(projectRef, {
-        raisedAmount: currentRaisedAmount + additionalAmount,
+        raisedAmount: increment(additionalAmountUSD),
         donorsCount: increment(1),
       });
-      console.log("Project raised amount and donor count successfully updated.");
     } catch (err) {
-      console.error("Error updating project:", err);
-      setError((prev) => prev + '\nError updating project: ' + (err as Error).message);
+      setError(prev => prev + '\nError updating project: ' + (err as Error).message);
     } finally {
       setProcessingDonation(false);
-      setStep('appreciation');
-      if (onDonationComplete) {
-        onDonationComplete();
-      }
+      if (onDonationComplete) onDonationComplete();
     }
+  };
+
+  // Called when the user clicks "Done".
+  const onDone = async () => {
+    if (!donationRecorded) {
+      await handleDonationComplete();
+    } else if (onDonationComplete) {
+      onDonationComplete();
+    }
+    onClose();
   };
 
   return (
     <div className="overlay-container" onClick={onClose}>
       <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
-        {/* Donation Step */}
         {step === 'donation' && (
           <div className="step-donation">
             <div className="modal-header">
@@ -312,7 +315,9 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
               <div className="input-group">
                 <select
                   value={donationData.paymentMethod}
-                  onChange={(e) => setDonationData({ ...donationData, paymentMethod: e.target.value })}
+                  onChange={(e) =>
+                    setDonationData({ ...donationData, paymentMethod: e.target.value })
+                  }
                 >
                   <option value="wallet">Cryptocurrency Wallet</option>
                   <option value="card">Credit/Debit Card</option>
@@ -381,13 +386,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
                 onChange={(e) => setIsChecked(e.target.checked)}
               />
               <label htmlFor="terms-checkbox">
-                By proceeding, you agree to our&nbsp;
-                <span className="terms-link">
-                  <a href="#" target="_blank" rel="noopener noreferrer">Terms of Use</a>
-                </span>&nbsp;and&nbsp;
-                <span className="terms-link">
-                  <a href="#" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-                </span>.
+                By proceeding, you agree to our <a href="#" target="_blank" rel="noopener noreferrer">Terms of Use</a> and <a href="#" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
               </label>
             </div>
             <button className="next-btn" onClick={handleNextStep} disabled={!isChecked}>
@@ -395,8 +394,6 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
             </button>
           </div>
         )}
-
-        {/* Info Step */}
         {step === 'info' && (
           <div className="step-info">
             <div className="modal-header">
@@ -412,15 +409,6 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
                 defaultValue={userData?.username || ''}
                 readOnly={!!userData}
               />
-              <div className="checkbox-group">
-                <input
-                  type="checkbox"
-                  id="displayName"
-                  checked={donationData.displayName}
-                  onChange={(e) => setDonationData({ ...donationData, displayName: e.target.checked })}
-                />
-                <label htmlFor="displayName">Display my name on donation page.</label>
-              </div>
             </div>
             <div className="form-group">
               <label>Email</label>
@@ -430,15 +418,6 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
                 defaultValue={userData?.email || ''}
                 readOnly={!!userData}
               />
-              <div className="checkbox-group">
-                <input
-                  type="checkbox"
-                  id="marketingUpdates"
-                  checked={donationData.marketingUpdates}
-                  onChange={(e) => setDonationData({ ...donationData, marketingUpdates: e.target.checked })}
-                />
-                <label htmlFor="marketingUpdates">I agree to receive marketing updates.</label>
-              </div>
             </div>
             <div className="form-group">
               <label>Message</label>
@@ -453,8 +432,11 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
             </button>
           </div>
         )}
-
-        {/* Wallet / Card Step */}
+        {/*
+          Wallet / Card Step:
+          If payment method is "card", display card details form.
+          Otherwise, display network selection and wallet connection (for crypto wallet).
+        */}
         {step === 'wallet' && (
           <div className="step-transaction">
             <div className="modal-header">
@@ -549,77 +531,62 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
             {error && <div className="error-message">{error}</div>}
           </div>
         )}
-
-
-{step === 'appreciation' && (
-  <div className="step-appreciation">
-    <div className="modal-header">
-      <button className='baack-btn' onClick={handleBackStep}>⬅</button>
-      <button className="close-btn" onClick={onClose}>✖</button>
-    </div>
-
-    {/* Add Thank You Image */}
-    <img src="\assets\appreciation.png" alt="Thank You" className="thank-you-logo" />
-
-    <h2 className="thank-you-message">Thank You for Your Kindness!</h2>
-
-    <div className="donation-summary">
-      <p>Amount: {donationData.cryptoAmount} {donationData.cryptoType}</p>
-      <p>Equivalent: {donationData.fiatAmount} {donationData.fiatType}</p>
-      <p><span style={{ fontWeight: 'bold' }}>{projectName || "Unknown Project"}</span></p>
-    </div>
-
-    {/* Add TxID Message */}
-    <p className="txid-message">
-      {donationData.paymentMethod === 'card'
-        ? "Your card payment is being processed. You'll receive email confirmation within 24 hours."
-        : "Your donation records will be shown on the website after the TxID is verified."}
-    </p>
-
-    {/* Display donor message */}
-    <div className="donation-card">
-      <p>{donationData.message || 'No message provided'}</p>
-    </div>
-
-    {/* Add Processing Note */}
-    <p className="note">
-      *Please note donations may not be reflected on the website or calculated in the total amount immediately. If your donation is missing, check back later.
-    </p>
-
-    {/* Add transaction status display */}
-    {transactionStatus === 'pending' && (
-      <div className="transaction-status pending">
-        <p>Processing your donation...</p>
-        <p>Transaction Hash: {transactionHash}</p>
-      </div>
-    )}
-    
-    {transactionStatus === 'success' && (
-      <div className="transaction-status success">
-        <p>Donation successful!</p>
-        <p>Transaction Hash: {transactionHash}</p>
-        <a 
-          href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View on Etherscan
-        </a>
-      </div>
-    )}
-    
-    {transactionStatus === 'error' && (
-      <div className="transaction-status error">
-        <p>Transaction failed. Please try again.</p>
-        <p>{error}</p>
-      </div>
-    )}
-
-    <button className="done-btn" onClick={onClose}>Done</button>
-  </div>
-)}
-
-
+        {step === 'appreciation' && (
+          <div className="step-appreciation">
+            <div className="modal-header">
+              <button className="back-btn" onClick={handleBackStep}>⬅</button>
+              <button className="close-btn" onClick={onClose}>✖</button>
+            </div>
+            <img src="/assets/appreciation.png" alt="Thank You" className="thank-you-logo" />
+            <h2 className="thank-you-message">Thank You for Your Kindness!</h2>
+            <div className="donation-summary">
+              <p>Amount: {donationData.cryptoAmount} {donationData.cryptoType}</p>
+              <p>Equivalent: {donationData.fiatAmount} {donationData.fiatType}</p>
+              <p><span style={{ fontWeight: 'bold' }}>{projectName || "Unknown Project"}</span></p>
+            </div>
+            <p className="txid-message">
+              {donationData.paymentMethod === 'card'
+                ? "Your card payment is being processed. You'll receive email confirmation within 24 hours."
+                : "Your donation records will be shown on the website after the TxID is verified."}
+            </p>
+            <div className="donation-card">
+              <p>{donationData.message || 'No message provided'}</p>
+            </div>
+            <p className="note">
+              *Please note donations may not be reflected on the website or calculated in the total amount immediately. If your donation is missing, check back later.
+            </p>
+            {donationData.paymentMethod === 'wallet' && (
+              <>
+                {transactionStatus === 'pending' && (
+                  <div className="transaction-status pending">
+                    <p>Processing your donation...</p>
+                    <p>Transaction Hash: {transactionHash}</p>
+                  </div>
+                )}
+                {transactionStatus === 'success' && (
+                  <div className="transaction-status success">
+                    <p>Donation successful!</p>
+                    <p>Transaction Hash: {transactionHash}</p>
+                    <a
+                      href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View on Etherscan
+                    </a>
+                  </div>
+                )}
+              </>
+            )}
+            {transactionStatus === 'error' && (
+              <div className="transaction-status error">
+                <p>Transaction failed. Please try again.</p>
+                <p>{error}</p>
+              </div>
+            )}
+            <button className="done-btn" onClick={onDone}>Done</button>
+          </div>
+        )}
       </div>
     </div>
   );
