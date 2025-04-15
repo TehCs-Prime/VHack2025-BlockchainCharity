@@ -1,4 +1,4 @@
-// ProjectDetails.tsx
+// Page-ProjectDetails.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, onSnapshot, collection, query, where, Unsubscribe } from 'firebase/firestore';
@@ -18,19 +18,19 @@ import { NewsUpdate } from './Tab-Updates';
 interface Project {
   id: string;
   title: string;
-  status: 'Funding' | 'Under Implementation' | 'Completed' | 'Cancelled';
+  status: 'Funding' | 'Under Implementation' | 'Completed' | 'Cancelled' | string;
   subtitle?: string;
   description: string;
   location: string;
   goalAmount: number;
-  raisedAmount: number; // Updated via donation flow from the database.
+  raisedAmount: number;
   raisedCrypto?: string;
   category: string;
   updatedAt: Date;
-  mainImage: string;
+  mainImage: string; // URL string
   allocatedAmount: number;
   pendingAmount: number;
-  donorsCount: number; // Updated via donation flow from the database.
+  donorsCount: number;
   beneficiariesCount: number;
   eventDate?: Date;
   eventDescription?: string;
@@ -57,7 +57,7 @@ const ProjectDetails: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Milestone');
   const [showDonationOverlay, setShowDonationOverlay] = useState(false);
 
-  // Real-time listener for project document.
+  // Listen for project document in Firestore.
   useEffect(() => {
     let unsubscribe: Unsubscribe;
     if (projectId) {
@@ -69,21 +69,23 @@ const ProjectDetails: React.FC = () => {
             const data = projectSnap.data();
             const projectData: Project = {
               id: projectSnap.id,
-              title: data.title,
-              status: data.status,
+              title: data.title || 'Untitled',
+              status: data.status || 'unknown',
               subtitle: data.subtitle,
               description: data.description,
               location: data.location,
-              goalAmount: data.goalAmount,
-              raisedAmount: data.raisedAmount,
+              goalAmount: data.goalAmount || 0,
+              raisedAmount: data.raisedAmount || 0,
               raisedCrypto: data.raisedCrypto,
-              category: data.category,
-              updatedAt: data.updatedAt?.toDate() || new Date(),
-              mainImage: data.mainImage,
-              allocatedAmount: data.allocatedAmount,
-              pendingAmount: data.pendingAmount,
-              donorsCount: data.donorsCount,
-              beneficiariesCount: data.beneficiariesCount,
+              category: data.category || '',
+              updatedAt: data.updatedAt ? data.updatedAt.toDate() : new Date(),
+              mainImage: data.coverImagePreview || data.mainImage || '',
+              allocatedAmount: data.allocatedAmount || 0,
+              pendingAmount: data.pendingAmount || 0,
+              donorsCount: data.donorsCount || 0,
+              beneficiariesCount: data.beneficiariesCount !== undefined
+                ? Number(data.beneficiariesCount)
+                : (data.numberOfBeneficiaries || 0),
               eventDate: data.eventDate ? data.eventDate.toDate() : undefined,
               eventDescription: data.eventDescription,
               organizationsInfo: data.organizationsInfo,
@@ -115,7 +117,7 @@ const ProjectDetails: React.FC = () => {
     };
   }, [projectId]);
 
-  // Real-time listener for donations documents for this project.
+  // Listen for donations associated with the project.
   const [donations, setDonations] = useState<Donation[]>([]);
   useEffect(() => {
     let unsubscribeDonations: Unsubscribe;
@@ -169,33 +171,36 @@ const ProjectDetails: React.FC = () => {
     return <div className="error-container">Project not found</div>;
   }
 
-  // Use the raisedAmount value from the database (updated by the donation flow)
-  const displayRaisedAmount = project.raisedAmount;
-  const displayDonorsCount = project.donorsCount;
-  const progressPercentage = ((displayRaisedAmount / project.goalAmount) * 100).toFixed(2);
-  const isFullyFunded = displayRaisedAmount >= project.goalAmount;
+  // Calculate progress details safely.
+  const displayRaisedAmount = project.raisedAmount || 0;
+  const goalAmount = project.goalAmount || 1; // Avoid division by zero.
+  const progressPercentage = ((displayRaisedAmount / goalAmount) * 100).toFixed(2);
+  const isFullyFunded = displayRaisedAmount >= goalAmount;
+
+  const statusText: string = project.status || 'unknown';
+  const statusClass = statusText.toLowerCase().replace(/\s+/g, '-');
 
   return (
     <div className="project-details-container">
-      {/* Breadcrumb navigation */}
+      {/* Breadcrumb Navigation */}
       <div className="breadcrumb">
         <Link to="/explore">All Projects</Link>
         <span className="breadcrumb-separator">›</span>
         <span className="current-page">{project.title}</span>
       </div>
 
-      <div className={`project-details-content status-${project.status.toLowerCase().replace(' ', '-')}`}>
+      <div className={`project-details-content status-${statusClass}`}>
         <div className="project-info-section">
-          <div className={`project-status-badge ${project.status.toLowerCase().replace(' ', '-')}`}>
+          <div className={`project-status-badge ${statusClass}`}>
             {project.status}
           </div>
           <h1 className="project-title">{project.title}</h1>
-          <p className="project-subtitle">{project.subtitle}</p>
+          {project.subtitle && <p className="project-subtitle">{project.subtitle}</p>}
           <div className="funding-details">
             <div className="funding-amounts">
               <span className="raised-amount">${displayRaisedAmount.toLocaleString()}</span>
               <span className="of-text">Raised of</span>
-              <span className="goal-amount">${project.goalAmount.toLocaleString()}</span>
+              <span className="goal-amount">${goalAmount.toLocaleString()}</span>
             </div>
             <div className="progress-container">
               <div className="progress-bar">
@@ -256,11 +261,15 @@ const ProjectDetails: React.FC = () => {
         </div>
 
         <div className="project-image-container">
-          <img
-            src={project.mainImage}
-            alt={project.title}
-            className="project-main-image"
-          />
+          {project.mainImage ? (
+            <img
+              src={project.mainImage}
+              alt={project.title}
+              className="project-main-image"
+            />
+          ) : (
+            <div className="image-placeholder">No Image Available</div>
+          )}
         </div>
       </div>
 
@@ -268,14 +277,14 @@ const ProjectDetails: React.FC = () => {
         <div className="statistics-left">
           <div className="donation-chart">
             <div className="donut-chart-container">
-              {/* Optionally, add a real chart component */}
+              {/* Optionally integrate a chart component */}
               <div className="donut-chart"></div>
             </div>
             <div className="donation-summary">
               <div className="total-raised">
                 <h3>Total Raised</h3>
                 <div className="crypto-amount">
-                  {project.raisedCrypto} ≈ ${displayRaisedAmount.toLocaleString()}
+                  {project.raisedCrypto ? `${project.raisedCrypto} ≈ ` : ''}${displayRaisedAmount.toLocaleString()}
                 </div>
                 <div className="allocation-details">
                   <div className="allocation-item allocated">
@@ -294,7 +303,7 @@ const ProjectDetails: React.FC = () => {
             <div className="metric donors">
               <div className="metric-icon donors-icon"></div>
               <div className="metric-data">
-                <div className="metric-value">{displayDonorsCount.toLocaleString()}</div>
+                <div className="metric-value">{project.donorsCount.toLocaleString()}</div>
                 <div className="metric-label">Donors</div>
               </div>
             </div>
@@ -302,7 +311,7 @@ const ProjectDetails: React.FC = () => {
               <div className="metric-icon beneficiaries-icon"></div>
               <div className="metric-data">
                 <div className="metric-value">{project.beneficiariesCount.toLocaleString()}</div>
-                <div className="metric-label">End-beneficiaries</div>
+                <div className="metric-label">Beneficiaries</div>
               </div>
             </div>
           </div>
@@ -311,10 +320,11 @@ const ProjectDetails: React.FC = () => {
         <div className="statistics-right">
           <h2>What happened?</h2>
           <div className="event-description">
+            <p className="project-description-details">{project.description}</p>
             <p>{project.eventDescription}</p>
             <p>{project.organizationsInfo}</p>
             <p className="update-info">
-              *Page updated {project.lastUpdated}. Cover photo credit to {project.photoCredit}.
+              *Page updated {project.lastUpdated || 'N/A'}. Cover photo credit to {project.photoCredit || 'Unknown'}.
             </p>
           </div>
         </div>
@@ -351,8 +361,8 @@ const ProjectDetails: React.FC = () => {
           {activeTab === 'Milestone' && (
             <MilestoneTab
               milestones={project.milestones}
-              objective={`US$ ${project.goalAmount.toLocaleString()}`}
-              initialMilestoneId={project.milestones?.[0]?.id || ''}
+              objective={`US$ ${goalAmount.toLocaleString()}`}
+              initialMilestoneId={project.milestones?.[0]?.title || ''}
             />
           )}
           {activeTab === 'updates' && <UpdatesTab newsData={project.newsUpdates} />}

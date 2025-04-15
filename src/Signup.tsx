@@ -127,3 +127,7 @@ const Signup: React.FC = () => {
 };
 
 export default Signup;
+function setError(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

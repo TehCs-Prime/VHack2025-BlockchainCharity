@@ -1,9 +1,10 @@
+// ProjectDiscovery.tsx
 import "./Page-Explore.css";
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase'; // your firebase configuration file
-import { useAuth } from './AuthContext'; // a custom hook or context returning current user info
+import { useAuth } from './AuthContext'; // custom hook returning current user info
 
 // Define types for our filters
 type ProjectStatus = 'All' | 'Funding' | 'Under Implementation' | 'Completed' | 'Cancelled';
@@ -19,6 +20,7 @@ interface ProjectFilters {
   location: string;
 }
 
+// Project interface matching Firestore document structure.
 export interface Project {
   id?: string;  // Firestore document ID
   title: string;
@@ -32,7 +34,7 @@ export interface Project {
   raisedCrypto?: string;
   category: Exclude<Category, 'All'>;
   updatedAt: Date;
-  mainImage: string; // Should be an imgbb URL
+  mainImage: string; // Expected to be a fully-qualified URL (e.g. from imgbb)
   allocatedAmount: number;
   pendingAmount: number;
   donorsCount: number;
@@ -49,7 +51,7 @@ export interface Project {
     ins?: string;
     vk?: string;
   };
-  // Additional nested arrays like milestones, donations, allocations, newsUpdates
+  // Additional arrays (e.g. milestones, donations, allocations, newsUpdates) can be added.
 }
 
 export const ProjectDiscovery: React.FC = () => {
@@ -83,13 +85,13 @@ export const ProjectDiscovery: React.FC = () => {
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const { currentUser, userData } = useAuth(); // currentUser from Auth, and userData holds role info
+  const { currentUser, userData } = useAuth();
 
   const navigateToProjectDetails = (projectId: string) => {
     navigate(`/project/${projectId}`);
   };
 
-  // Fetch projects from Firestore and parse timestamp fields as Dates
+  // Fetch projects from Firestore. Parse Firestore timestamps into Date objects if they exist.
   const fetchProjects = async () => {
     setLoading(true);
     try {
@@ -97,6 +99,7 @@ export const ProjectDiscovery: React.FC = () => {
       const projectsData: Project[] = [];
       querySnapshot.forEach(doc => {
         const data = doc.data();
+
         projectsData.push({
           id: doc.id,
           title: data.title,
@@ -109,7 +112,8 @@ export const ProjectDiscovery: React.FC = () => {
           raisedAmount: data.raisedAmount,
           raisedCrypto: data.raisedCrypto,
           category: data.category,
-          updatedAt: data.updatedAt.toDate(),
+          // Use the updatedAt field if available, or default to current date
+          updatedAt: data.updatedAt ? data.updatedAt.toDate() : new Date(),
           mainImage: data.mainImage,
           allocatedAmount: data.allocatedAmount,
           pendingAmount: data.pendingAmount,
@@ -135,7 +139,7 @@ export const ProjectDiscovery: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Handle filter changes (same as before)
+  // Filter checkbox change handler.
   const handleCheckboxChange = (
     section: 'status' | 'timing' | 'categories',
     value: ProjectStatus | Timing | Category
@@ -162,7 +166,7 @@ export const ProjectDiscovery: React.FC = () => {
     });
   };
 
-  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLocationChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFilters(prev => ({ ...prev, location: e.target.value }));
   };
 
@@ -176,12 +180,11 @@ export const ProjectDiscovery: React.FC = () => {
     setSearchQuery('');
   };
 
+  // Filter and sort projects based on criteria.
   const getFilteredAndSortedProjects = (): Project[] => {
     let filteredProjects = [...projects];
     if (!filters.status.includes('All')) {
-      filteredProjects = filteredProjects.filter(project => 
-        filters.status.includes(project.status)
-      );
+      filteredProjects = filteredProjects.filter(project => filters.status.includes(project.status));
     }
     if (!filters.timing.includes('All')) {
       filteredProjects = filteredProjects.filter(project =>
@@ -189,9 +192,7 @@ export const ProjectDiscovery: React.FC = () => {
       );
     }
     if (!filters.categories.includes('All')) {
-      filteredProjects = filteredProjects.filter(project =>
-        filters.categories.includes(project.category)
-      );
+      filteredProjects = filteredProjects.filter(project => filters.categories.includes(project.category));
     }
     if (filters.location.trim() !== '') {
       const locationLower = filters.location.toLowerCase().trim();
@@ -222,14 +223,12 @@ export const ProjectDiscovery: React.FC = () => {
     return filteredProjects;
   };
 
-  // ------ IMGBB Image Upload ------
-
-  // This function should call imgbb API to upload the image file and return the URL.
-  // Replace the API_KEY and endpoint as per imgbb documentation.
+  // --- IMGBB Image Upload ---  
+  // This function is used when an admin adds a new project.
   const uploadImageToImgbb = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('image', file);
-    // Add your imgbb API key here
+    // Replace with your actual imgbb API key.
     formData.append('key', 'ea041d81863434cecbdb34bfe3264458');
     
     const res = await fetch('https://api.imgbb.com/1/upload', {
@@ -244,7 +243,6 @@ export const ProjectDiscovery: React.FC = () => {
     throw new Error('Image upload failed');
   };
 
-  // Handle image file selection during project add
   const handleImageFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setUploadingImage(true);
@@ -259,11 +257,10 @@ export const ProjectDiscovery: React.FC = () => {
     }
   };
 
-  // Handler for adding a new project (admin only)
+  // Admin add-project handler.
   const handleAddProject = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // Ensure the project has a valid image URL
       if (!newProject.mainImage) {
         alert('Please upload an image');
         return;
@@ -294,7 +291,7 @@ export const ProjectDiscovery: React.FC = () => {
     }
   };
 
-  // Render the Add-Project Form for admin users
+  // Render the admin add-project form.
   const renderAddProjectForm = () => (
     <div className="add-project-form-container">
       <form className="add-project-form" onSubmit={handleAddProject}>
@@ -326,20 +323,20 @@ export const ProjectDiscovery: React.FC = () => {
         <input 
           type="text" 
           value={newProject.location} 
-          onChange={e => setNewProject({ ...newProject, location: e.target.value })} 
+          onChange={e => setNewProject({ ...newProject, location: e.target.value })}
           required
         />
         <label>Goal Amount:</label>
         <input 
           type="number" 
           value={newProject.goalAmount} 
-          onChange={e => setNewProject({ ...newProject, goalAmount: +e.target.value })} 
+          onChange={e => setNewProject({ ...newProject, goalAmount: +e.target.value })}
         />
         <label>Raised Amount:</label>
         <input 
           type="number" 
           value={newProject.raisedAmount} 
-          onChange={e => setNewProject({ ...newProject, raisedAmount: +e.target.value })} 
+          onChange={e => setNewProject({ ...newProject, raisedAmount: +e.target.value })}
         />
         <label>Category:</label>
         <select 
@@ -349,7 +346,7 @@ export const ProjectDiscovery: React.FC = () => {
           <option value="Water">Water</option>
           <option value="Education">Education</option>
           <option value="Health">Health</option>
-          {/* Add other categories as required */}
+          {/* Add other categories as needed */}
         </select>
         <label>Image Upload (via imgbb):</label>
         <input type="file" onChange={handleImageFileChange} />
@@ -371,7 +368,7 @@ export const ProjectDiscovery: React.FC = () => {
         <h1 className="page-title">Discover All Projects</h1>
       </div>
 
-      {/* New Toolbar for Admin Actions */}
+      {/* Admin Toolbar */}
       {userData?.role === 'admin' && (
         <div className="admin-toolbar">
           <button className="add-project-btn" onClick={() => setShowAddForm(true)}>
@@ -389,7 +386,6 @@ export const ProjectDiscovery: React.FC = () => {
               Clear All
             </button>
           </div>
-          
           <div className="filter-section">
             <h3>Project Status</h3>
             {(['All', 'Funding', 'Under Implementation', 'Completed', 'Cancelled'] as const).map(status => (
@@ -404,7 +400,6 @@ export const ProjectDiscovery: React.FC = () => {
               </div>
             ))}
           </div>
-          
           <div className="filter-section">
             <h3>Timing</h3>
             {(['All', 'Near to End', 'New Project'] as const).map(timing => (
@@ -419,7 +414,6 @@ export const ProjectDiscovery: React.FC = () => {
               </div>
             ))}
           </div>
-          
           <div className="filter-section categories-section">
             <h3>Categories</h3>
             <div className="scrollable-categories">
@@ -438,7 +432,6 @@ export const ProjectDiscovery: React.FC = () => {
               ))}
             </div>
           </div>
-          
           <div className="filter-section">
             <h3>By Location</h3>
             <div className="location-input">
@@ -458,7 +451,6 @@ export const ProjectDiscovery: React.FC = () => {
               )}
             </div>
           </div>
-          
           <div className="active-filters">
             <h3>Active Filters</h3>
             <div className="active-filters-list">
@@ -513,7 +505,6 @@ export const ProjectDiscovery: React.FC = () => {
                 </button>
               )}
             </div>
-            
             <div className="sort-controls">
               <div className="sort-dropdown">
                 <label htmlFor="sort-select">Sort by:</label>
@@ -527,7 +518,6 @@ export const ProjectDiscovery: React.FC = () => {
                   <option value="Date created">Date created</option>
                 </select>
               </div>
-              
               <div className="view-toggle">
                 <button 
                   className={`view-btn ${viewMode === 'Grid' ? 'active' : ''}`}
@@ -550,14 +540,22 @@ export const ProjectDiscovery: React.FC = () => {
           ) : (
             <div className={`projects-container ${viewMode.toLowerCase()}-view`}>
               {getFilteredAndSortedProjects().map(project => (
-                <div className="project-card" key={project.id} onClick={() => project.id && navigateToProjectDetails(project.id)} style={{ cursor: 'pointer' }}>
+                <div 
+                  key={project.id} 
+                  className="project-card" 
+                  onClick={() => project.id && navigateToProjectDetails(project.id)} 
+                  style={{ cursor: 'pointer' }}
+                >
                   <div className="project-status" data-status={project.status}>
                     {project.status}
                   </div>
                   <h3 className="project-title">{project.title}</h3>
                   <div className="project-category">{project.category}</div>
-                  {/* mainImage expected to be a fully-qualified imgbb URL */}
-                  <img className="project-image" src={project.mainImage} alt={project.title} />
+                  <img 
+                    className="project-image" 
+                    src={project.mainImage} 
+                    alt={project.title} 
+                  />
                   <p className="project-description">{project.description}</p>
                   <div className="project-progress">
                     <div className="progress-label">

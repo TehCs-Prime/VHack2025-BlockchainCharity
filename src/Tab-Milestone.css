@@ -1,296 +1,299 @@
 .milestone-container {
-    background-color: white;
-    color: #333;
-    padding: 2rem;
-    font-family: 'Arial', sans-serif;
-    max-width: 1800px;
-    margin: 0 auto;
-  }
-  
-  .milestone-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #e5e5e5;
-    padding-bottom: 1rem;
-  }
-  
-  .milestone-title {
-    color: #333;
-    font-size: 1.8rem;
-    font-weight: 400;
-    margin: 0;
-  }
-  
-  .objective {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  
-  .objective-label {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #051b0d;
-    margin-bottom: 0.5rem;
-  }
-  
-  .objective-amount {
-    font-size: 1.5rem;
-    color: #f59e0b;
-    font-weight: 600;
-  }
-  
-  .milestone-progress {
-    display: flex;
-    align-items: center;
-    margin-bottom: 3rem;
-  }
-  
-  .milestone-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.2s;
-    z-index: 2;
-  }
-  
-  .milestone-node:hover {
-    transform: scale(1.05);
-  }
-  
-  .milestone-circle {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background-color: #e5e5e5;
-    color: #777;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  .milestone-node.active .milestone-circle {
-    background-color: #4ade80;
-    color: white;
-  }
-  
-  .milestone-amount {
-    font-size: 0.8rem;
-    color: #777;
-    transition: color 0.3s;
-  }
-  
-  .milestone-node.active .milestone-amount {
-    color: #333;
-  }
-  
-  .milestone-line {
-    flex-grow: 1;
-    height: 2px;
-    background-color: #e5e5e5;
-    margin: 0 1rem;
-    position: relative;
-    transition: background-color 0.3s;
-  }
-  
-  .milestone-line.completed {
-    background-color: #4ade80;
-  }
-  
-  .milestone-details {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
-  }
-  
-  .milestone-number h2 {
-    font-size: 3rem;
-    color: #4ade80;
-    margin: 0 1rem 0 0;
-    font-weight: 600;
-  }
-  
-  .milestone-status {
-    display: flex;
-    flex-direction: column;
-    padding-top: 0.5rem;
-  }
-  
-  .status-label {
-    font-size: 0.8rem;
-    color: #777;
-    margin-bottom: 0.3rem;
-  }
-  
-  .status-value {
-    font-size: 1rem;
-    color: #f59e0b;
-    font-weight: 600;
-  }
-  
-  .section-title {
-    color: #11d15b;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    margin-top: 2rem;
-  }
-  
-  .milestone-description, .support-text, .what-we-did {
-    color: #555;
-    line-height: 1.6;
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .milestone-content {
-    display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
-  .left-column {
-    flex: 1;
-  }
-  
-  .right-column {
-    flex: 1;
-  }
-  
-  .image-gallery {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  
-  .image-thumbnail {
-    width: 15rem;
-    height: 15rem;
-    border-radius: 0.25rem;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s;
-    border: 1px solid #e5e5e5;
-  }
-  
-  .image-thumbnail:hover {
-    transform: scale(1.05);
-  }
-  
-  .image-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .expenses-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .total-amount {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .total-label {
-    font-size: 0.8rem;
-    color: #777;
-    margin-bottom: 0.5rem;
-  }
-  
-  .total-value {
-    font-size: 1.5rem;
-    color: #f59e0b;
-    font-weight: 600;
-  }
-  
-  .view-graph-btn {
-    background-color: #f59e0b;
-    color: white;
-    border: none;
-    border-radius: 0.25rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background-color 0.3s;
-  }
-  
-  .view-graph-btn:hover {
-    background-color: #d97706;
-  }
-  
-  .expenses-table {
-    background-color: #f9f9f9;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    border: 1px solid #e5e5e5;
-  }
-  
-  .expense-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 0.5fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    font-size: 1.0rem;
-    font-weight: bold;
-    color: #777;
-  }
-  
-  .expense-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 0.5fr;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid #e5e5e5;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #333;
-  }
-  
-  .expense-details, .blockchain-transaction {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: #777;
-  }
+  background-color: white;
+  color: #333;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+  max-width: 1800px;
+  margin: 0 auto;
+}
 
-  .blockchain-transaction {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-  }
-  
-  .description-text {
-    color: #333;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-  }
-  
-  .blockchain-link {
-    color: #22c55e;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  
-  .blockchain-link:hover {
-    text-decoration: underline;
-    color: #15803d;
-  }
-  
-  .icon {
-    margin-right: 0.5rem;
-  }
-  
-  .receipt-icon {
-    cursor: pointer;
-    font-size:x-large;
-  }
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 1rem;
+}
+
+.milestone-title {
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.objective {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.objective-label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #051b0d;
+  margin-bottom: 0.5rem;
+}
+
+.objective-amount {
+  font-size: 1.5rem;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.milestone-progress {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.milestone-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  z-index: 2;
+}
+
+.milestone-node:hover {
+  transform: scale(1.05);
+}
+
+.milestone-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #e5e5e5;
+  color: #777;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.milestone-node.active .milestone-circle {
+  background-color: #4ade80;
+  color: white;
+}
+
+.milestone-amount {
+  font-size: 0.8rem;
+  color: #777;
+  transition: color 0.3s;
+}
+
+.milestone-node.active .milestone-amount {
+  color: #333;
+}
+
+.milestone-line {
+  flex-grow: 1;
+  height: 2px;
+  background-color: #e5e5e5;
+  margin: 0 1rem;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.milestone-line.completed {
+  background-color: #4ade80;
+}
+
+.milestone-details {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.milestone-title-display h2 {
+  font-size: 3rem;
+  color: #4ade80;
+  margin: 0 1rem 0 0;
+  font-weight: 600;
+}
+
+.milestone-status {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.5rem;
+}
+
+.status-label {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 0.3rem;
+}
+
+.status-value {
+  font-size: 1rem;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.section-title {
+  color: #11d15b;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.milestone-solution,
+.what-we-did,
+.support-text {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.milestone-content {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.left-column {
+  flex: 1;
+}
+
+.right-column {
+  flex: 1;
+}
+
+.image-gallery {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.image-thumbnail {
+  width: 15rem;
+  height: 15rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 1px solid #e5e5e5;
+}
+
+.image-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.image-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.expenses-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.total-amount {
+  display: flex;
+  flex-direction: column;
+}
+
+.total-label {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+
+.total-value {
+  font-size: 1.5rem;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.view-graph-btn {
+  background-color: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+.view-graph-btn:hover {
+  background-color: #d97706;
+}
+
+.expenses-table {
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e5e5;
+}
+
+.expense-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 0.5fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.0rem;
+  font-weight: bold;
+  color: #777;
+}
+
+.expense-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 0.5fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e5e5e5;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.expense-details,
+.blockchain-transaction {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.blockchain-transaction {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+.description-text {
+  color: #333;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.blockchain-link {
+  color: #22c55e;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.blockchain-link:hover {
+  text-decoration: underline;
+  color: #15803d;
+}
+
+.icon {
+  margin-right: 0.5rem;
+}
+
+.receipt-icon {
+  cursor: pointer;
+  font-size: x-large;
+}

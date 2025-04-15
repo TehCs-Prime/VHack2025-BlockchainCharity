@@ -1,4 +1,4 @@
-// components/CharityProfile.tsx
+// CharityProfile.tsx
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import LocalAvatar from './LocalAvatar';
@@ -6,42 +6,37 @@ import FundraisingForm from './FundraisingForm';
 import './Profile.css';
 
 export default function CharityProfile() {
-  // Retrieve userData and updateProfile from the AuthContext.
+  // Retrieve user data and update function from AuthContext.
   const { userData, updateProfile } = useAuth();
 
-  // Check that userData exists and that the role is charity.
+  // Only allow charity role users.
   if (!userData || userData.role !== 'charity') {
     return <p>Unauthorized Access</p>;
   }
   const charityUser = userData;
 
-  // Read the verified status from firebase; default to false if undefined.
+  // If verified is undefined, default to false.
   const isVerified: boolean = charityUser.verified || false;
   const estimatedVerificationTime = '2-3 business days';
 
-  // State to control display of the fundraising proposal form.
+  // Control the display of the fundraising proposal form.
   const [showFundraisingForm, setShowFundraisingForm] = useState<boolean>(false);
 
-  // Function to handle toggling the proposal form.
-  // If the account is unverified, we prompt and then update the status in Firebase.
   const handleToggleProposalForm = async () => {
     if (!isVerified) {
       const confirmProposal = window.confirm(
-        "Your account is currently unverified. Would you like to submit a proposal and have your account marked as verified?"
+        "Your account is currently unverified. Would you like to submit a proposal? Submitting your proposal will flag your account for verification."
       );
-      if (confirmProposal) {
-        try {
-          // Update the user's profile in Firebase to mark them as verified.
-          await updateProfile({ verified: false });
-          // You may also want to provide feedback (e.g., a toast or message) that the update was successful.
-          setShowFundraisingForm(false);
-        } catch (err) {
-          console.error("Error updating verified status:", err);
-        }
+      if (!confirmProposal) return;
+      // Optionally update the profile to mark as pending verification
+      try {
+        // In this example we call updateProfile—customize as needed.
+        await updateProfile({ verified: false });
+      } catch (err) {
+        console.error("Error updating verified status:", err);
       }
-    } else {
-      setShowFundraisingForm(!showFundraisingForm);
     }
+    setShowFundraisingForm(prev => !prev);
   };
 
   return (
@@ -76,13 +71,7 @@ export default function CharityProfile() {
       {/* Main Content */}
       <main className="profile-content">
         <div className="content-box">
-          {/* Campaign History Section */}
-          <section className="section campaign-history">
-            <h2>Campaigns Created</h2>
-            {/* You can map over campaign data here */}
-          </section>
-
-          {/* Create Campaign Proposal Section */}
+          {/* Proposal Submission Section */}
           <section className="section create-campaign">
             <div
               style={{
@@ -92,7 +81,7 @@ export default function CharityProfile() {
                 marginBottom: '1rem',
               }}
             >
-              <h2>Create Campaign Proposal</h2>
+              <h2>Submit Campaign Proposal</h2>
               <button className="save-btn" onClick={handleToggleProposalForm}>
                 {showFundraisingForm ? 'Hide Form' : 'Submit Proposal'}
               </button>
