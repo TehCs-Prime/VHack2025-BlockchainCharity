@@ -1,12 +1,3 @@
-.charity-signup {
-  max-width: 800px;
-  padding: 2rem;
-  padding-top: 0rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .charity-signup h2 {
   color: #2d3436;
   text-align: center;
@@ -151,4 +142,18 @@
 
 .invalid-input {
   border: 1px solid red;
+}
+
+.continue-button{
+  padding: 15px;
+  margin: 20px 0;
+  width: 100%;
+  background-color: #f8bd1b;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }

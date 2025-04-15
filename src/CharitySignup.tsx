@@ -293,7 +293,7 @@ const CharitySignup: React.FC<CharitySignupProps> = ({ onSuccess }) => {
           </div>
       
           {error && <div className="error-message">{error}</div>}
-          <button type="submit" disabled={loading || isVerifyingId}>
+          <button type="submit" className='continue-button' disabled={loading || isVerifyingId}>
             {loading ? 'Verifying...' : 'Continue to Verification'}
           </button>
         </form>
