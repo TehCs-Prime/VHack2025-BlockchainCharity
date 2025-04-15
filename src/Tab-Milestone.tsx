@@ -105,17 +105,22 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
             {selectedMilestone.solution ? selectedMilestone.solution : 'No solution provided.'}
           </p>
 
-          <h3 className="section-title">WHAT DID WE DO?</h3>
-          <p className="what-we-did">{selectedMilestone.activities}</p>
-
-          <h3 className="section-title">IMAGES</h3>
-          <div className="image-gallery">
-            {selectedMilestone.imagePreview && (
-              <div className="image-thumbnail">
-                <img src={selectedMilestone.imagePreview} alt={selectedMilestone.title} />
-              </div>
-            )}
-          </div>
+          <div className="section-row">
+  <div className="section-column">
+    <h3 className="section-title aligned-title">WHAT DID WE DO?</h3>
+    <p className="what-we-did">{selectedMilestone.activities}</p>
+  </div>
+  <div className="section-column">
+    <h3 className="section-title aligned-title">IMAGES</h3>
+    <div className="image-gallery">
+      {selectedMilestone.imagePreview && (
+        <div className="image-thumbnail">
+          <img src={selectedMilestone.imagePreview} alt={selectedMilestone.title} />
+        </div>
+      )}
+    </div>
+  </div>
+</div>
 
           <div className="right-column">
             <h3 className="section-title">EXPENSES</h3>
