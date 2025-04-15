@@ -1,4 +1,3 @@
-// Tab-Donors.tsx
 import React, { useEffect, useState } from 'react';
 import './Tab-Donors.css';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
@@ -12,6 +11,7 @@ export interface Donation {
   date: string;         // Donation date (formatted)
   message: string | null;
   paymentMethod: string; // "crypto" or "card"
+  etherscanLink?: string; // Optional link to view transaction on Etherscan
 }
 
 interface DonorTabProps {
@@ -69,6 +69,7 @@ const DonorTab: React.FC<DonorTabProps> = ({ projectId }) => {
             amount,
             currency,
             paymentMethod,
+            etherscanLink: data.etherscanLink, // Read the stored link (if it exists)
           });
         });
         setDonations(donationList);
@@ -117,7 +118,6 @@ const DonorTab: React.FC<DonorTabProps> = ({ projectId }) => {
                   )
                 ) : (
                   <div className="icons card-icon">
-                    {/* Optionally, you could map the fiat currency to its symbol */}
                     {donation.currency === "MYR" ? "RM" : "$"}
                   </div>
                 )}
@@ -137,14 +137,22 @@ const DonorTab: React.FC<DonorTabProps> = ({ projectId }) => {
               )}
             </div>
             <div className="col actions">
-              <button className="expand-btn">
-                <a
-                  href="https://bscscan.com/tx/0x192d2b9dc09637f580b3e913e99489922fca3820d87e9c8de59a542b7d76cc9f"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
+              {donation.etherscanLink ? (
+                <button className="expand-btn">
+                  <a
+                    href={donation.etherscanLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    ›
+                  </a>
+                </button>
+              ) : (
+                <button className="expand-btn" disabled title="No transaction link available">
                   ›
-                </a>
-              </button>
+                </button>
+              )}
             </div>
           </div>
         ))}

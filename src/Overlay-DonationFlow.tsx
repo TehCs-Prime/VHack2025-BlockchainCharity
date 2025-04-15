@@ -1,4 +1,3 @@
-// OverlayDonationFlow.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { ethers } from 'ethers';
@@ -62,7 +61,6 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
   const { userData } = useAuth();
   const [step, setStep] = useState<'donation' | 'info' | 'wallet' | 'appreciation'>('donation');
 
-  // Extend donationData with card fields when paymentMethod is card.
   const [donationData, setDonationData] = useState({
     cryptoAmount: '',
     cryptoType: 'BNB',
@@ -232,19 +230,26 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
     if (processingDonation || donationRecorded) return;
     setProcessingDonation(true);
 
+    // Prepare the donation record with an optional etherscanLink.
+    const donationRecord: any = {
+      donor: userData ? (userData.username || userData.email) : 'anonymous',
+      message: donationData.message,
+      projectId: projectId,
+      date: serverTimestamp(),
+      paymentMethod: donationData.paymentMethod === 'card' ? 'card' : 'crypto',
+      ...(donationData.paymentMethod === 'card'
+        ? { fiatAmount: donationData.fiatAmount, fiatCurrency: donationData.fiatType }
+        : { cryptoAmount: donationData.cryptoAmount, cryptoType: donationData.cryptoType }
+      ),
+    };
+
+    // For crypto wallet payments, include the etherscan link if transactionHash exists.
+    if (donationData.paymentMethod === 'wallet' && transactionHash) {
+      donationRecord.etherscanLink = `https://sepolia.etherscan.io/tx/${transactionHash}`;
+    }
+
     try {
-      // Record the donation.
-      await addDoc(collection(db, 'donations'), {
-        donor: userData ? (userData.username || userData.email) : 'anonymous',
-        message: donationData.message,
-        projectId: projectId,
-        date: serverTimestamp(),
-        paymentMethod: donationData.paymentMethod === 'card' ? 'card' : 'crypto',
-        ...(donationData.paymentMethod === 'card'
-          ? { fiatAmount: donationData.fiatAmount, fiatCurrency: donationData.fiatType }
-          : { cryptoAmount: donationData.cryptoAmount, cryptoType: donationData.cryptoType }
-        ),
-      });
+      await addDoc(collection(db, 'donations'), donationRecord);
       setDonationRecorded(true);
     } catch (err) {
       setError('Error adding donation record: ' + (err as Error).message);
@@ -386,7 +391,14 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
                 onChange={(e) => setIsChecked(e.target.checked)}
               />
               <label htmlFor="terms-checkbox">
-                By proceeding, you agree to our <a href="#" target="_blank" rel="noopener noreferrer">Terms of Use</a> and <a href="#" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+                By proceeding, you agree to our{" "}
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                  Terms of Use
+                </a>{" "}
+                and{" "}
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                  Privacy Policy
+                </a>.
               </label>
             </div>
             <button className="next-btn" onClick={handleNextStep} disabled={!isChecked}>
@@ -432,11 +444,6 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
             </button>
           </div>
         )}
-        {/*
-          Wallet / Card Step:
-          If payment method is "card", display card details form.
-          Otherwise, display network selection and wallet connection (for crypto wallet).
-        */}
         {step === 'wallet' && (
           <div className="step-transaction">
             <div className="modal-header">

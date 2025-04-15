@@ -30,8 +30,16 @@ interface FundraisingFormData {
   totalFundObjective: number;
   numberOfBeneficiaries: number;
   projectDescription: string;
-  projectCategory: string; // <-- Added project category here.
+  projectCategory: string;
   milestones: Milestone[];
+}
+
+// Props for FundraisingForm
+interface FundraisingFormProps {
+  charityUser: {
+    uid: string;
+    // You can include additional properties as needed.
+  };
 }
 
 const initialExpense: Expense = {
@@ -60,7 +68,7 @@ const initialFormState: FundraisingFormData = {
   totalFundObjective: 0,
   numberOfBeneficiaries: 0,
   projectDescription: '',
-  projectCategory: 'Water', // Default category for the project.
+  projectCategory: 'Water', // Default category.
   milestones: [],
 };
 
@@ -83,7 +91,7 @@ const uploadImageToImgbb = async (file: File): Promise<string> => {
   throw new Error('Image upload failed');
 };
 
-const FundraisingForm: React.FC = () => {
+const FundraisingForm: React.FC<FundraisingFormProps> = ({ charityUser }) => {
   const [formData, setFormData] = useState<FundraisingFormData>({ ...initialFormState });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -101,11 +109,16 @@ const FundraisingForm: React.FC = () => {
 
   // Compute total milestone funds.
   useEffect(() => {
-    const total = currentMilestones.reduce((sum, milestone) => sum + (milestone.fundObjective || 0), 0);
+    const total = currentMilestones.reduce(
+      (sum, milestone) => sum + (milestone.fundObjective || 0),
+      0
+    );
     setTotalMilestoneFunds(total);
   }, [currentMilestones]);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -165,7 +178,11 @@ const FundraisingForm: React.FC = () => {
   };
 
   // Handle milestone field changes.
-  const handleMilestoneChange = (index: number, field: keyof Milestone, value: unknown) => {
+  const handleMilestoneChange = (
+    index: number,
+    field: keyof Milestone,
+    value: unknown
+  ) => {
     const updatedMilestones = [...currentMilestones];
     updatedMilestones[index] = { ...updatedMilestones[index], [field]: value };
     setCurrentMilestones(updatedMilestones);
@@ -223,7 +240,8 @@ const FundraisingForm: React.FC = () => {
         })
       );
 
-      // Map the fundraising form fields to match the project schema used in the explore page.
+      // Map form fields to match the project schema.
+      // Include "createdBy" using charityUser.uid.
       const finalFormData = {
         title: formData.projectTitle,
         subtitle: formData.projectQuote,
@@ -232,12 +250,13 @@ const FundraisingForm: React.FC = () => {
         raisedAmount: 0,
         mainImage: coverImageUrl || formData.coverImagePreview,
         category: formData.projectCategory,
-        // Record numberOfBeneficiaries in the database.
+        // Record numberOfBeneficiaries
         numberOfBeneficiaries: formData.numberOfBeneficiaries,
         milestones: processedMilestones,
         status: 'Funding',
         location: '',
         updatedAt: serverTimestamp(),
+        createdBy: charityUser.uid // <-- This ties the project to the charity.
       };
 
       await addDoc(collection(db, 'projects'), finalFormData);

@@ -34,6 +34,7 @@ const AppContent: React.FC = () => {
           <Route path="/charity-signup" element={<CharitySignup onSuccess={() => { /* redirect or notify */ }} />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/charity-profile" element={<CharityProfile />} />
+          <Route path="/project/:id" element={<ProjectDetails/>} />
           <Route path="/impact" element={<ImpactReport />} />
           <Route path="/approach" element={<Approach />} />
           <Route path="/settings" element={<Settings />} />

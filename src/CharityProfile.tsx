@@ -1,9 +1,12 @@
 // CharityProfile.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import LocalAvatar from './LocalAvatar';
 import FundraisingForm from './FundraisingForm';
+import CampaignsTable from './CampaignsTable';
 import './Profile.css';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from './firebase';
 
 export default function CharityProfile() {
   // Retrieve user data and update function from AuthContext.
@@ -15,12 +18,31 @@ export default function CharityProfile() {
   }
   const charityUser = userData;
 
-  // If verified is undefined, default to false.
+  // Use the charity's verified flag; default is false.
   const isVerified: boolean = charityUser.verified || false;
   const estimatedVerificationTime = '2-3 business days';
 
   // Control the display of the fundraising proposal form.
   const [showFundraisingForm, setShowFundraisingForm] = useState<boolean>(false);
+
+  // Campaigns state: campaigns created by the charity.
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  useEffect(() => {
+    if (charityUser && charityUser.uid) {
+      const q = query(
+        collection(db, 'projects'),
+        where('createdBy', '==', charityUser.uid)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const campaignList: any[] = [];
+        querySnapshot.forEach((doc) => {
+          campaignList.push({ id: doc.id, ...doc.data() });
+        });
+        setCampaigns(campaignList);
+      });
+      return unsubscribe;
+    }
+  }, [charityUser]);
 
   const handleToggleProposalForm = async () => {
     if (!isVerified) {
@@ -28,15 +50,13 @@ export default function CharityProfile() {
         "Your account is currently unverified. Would you like to submit a proposal? Submitting your proposal will flag your account for verification."
       );
       if (!confirmProposal) return;
-      // Optionally update the profile to mark as pending verification
       try {
-        // In this example we call updateProfile—customize as needed.
         await updateProfile({ verified: false });
       } catch (err) {
         console.error("Error updating verified status:", err);
       }
     }
-    setShowFundraisingForm(prev => !prev);
+    setShowFundraisingForm((prev) => !prev);
   };
 
   return (
@@ -71,7 +91,7 @@ export default function CharityProfile() {
       {/* Main Content */}
       <main className="profile-content">
         <div className="content-box">
-          {/* Proposal Submission Section */}
+          {/* Campaign Proposal Section */}
           <section className="section create-campaign">
             <div
               style={{
@@ -88,8 +108,19 @@ export default function CharityProfile() {
             </div>
             {showFundraisingForm && (
               <div className="fundraising-form-container">
-                <FundraisingForm />
+                {/* Pass the charity user info to the form */}
+                <FundraisingForm charityUser={charityUser} />
               </div>
+            )}
+          </section>
+
+          {/* Campaigns Table Section */}
+          <section className="section campaign-history">
+            <h2>Campaigns Created</h2>
+            {campaigns.length > 0 ? (
+              <CampaignsTable campaigns={campaigns} />
+            ) : (
+              <p>No campaigns created yet.</p>
             )}
           </section>
         </div>
