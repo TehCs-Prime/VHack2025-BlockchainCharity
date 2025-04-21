@@ -365,7 +365,12 @@ const ProjectDetails: React.FC = () => {
               initialMilestoneId={project.milestones?.[0]?.title || ''}
             />
           )}
-          {activeTab === 'updates' && <UpdatesTab newsData={project.newsUpdates} />}
+          {activeTab === 'updates' && (
+            <UpdatesTab 
+              newsData={project.newsUpdates} 
+              projectId={project.id}    // <-- pass project id for news update form
+            />
+          )}
           {activeTab === 'donors' && <DonorTab projectId={project.id} />}
           {activeTab === 'receiver' && <AllocationsTab allocations={project.allocations} />}
         </div>
