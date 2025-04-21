@@ -1,7 +1,7 @@
 // Tab-Updates.tsx
 
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'; // <-- Import orderBy
+import { collection, query, orderBy, onSnapshot, doc, getDoc, where } from 'firebase/firestore'; // added where
 import { db } from './firebase';
 import { useAuth } from './AuthContext';            // <-- import useAuth
 import AddNewsUpdateForm, { NewsUpdate as FormNewsUpdate } from './AddNewsUpdateForm';
@@ -28,6 +28,21 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
   const [updates, setUpdates] = useState<NewsUpdate[]>([]);
   const [currentUpdateIndex, setCurrentUpdateIndex] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const [projectOwner, setProjectOwner] = useState<string | null>(null); // added state
+
+  useEffect(() => {
+    if (projectId) {
+      const projectRef = doc(db, 'projects', projectId);
+      getDoc(projectRef)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            // assuming 'createdBy' field stores the charity owner's uid
+            setProjectOwner(docSnap.data().createdBy);
+          }
+        })
+        .catch(err => console.error('Error fetching project owner:', err));
+    }
+  }, [projectId]);
 
   useEffect(() => {
     if (newsData && newsData.length) {
@@ -35,7 +50,19 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
       setCurrentUpdateIndex(newsData.length - 1); // set last update as current
       return;
     }
-    const q = query(collection(db, 'newsUpdates'), orderBy("createdAt")); // order by createdAt
+    let q;
+    if (projectId) {
+      q = query(
+        collection(db, 'newsUpdates'),
+        where('projectId', '==', projectId), // filter by projectId
+        orderBy("createdAt")
+      );
+    } else {
+      q = query(
+        collection(db, 'newsUpdates'),
+        orderBy("createdAt")
+      );
+    }
     const unsub = onSnapshot(q, snap => {
       const fetched: NewsUpdate[] = [];
       snap.forEach(doc => {
@@ -53,7 +80,7 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
       setCurrentUpdateIndex(fetched.length - 1); // set last update as current
     });
     return () => unsub();
-  }, [newsData]);
+  }, [newsData, projectId]);
 
   const current = updates[currentUpdateIndex]!;
   const goPrev = () => {
@@ -67,7 +94,7 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
 
   return (
     <div className="updates-wrapper">
-      {isCharity && (
+      {isCharity && projectOwner && userData?.uid === projectOwner && ( // modified condition
         <button
           className="toggle-form-btn"
           onClick={() => setShowForm(s => !s)}
@@ -76,7 +103,9 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
         </button>
       )}
 
-      {showForm && isCharity && <AddNewsUpdateForm projectId={projectId} />} 
+      {showForm && isCharity && projectOwner && userData?.uid === projectOwner && ( // modified condition
+        <AddNewsUpdateForm projectId={projectId} />
+      )}
 
       {!showForm && (
         <>
