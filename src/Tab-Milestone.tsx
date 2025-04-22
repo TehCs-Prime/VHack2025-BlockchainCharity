@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Tab-Milestone.css';
 import GraphOverlay from './Graph-Overlay';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
 import { db } from './firebase'; // adjust path as needed
+import { useAuth } from './AuthContext'; // <-- added import
 
 export interface Expense {
   date: string;
@@ -29,12 +30,14 @@ interface MilestoneTabProps {
   milestones: Milestone[];       // Data passed from your project document in the database
   objective: string;             // Overall objective as a formatted string (e.g., "US$ 10,000")
   initialMilestoneId?: string;   // Optional initial milestone identifier (using title as identifier)
+  projectCreatorId?: string; // <-- new prop
 }
 
 const TabMilestone: React.FC<MilestoneTabProps> = ({
   milestones,
   objective,
   initialMilestoneId,
+  projectCreatorId, // <-- destructure new prop
 }) => {
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<string>(
     initialMilestoneId || (milestones.length > 0 ? milestones[0].title : '')
@@ -112,20 +115,36 @@ const TabMilestone: React.FC<MilestoneTabProps> = ({
       amount,
       receipt: null,
       // Mock PDF receipt link (not actually stored)
-      receiptPreview: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      receiptPreview:
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
       transaction,
     };
-    // Persist to Firestore
     const docRef = doc(db, 'milestones', selectedMilestoneId);
-    await updateDoc(docRef, {
-      expenses: arrayUnion(newExpense),
-    });
-    // Update local state
+    try {
+      await updateDoc(docRef, {
+        expenses: arrayUnion(newExpense),
+      });
+    } catch (error: any) {
+      if (error.code === 'not-found' || error.message.includes('No document to update')) {
+        await setDoc(docRef, { expenses: [newExpense] }, { merge: true });
+      } else {
+        throw error;
+      }
+    }
     setExpensesData(prev => [...prev, newExpense]);
-    // Reset form
-    setExpenseForm({ date: '', type: '', amount: '', description: '', transaction: '', receiptFile: null });
+    setExpenseForm({
+      date: '',
+      type: '',
+      amount: '',
+      description: '',
+      transaction: '',
+      receiptFile: null,
+    });
     setShowForm(false);
   };
+
+  const { userData } = useAuth(); // <-- new hook usage
+  const isCharity = userData?.role === 'charity'; // <-- newly added
 
   return (
     <div className="milestone-container">
@@ -197,9 +216,12 @@ const TabMilestone: React.FC<MilestoneTabProps> = ({
                   {expensesData.reduce((acc, e) => acc + (parseFloat(e.amount) || 0), 0).toFixed(2)}
                 </span>
               </div>
-              <button className="add-expense-btn" onClick={handleToggleForm}>
-                + Add Expense
-              </button>
+              { /* Show add expense button only when the logged‐in charity is the project creator */
+                isCharity && projectCreatorId && userData?.uid === projectCreatorId && (
+                <button className="add-expense-btn" onClick={handleToggleForm}>
+                  + Add Expense
+                </button>
+              )}
               <button className="view-graph-btn" onClick={handleOpenGraph}>
                 <span className="graph-icon">📊</span> View in graph
               </button>
