@@ -25,7 +25,6 @@ const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => {
           <th>Status</th>
           <th>Goal Amount</th>
           <th>Raised Amount</th>
-          <th>Created On</th>
           <th>Details</th>
         </tr>
       </thead>
@@ -36,11 +35,6 @@ const CampaignsTable: React.FC<CampaignsTableProps> = ({ campaigns }) => {
             <td>{campaign.status}</td>
             <td>${Number(campaign.goalAmount).toLocaleString()}</td>
             <td>${Number(campaign.raisedAmount).toLocaleString()}</td>
-            <td>
-              {campaign.createdAt
-                ? new Date(campaign.createdAt.seconds * 1000).toLocaleDateString()
-                : 'N/A'}
-            </td>
             <td>
               <Link to={`/project/${campaign.id}`} className="campaign-link">
                 View Details

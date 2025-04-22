@@ -1,6 +1,6 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { useAuth } from './AuthContext';
-import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { doc, collection, query, where, getDocs, updateDoc, onSnapshot } from 'firebase/firestore';
 import { db } from './firebase';
 import './Profile.css';
 
@@ -11,6 +11,8 @@ interface Donation {
   date: string;
   campaign: string;
   type: 'cash' | 'crypto';
+  message?: string;
+  etherscanLink?: string;
 }
 
 interface UserData {
@@ -38,19 +40,53 @@ export default function Profile() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchDonations = async () => {
-      if (!currentUser) return;
-      
-      const donationsRef = collection(db, 'donations');
-      const q = query(donationsRef, where('userId', '==', currentUser.uid));
-      const snapshot = await getDocs(q);
-      setDonations(snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }) as Donation));
-    };
-
-    fetchDonations();
+    if (!currentUser) return;
+    
+    const donationsRef = collection(db, 'donations');
+    const q = query(donationsRef, where('userId', '==', currentUser.uid));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const donationData = snapshot.docs.map(doc => {
+        const data = doc.data();
+        // Convert Firestore timestamp to Date object
+        const dateObj =
+          data.date && data.date.toDate ? data.date.toDate() : new Date(data.date);
+          
+        // Determine donation details based on DB fields
+        let amount = 0,
+            currency = '',
+            type: 'cash' | 'crypto' = 'cash';
+        if (data.fiatAmount && data.fiatCurrency) {
+          amount = parseFloat(data.fiatAmount);
+          currency = data.fiatCurrency;
+          type = 'cash';
+        } else if (data.cryptoAmount && data.cryptoType) {
+          amount = parseFloat(data.cryptoAmount);
+          currency = data.cryptoType;
+          type = 'crypto';
+        } else {
+          // Fallback: use a default value if none found
+          amount = 0;
+          currency = 'N/A';
+          type = 'cash';
+        }
+        // Use campaign from DB or a default value
+        const campaign = data.campaign || 'Default Campaign';
+  
+        return {
+          id: doc.id,
+          donor: data.donor || 'anonymous',
+          date: dateObj,
+          amount,
+          currency,
+          campaign,
+          type,
+          message: data.message || '',
+          etherscanLink: data.etherscanLink || ''
+        } as Donation;
+      });
+      setDonations(donationData);
+    });
+    return unsubscribe;
   }, [currentUser]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -199,20 +235,44 @@ export default function Profile() {
         <div className="content-box">
           <section className="section donation-history">
             <h2>Donation History</h2>
-            <div className="donation-list">
-              {donations.map(donation => (
-                <div key={donation.id} className="donation-item">
-                  <div className="donation-main">
-                    <h3>{donation.campaign}</h3>
-                    <p className={`donation-amount ${donation.type}`}>
-                      {donation.amount} {donation.currency}
-                    </p>
-                  </div>
-                  <p className="donation-date">
-                    {new Date(donation.date).toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
+            <div className="table-responsive">
+              <table className="donation-table table-striped">
+                <thead>
+                  <tr>
+                    <th>Campaign</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+                    <th>Message</th>
+                    <th>Transaction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {donations.map(donation => (
+                    <tr key={donation.id}>
+                      <td>{donation.campaign}</td>
+                      <td>{new Date(donation.date).toLocaleDateString()}</td>
+                      <td>{donation.amount}</td>
+                      <td>{donation.currency}</td>
+                      <td>{donation.message || '-'}</td>
+                      <td>
+                        {donation.etherscanLink ? (
+                          <a 
+                            href={donation.etherscanLink} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="tx-link" // added class for styling
+                          >
+                            View Tx
+                          </a>
+                        ) : (
+                          '-'
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </section>
         </div>

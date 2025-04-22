@@ -1,7 +1,8 @@
-// Tab-Milestone.tsx
 import React, { useState, useEffect } from 'react';
 import './Tab-Milestone.css';
 import GraphOverlay from './Graph-Overlay';
+import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { db } from './firebase'; // adjust path as needed
 
 export interface Expense {
   date: string;
@@ -10,6 +11,7 @@ export interface Expense {
   amount: string;
   receipt: File | null;
   receiptPreview: string | null;
+  transaction: string;
 }
 
 export interface Milestone {
@@ -29,35 +31,101 @@ interface MilestoneTabProps {
   initialMilestoneId?: string;   // Optional initial milestone identifier (using title as identifier)
 }
 
-const MilestoneTab: React.FC<MilestoneTabProps> = ({
+const TabMilestone: React.FC<MilestoneTabProps> = ({
   milestones,
   objective,
   initialMilestoneId,
 }) => {
-  // Use the provided initialMilestoneId or default to the first milestone's title.
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<string>(
     initialMilestoneId || (milestones.length > 0 ? milestones[0].title : '')
   );
 
-  // If milestones update and the current selection is missing, select the first milestone.
+  // Local state for dynamic expenses fetched from Firestore
+  const [expensesData, setExpensesData] = useState<Expense[]>([]);
+  // Form toggling and state
+  const [showForm, setShowForm] = useState(false);
+  const [expenseForm, setExpenseForm] = useState({
+    date: '',
+    type: '',
+    amount: '',
+    description: '',
+    transaction: '',
+    receiptFile: null as File | null,
+  });
+
+  // Sync selectedMilestoneId if props change
   useEffect(() => {
     if (milestones.length > 0 && !milestones.find(m => m.title === selectedMilestoneId)) {
       setSelectedMilestoneId(milestones[0].title);
     }
   }, [milestones, selectedMilestoneId]);
 
-  // Using the milestone's title as its identifier (assumed unique).
+  // Fetch expenses from Firestore whenever milestone changes
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      if (!selectedMilestoneId) return;
+      const docRef = doc(db, 'milestones', selectedMilestoneId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setExpensesData(data.expenses || []);
+      }
+    };
+    fetchExpenses();
+  }, [selectedMilestoneId]);
+
   const selectedMilestone = milestones.find(m => m.title === selectedMilestoneId) || milestones[0];
   const selectedIndex = milestones.findIndex(m => m.title === selectedMilestoneId);
 
   const handleMilestoneClick = (id: string) => {
     setSelectedMilestoneId(id);
+    setShowForm(false);
   };
 
-  // State for toggling the graph overlay.
-  const [isGraphOpen, setIsGraphOpen] = useState(false);
   const handleOpenGraph = () => setIsGraphOpen(true);
   const handleCloseGraph = () => setIsGraphOpen(false);
+  const [isGraphOpen, setIsGraphOpen] = useState(false);
+
+  const handleToggleForm = () => setShowForm(prev => !prev);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setExpenseForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setExpenseForm(prev => ({
+      ...prev,
+      receiptFile: e.target.files ? e.target.files[0] : null,
+    }));
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { date, type, amount, description, transaction } = expenseForm;
+    const newExpense: Expense = {
+      date,
+      type,
+      description,
+      amount,
+      receipt: null,
+      // Mock PDF receipt link (not actually stored)
+      receiptPreview: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      transaction,
+    };
+    // Persist to Firestore
+    const docRef = doc(db, 'milestones', selectedMilestoneId);
+    await updateDoc(docRef, {
+      expenses: arrayUnion(newExpense),
+    });
+    // Update local state
+    setExpensesData(prev => [...prev, newExpense]);
+    // Reset form
+    setExpenseForm({ date: '', type: '', amount: '', description: '', transaction: '', receiptFile: null });
+    setShowForm(false);
+  };
 
   return (
     <div className="milestone-container">
@@ -72,7 +140,7 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
       <div className="milestone-progress">
         {milestones.map((milestone, index) => (
           <React.Fragment key={index}>
-            <div 
+            <div
               className={`milestone-node ${milestone.title === selectedMilestoneId ? 'active' : ''}`}
               onClick={() => handleMilestoneClick(milestone.title)}
             >
@@ -94,33 +162,31 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
             </div>
             <div className="milestone-status">
               <span className="status-label">STATUS</span>
-              <span className="status-value">
-                {selectedMilestone.status}
-              </span>
+              <span className="status-value">{selectedMilestone.status}</span>
             </div>
           </div>
 
           <h3 className="section-title">SOLUTION</h3>
           <p className="milestone-solution">
-            {selectedMilestone.solution ? selectedMilestone.solution : 'No solution provided.'}
+            {selectedMilestone.solution || 'No solution provided.'}
           </p>
 
           <div className="section-row">
-  <div className="section-column">
-    <h3 className="section-title aligned-title">WHAT DID WE DO?</h3>
-    <p className="what-we-did">{selectedMilestone.activities}</p>
-  </div>
-  <div className="section-column">
-    <h3 className="section-title aligned-title">IMAGES</h3>
-    <div className="image-gallery">
-      {selectedMilestone.imagePreview && (
-        <div className="image-thumbnail">
-          <img src={selectedMilestone.imagePreview} alt={selectedMilestone.title} />
-        </div>
-      )}
-    </div>
-  </div>
-</div>
+            <div className="section-column">
+              <h3 className="section-title aligned-title">WHAT DID WE DO?</h3>
+              <p className="what-we-did">{selectedMilestone.activities}</p>
+            </div>
+            <div className="section-column">
+              <h3 className="section-title aligned-title">IMAGES</h3>
+              <div className="image-gallery">
+                {selectedMilestone.imagePreview && (
+                  <div className="image-thumbnail">
+                    <img src={selectedMilestone.imagePreview} alt={selectedMilestone.title} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
 
           <div className="right-column">
             <h3 className="section-title">EXPENSES</h3>
@@ -128,95 +194,125 @@ const MilestoneTab: React.FC<MilestoneTabProps> = ({
               <div className="total-amount">
                 <span className="total-label">TOTAL AMOUNT SPENT</span>
                 <span className="total-value">
-                  {selectedMilestone.expenses 
-                    ? selectedMilestone.expenses.reduce((acc, e) => acc + (parseFloat(e.amount) || 0), 0).toFixed(2)
-                    : '0'}
+                  {expensesData.reduce((acc, e) => acc + (parseFloat(e.amount) || 0), 0).toFixed(2)}
                 </span>
               </div>
+              <button className="add-expense-btn" onClick={handleToggleForm}>
+                + Add Expense
+              </button>
               <button className="view-graph-btn" onClick={handleOpenGraph}>
                 <span className="graph-icon">📊</span> View in graph
               </button>
             </div>
 
-            <div className="expenses-table">
-              <div className="expense-header">
-                <div className="expense-date">
-                  <span className="icon"></span> DATE
+            {showForm && (
+              <form className="expense-form" onSubmit={handleFormSubmit}>
+                <input
+                  type="date"
+                  name="date"
+                  value={expenseForm.date}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name="type"
+                  placeholder="Type"
+                  value={expenseForm.type}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="number"
+                  name="amount"
+                  placeholder="Amount"
+                  value={expenseForm.amount}
+                  onChange={handleInputChange}
+                  required
+                />
+                <textarea
+                  name="description"
+                  placeholder="Description"
+                  value={expenseForm.description}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="url"
+                  name="transaction"
+                  placeholder="Transaction Link"
+                  value={expenseForm.transaction}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleFileChange}
+                />
+                <div>
+                  <button type="submit">Submit</button>
+                  <button type="button" onClick={handleToggleForm}>Cancel</button>
                 </div>
-                <div className="expense-type">
-                  <span className="icon"></span> TYPE
+              </form>
+            )}
+
+            {expensesData.map((expense, idx) => (
+              <div key={idx} className="expenses-table">
+                <div className="expense-header">
+                  <div className="expense-date">DATE</div>
+                  <div className="expense-type">TYPE</div>
+                  <div className="expense-amount">AMOUNT</div>
+                  <div className="expense-receipt">RECEIPT</div>
                 </div>
-                <div className="expense-amount">
-                  <span className="icon"></span> AMOUNT
-                </div>
-                <div className="expense-receipt">
-                  <span className="icon"></span> RECEIPT
-                </div>
-              </div>
-              
-              {selectedMilestone.expenses.map((expense, index) => (
-                <div key={index} className="expense-row">
+                <div className="expense-row">
                   <div className="expense-date">{expense.date}</div>
                   <div className="expense-type">{expense.type}</div>
                   <div className="expense-amount">{expense.amount}</div>
                   <div className="expense-receipt">
                     {expense.receiptPreview ? (
-                      <a 
-                        className="receipt-icon" 
-                        href={expense.receiptPreview} 
-                        target="_blank" 
+                      <a
+                        className="receipt-icon"
+                        href={expense.receiptPreview}
+                        target="_blank"
                         rel="noopener noreferrer"
-                        style={{ textDecoration: "none", color: "inherit" }}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
                       >
                         📄
                       </a>
                     ) : (
                       'N/A'
-                    )}                    
+                    )}
                   </div>
                 </div>
-              ))}
 
-              {selectedMilestone.expenses.length > 0 && (
-                <>
-                  <div className="expense-details">
-                    <div className="expense-description">
-                      <span className="icon"></span> DESCRIPTION 📝
-                    </div>
-                    <div className="description-text">
-                      {selectedMilestone.expenses[0].description}
-                    </div>
-                  </div>
-
-                  <div className="blockchain-transaction">
-                    <span className="icon"></span> TRANSACTION 🔗
-                    <a 
-                      href="https://bitpay.com/insight/BTC/mainnet/tx/e6b6d64675281f3e0e6eeb94a28da0717e77492ae7b4194ce9fbd500716aaeda" 
-                      className="blockchain-link"
-                    >
-                      View in Blockchain
-                    </a>
-                  </div>
-                </>
-              )}
-            </div>
+                <div className="expense-details">
+                  <div className="expense-description">DESCRIPTION 📝</div>
+                  <div className="description-text">{expense.description}</div>
+                </div>
+                <div className="blockchain-transaction">
+                  <span className="icon"></span> TRANSACTION 🔗
+                  <a href={expense.transaction} className="blockchain-link">
+                    View Link
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </>
       )}
 
-      <GraphOverlay 
+      <GraphOverlay
         isOpen={isGraphOpen}
         onClose={handleCloseGraph}
-        expenses={selectedMilestone.expenses}
+        expenses={expensesData}
         milestoneName={selectedMilestone.title}
         totalExpenses={
-          selectedMilestone.expenses
-            ? selectedMilestone.expenses.reduce((acc, e) => acc + (parseFloat(e.amount) || 0), 0).toFixed(2)
-            : '0'
+          expensesData.reduce((acc, e) => acc + (parseFloat(e.amount) || 0), 0).toFixed(2)
         }
       />
     </div>
   );
 };
 
-export default MilestoneTab;
+export default TabMilestone;

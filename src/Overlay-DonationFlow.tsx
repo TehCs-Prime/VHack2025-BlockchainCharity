@@ -222,13 +222,15 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
       }
     }
 
-    // <-- Changed: fallback to donationData.name before 'anonymous'
     const donorName = donationData.name.trim() || 'anonymous';
 
+    // Modified donationRecord to include the campaign name using projectName
     const donationRecord: any = {
       donor: donorName,
+      campaign: projectName || 'Unknown Campaign',
       message: donationData.message,
       projectId,
+      userId: userData?.uid || 'anonymous',
       date: serverTimestamp(),
       paymentMethod: donationData.paymentMethod === 'card' ? 'card' : 'crypto',
       ...(donationData.paymentMethod === 'card'
