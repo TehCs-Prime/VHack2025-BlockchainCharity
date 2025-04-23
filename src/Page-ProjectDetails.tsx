@@ -15,6 +15,13 @@ import { Donation } from './Tab-Donors';
 import { Allocation } from './Tab-Allocations';
 import { NewsUpdate } from './Tab-Updates';
 
+import twitterIcon from '/assets/twitter-logo-black.png';
+import facebookIcon from '/assets/facebook-logo-black.png';
+import telegramIcon from '/assets/telegram-logo-24.png';
+import instagramIcon from '/assets/instagram-alt-logo-black.png';
+import vkIcon from '/assets/vk-logo-24.png';
+
+
 interface Project {
   id: string;
   title: string;
@@ -91,7 +98,13 @@ const ProjectDetails: React.FC = () => {
               organizationsInfo: data.organizationsInfo,
               lastUpdated: data.lastUpdated,
               photoCredit: data.photoCredit,
-              socialLinks: data.socialLinks,
+              socialLinks: {
+                twitter: data.socialLinks?.twitter || 'https://www.instagram.com/',
+                facebook: data.socialLinks?.facebook || 'https://www.instagram.com/',
+                telegram: data.socialLinks?.telegram || 'https://www.instagram.com/',
+                ins: data.socialLinks?.ins || 'https://www.instagram.com/',
+                vk: data.socialLinks?.vk || 'https://www.instagram.com/',
+              },
               milestones: data.milestones || [],
               donations: data.donations || [],
               allocations: data.allocations || [],
@@ -233,27 +246,27 @@ const ProjectDetails: React.FC = () => {
             <div className="social-share">
               {project.socialLinks?.twitter && (
                 <a href={project.socialLinks.twitter} className="social-icon twitter">
-                  <img src="/assets/twitter-logo-black.png" alt="Share on Twitter" />
+                  <img src={twitterIcon} alt="Share on Twitter" />
                 </a>
               )}
               {project.socialLinks?.facebook && (
                 <a href={project.socialLinks.facebook} className="social-icon facebook">
-                  <img src="/assets/facebook-logo-black.png" alt="Share on Facebook" />
+                  <img src={facebookIcon} alt="Share on Facebook" />
                 </a>
               )}
               {project.socialLinks?.telegram && (
                 <a href={project.socialLinks.telegram} className="social-icon telegram">
-                  <img src="/assets/telegram-logo-24.png" alt="Share on Telegram" />
+                  <img src={telegramIcon} alt="Share on Telegram" />
                 </a>
               )}
               {project.socialLinks?.ins && (
                 <a href={project.socialLinks.ins} className="social-icon instagram">
-                  <img src="/assets/instagram-alt-logo-black.png" alt="Share on Instagram" />
+                  <img src={instagramIcon} alt="Share on Instagram" />
                 </a>
               )}
               {project.socialLinks?.vk && (
                 <a href={project.socialLinks.vk} className="social-icon vk">
-                  <img src="/assets/vk-logo-24.png" alt="Share on VK" />
+                  <img src={vkIcon} alt="Share on VK" />
                 </a>
               )}
             </div>

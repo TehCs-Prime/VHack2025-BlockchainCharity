@@ -20,7 +20,7 @@ const GraphOverlay: React.FC<GraphOverlayProps> = ({
   // Group expenses by type for the pie chart data
   const expensesByType: Record<string, number> = {};
   expenses.forEach((expense) => {
-    const amount = parseFloat(expense.amount.replace(/[^0-9.-]+/g, ''));
+    const amount = parseFloat(String(expense.amount).replace(/[^0-9.-]+/g, ''));
     if (!isNaN(amount)) {
       if (expensesByType[expense.type]) {
         expensesByType[expense.type] += amount;

@@ -18,6 +18,10 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData }) => {
     const [currentUpdateIndex, setCurrentUpdateIndex] = useState(0);
     const currentUpdate = newsData[currentUpdateIndex];
 
+    if (!currentUpdate) {
+        return <div className="updates-content">No updates available.</div>;
+    }
+
     const goToPrevious = () => {
         if (currentUpdateIndex < newsData.length - 1) {
             setCurrentUpdateIndex(currentUpdateIndex + 1);
