@@ -118,7 +118,7 @@ const Header: React.FC = () => {
                 className="signup-link"
                 state={{ from: location.pathname }}
               >
-                Sign Up
+                Sign&nbsp;Up
               </Link>
             </div>
           )}

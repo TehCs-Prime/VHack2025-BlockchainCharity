@@ -55,6 +55,7 @@ interface Project {
   donations: Donation[];
   allocations: Allocation[];
   newsUpdates: NewsUpdate[];
+  createdBy: string; // Add createdBy attribute
 }
 
 const ProjectDetails: React.FC = () => {
@@ -109,6 +110,7 @@ const ProjectDetails: React.FC = () => {
               donations: data.donations || [],
               allocations: data.allocations || [],
               newsUpdates: data.newsUpdates || [],
+              createdBy: data.createdBy, // Add createdBy attribute
             };
             setProject(projectData);
           } else {
@@ -376,9 +378,15 @@ const ProjectDetails: React.FC = () => {
               milestones={project.milestones}
               objective={`US$ ${goalAmount.toLocaleString()}`}
               initialMilestoneId={project.milestones?.[0]?.title || ''}
+              projectCreatorId={project.createdBy} // <-- pass createdBy from project
             />
           )}
-          {activeTab === 'updates' && <UpdatesTab newsData={project.newsUpdates} />}
+          {activeTab === 'updates' && (
+            <UpdatesTab 
+              newsData={project.newsUpdates} 
+              projectId={project.id}    // <-- pass project id for news update form
+            />
+          )}
           {activeTab === 'donors' && <DonorTab projectId={project.id} />}
           {activeTab === 'receiver' && <AllocationsTab allocations={project.allocations} />}
         </div>

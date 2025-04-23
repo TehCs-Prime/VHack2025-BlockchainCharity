@@ -311,3 +311,96 @@
   cursor: pointer;
   font-size: x-large;
 }
+
+/* Scoped Add Expense Button */
+.milestone-container .add-expense-btn {
+  background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.milestone-container .add-expense-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #15803d 0%, #22c55e 100%);
+}
+
+/* Scoped Expense Form */
+.milestone-container .expense-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e5e5;
+  margin-bottom: 2rem;
+}
+
+.milestone-container .expense-form input[type="date"],
+.milestone-container .expense-form input[type="text"],
+.milestone-container .expense-form input[type="number"],
+.milestone-container .expense-form input[type="url"],
+.milestone-container .expense-form textarea,
+.milestone-container .expense-form input[type="file"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.milestone-container .expense-form textarea {
+  resize: vertical;
+  grid-column: span 2;
+  height: 4rem;
+}
+
+.milestone-container .expense-form div {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.milestone-container .expense-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.milestone-container .expense-form button[type="submit"] {
+  background-color: #4ade80;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.milestone-container .expense-form button[type="submit"]:hover {
+  background-color: #22c55e;
+}
+
+.milestone-container .expense-form button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+  transition: background-color 0.3s;
+}
+
+.milestone-container .expense-form button[type="button"]:hover {
+  background-color: #aaa;
+}
+
+/* Scoped Expenses Table */
+.milestone-container .expenses-table {
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e5e5;
+  margin-bottom: 2rem;
+}
