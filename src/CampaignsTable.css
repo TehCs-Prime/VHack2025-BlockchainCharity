@@ -1,0 +1,46 @@
+/* Style for the campaigns table */
+.campaigns-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Table headings */
+  .campaigns-table th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    padding: 12px 8px;
+    border-bottom: 2px solid #ddd;
+    text-align: left;
+  }
+  
+  /* Table cells */
+  .campaigns-table td {
+    border: 1px solid #ddd;
+    padding: 10px 8px;
+    color: #555;
+  }
+  
+  /* Alternate row background */
+  .campaigns-table tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  /* Hover effect on table rows */
+  .campaigns-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Styling for the link in the details column */
+  .campaign-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .campaign-link:hover {
+    text-decoration: underline;
+  }
+  
