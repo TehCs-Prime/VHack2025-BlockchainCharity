@@ -36,65 +36,66 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="home">
+    <div>
+      <div className='grid grid-cols-2 gap-4 items-center justify-items-center h-[85vh]'>
+        <div className="hearts-wrapper">
+          <div 
+            className={`heart-container ${isClicked ? 'burst' : ''}`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={handleClick}
+            role="button"
+            aria-label="Support Charity"
+          >
+            <div className="heart">
+              {isHovered && (
+                <div className="donation-message">
+                  <span>"Empowering Changes</span>
+                  <span>Uplifting Lives"</span>
+                </div>
+              )}
+            </div>
 
-      <div className='intro-container'>
-        
-      <div className="hearts-wrapper">
-      <div 
-      className={`heart-container ${isClicked ? 'burst' : ''}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
-      role="button"
-      aria-label="Support Charity"
-    >
-      <div className="heart">
-        {isHovered && (
-          <div className="donation-message">
-            <span>"Empowering Changes</span>
-            <span>Uplifting Lives"</span>
+            <div className="sparkles">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="spark" />
+              ))}
+            </div>
+
+            <div className="small-heart small-heart-1"></div>
+            <div className="small-heart small-heart-2"></div>
+            <div className="small-heart small-heart-3"></div>
+            <div className="small-heart small-heart-4"></div>
+            <div className="small-heart small-heart-5"></div>
+            <div className="small-heart small-heart-6"></div>
           </div>
-        )}
-      </div>
-      <div className="sparkles">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="spark" />
-        ))}
-      </div>
-        <div className="small-heart small-heart-1"></div>
-        <div className="small-heart small-heart-2"></div>
-        <div className="small-heart small-heart-3"></div>
-        <div className="small-heart small-heart-4"></div>
-        <div className="small-heart small-heart-5"></div>
-        <div className="small-heart small-heart-6"></div>
-    </div>
-    </div>
+        </div>
 
-        <div className='intro-words'>
-          <div className='intro-title'>Pioneering Solutions for Social Transformation</div>
-          <div className='intro-des'>We as <strong>LaCial Charity</strong>, a non-profit organization dedicated to empower communities with Web3 Blockchain technology.</div>
+        <div>
+          <div className='font-bold text-4xl pb-4'>Pioneering Solutions for Social Transformation</div>
+          <div className='text-xl w-[40vw]'>We as <strong>LaCial Charity</strong>, a non-profit organization dedicated to empower communities with Web3 Blockchain technology.</div>
         </div>
       </div>
 
-      <div className="why-us-container">
-        <h2 className="why-us-title">Why Us?</h2>
-        <div className="why-us-underline"></div>
-        <div className="why-us-features">
+      <div className="flex flex-col items-center text-center py-10">
+        <h2 className="text-4xl font-bold text-[#2d3748] pb-6">Why Us?</h2>
+        <div className="w-16 h-2 bg-[#e7b718] mb-8"></div>
+        <div className="flex justify-between flex-start gap-10 select-none px-16">
           {features.map((feature, index) => (
-            <div key={index} className="feature-card">
-              <div className="feature-icon-wrapper">
-                <feature.icon className="feature-icon" />
+            <div key={index} className="flex flex-col items-center text-center py-12 px-6 bg-[#fffed9] min-h-[280px] box-shadow-lg rounded-xl">
+              <div className="w-16 h-16 bg-[#fff4e6] rounded-full flex items-center justify-center mb-4">
+                <feature.icon className="text-[#ff8a00] w-8 h-8" />
               </div>
               <h3 className="feature-title">{feature.title}</h3>
               <p className="feature-description">{feature.description}</p>
             </div>
           ))}
+        </div>
       </div>
-    </div>
+    
       <div className="landing-container">
-        <h2 className="why-us-title">Ready to Start?</h2>
-        <div className="why-us-underline"></div>
+        <h2 className="text-4xl font-bold text-[#2d3748] pb-6">Ready to Start?</h2>
+        <div className="w-16 h-2 bg-[#e7b718]"></div>
         <div className="landing-options">
           <div className="landing-option">
             <div className="icon-container">
@@ -119,9 +120,10 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
-        <div className='Recommendation'>Just For You</div>
-        <div className="why-us-underline"></div>
-        <div className='Cards'><ScrollableCard /></div>
+
+      <div className='Recommendation'>Just For You</div>
+      <div className="why-us-underline"></div>
+      <div className='Cards'><ScrollableCard /></div>
       <RollingBanner />
     </div>
   );

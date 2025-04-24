@@ -34,7 +34,6 @@ const App: React.FC = () => {
             <Route path="/approach" element={<Approach />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
-            {/* Add other routes as needed */}
           </Routes>
         </main>
         <Footer />

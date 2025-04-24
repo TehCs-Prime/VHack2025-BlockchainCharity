@@ -18,17 +18,15 @@ const Header: React.FC = () => {
   const profileRoute = user && user.role === 'charity' ? '/charity-profile' : '/profile'
 
   return (
-    <header className="header">
-      <div className="container">
+    <header className="px-12 py-4 bg-[#ffc014] shadow-md sticky top-0 z-50 w-full">
+      <div className="flex items-center justify-between mx-auto">
         {/* Logo Section */}
-        <div className="logo-container">
-          <NavLink to="/">
-            <img src={Logo} alt="LaCial" className="logo" />
-          </NavLink>
-        </div>
+        <NavLink to="/">
+          <img src={Logo} alt="LaCial" className="h-6" />
+        </NavLink>
 
-        <nav className="nav">
-          <ul className="nav-list">
+        <nav className="">
+          <ul className="flex list-none gap-20 text-sm font-semibold text-gray-800">
             <li className="nav-item">
               <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
             </li>
@@ -48,18 +46,16 @@ const Header: React.FC = () => {
         </nav>
 
         {/* Authentication Section */}
-        <div className="auth-section">
+        <div className="flex items-center text-sm font-semibold text-[#ffc014]">
           {user ? (
-            <div className="user-menu">
+            <div className="flex items-center gap-6">
               <Link to={profileRoute} className="login-link">Profile</Link>
-              <span className="divider">|</span>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
             </div>
           ) : (
-            <div className="login-signup">
-              <Link to="/login" className="login-link">Login</Link>
-              <span className="divider">|</span>
-              <Link to="/signup" className="signup-link">Sign Up</Link>
+            <div className="flex items-center gap-6">
+              <Link to="/login" className="border-2 rounded-full border-white bg-white px-5 py-1 transition-all duration-300 hover:bg-white hover:text-[#ffc014]">Login</Link>
+              <Link to="/signup" className="border-2 rounded-full border-white bg-white px-5 py-1 transition-all duration-300 hover:bg-white hover:text-[#ffc014]">Sign Up</Link>
             </div>
           )}
         </div>

@@ -1,59 +1,5 @@
-.header {
-  padding: 40px 20px;
-  background-color: white;
-  width: 100%;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-
-/* Add this if you want a full-width background image like in the GiveTrack example */
-.header-with-background {
-  background-image: url('/assets/BckgroundPic.png');
-  background-size: cover;
-  background-position: center;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  height: 30px;
-}
-
-.nav {
-  margin-left: 90px;
-}
-
-.nav-list {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 55px;
-}
-
-.nav-item {
-  padding: 0;
-}
-
 .nav-link {
   text-decoration: none;
-  color: #333;
-  font-size: 18px;
-  font-weight: bold;
   transition: color 0.3s;
   padding-bottom: 5px;
   border-bottom: 2px solid transparent;
@@ -61,43 +7,8 @@
 
 .nav-link:hover, 
 .nav-link.active {
-  color: #F0B90B;
-  border-bottom: 2px solid #F0B90B;
-}
-
-.auth-container {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.cta-button {
-  background-color: #F0B90B; 
-  color: white;
-  padding: 10px 20px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.3s;
-  border: 1px solid #F0B90B;
-}
-
-.cta-button:hover {
-  background-color: #e6af00;
-}
-
-.login-signup {
-  display: flex;
-  align-items: center;
-  margin-right: 20px;
-}
-
-.login-link, .signup-link {
-  color: #333;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-  padding: 0 10px;
+  color: #feffd3;
+  border-bottom: 2px solid #feffd3;
 }
 
 .login-link:hover, .signup-link:hover {
@@ -130,12 +41,6 @@
   .login-signup {
     margin-top: 10px;
   }
-}
-
-.auth-section {
-  display: flex;
-  align-items: center;
-  gap: 20px;
 }
 
 .user-menu {
