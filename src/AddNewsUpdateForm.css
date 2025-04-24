@@ -6,6 +6,13 @@
     margin: 16px auto;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
+
+  .news-update-form h3 {
+    font-weight: bold;
+    font-size: large;
+    color:#0fad78;
+    margin-bottom: 1rem;
+  }
   
   .news-update-form .form-group {
     margin-bottom: 16px;
@@ -34,21 +41,34 @@
   
   .news-update-form button[type="submit"] {
     padding: 10px 16px;
-    font-size: 15px;
-    background-color: #007bff;
-    color: white;
+    background: linear-gradient(135deg, #22c55e 0%, #46d179 100%);
+    color: white  ;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.5rem;
     cursor: pointer;
+    display: flex;
+    justify-self: center;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: transform 0.2s, background 0.3s;
   }
   
   .news-update-form button[type="submit"]:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
+
+  .news-update-form button[type="submit"]:hover {
+    opacity: 0.8;
+  }
   
   .news-update-form p {
     margin-top: 12px;
     font-size: 14px;
+  }
+
+  .news-submit-button {
+    color: #4ade80;
   }
   

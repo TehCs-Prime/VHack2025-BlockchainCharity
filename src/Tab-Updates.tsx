@@ -1,10 +1,10 @@
 // Tab-Updates.tsx
 
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, doc, getDoc, where } from 'firebase/firestore'; // added where
+import { collection, query, orderBy, onSnapshot, doc, getDoc, where } from 'firebase/firestore';
 import { db } from './firebase';
-import { useAuth } from './AuthContext';            // <-- import useAuth
-import AddNewsUpdateForm, { NewsUpdate as FormNewsUpdate } from './AddNewsUpdateForm';
+import { useAuth } from './AuthContext';
+import AddNewsUpdateForm from './AddNewsUpdateForm';
 import './Tab-Updates.css';
 
 export interface NewsUpdate {
@@ -18,17 +18,17 @@ export interface NewsUpdate {
 
 interface UpdatesTabProps {
   newsData?: NewsUpdate[];
-  projectId?: string; // <-- new prop for projectId
+  projectId?: string;
 }
 
 const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
-  const { userData } = useAuth();                   // <-- get userData
-  const isCharity = userData?.role === 'charity';   // <-- check role
+  const { userData } = useAuth();
+  const isCharity = userData?.role === 'charity';
 
   const [updates, setUpdates] = useState<NewsUpdate[]>([]);
   const [currentUpdateIndex, setCurrentUpdateIndex] = useState(0);
   const [showForm, setShowForm] = useState(false);
-  const [projectOwner, setProjectOwner] = useState<string | null>(null); // added state
+  const [projectOwner, setProjectOwner] = useState<string | null>(null);
 
   useEffect(() => {
     if (projectId) {
@@ -82,7 +82,7 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
     return () => unsub();
   }, [newsData, projectId]);
 
-  const current = updates[currentUpdateIndex]!;
+  const current = updates[currentUpdateIndex];
   const goPrev = () => {
     setCurrentUpdateIndex(i => (i > 0 ? i - 1 : i));
   };
@@ -90,44 +90,12 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
     setCurrentUpdateIndex(i => (i < updates.length - 1 ? i + 1 : i));
   };
   const share = (platform: 'facebook' | 'twitter' | 'linkedin') =>
-    console.log(`Sharing to ${platform}: ${current.title}`);
-const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData }) => {
-    const [currentUpdateIndex, setCurrentUpdateIndex] = useState(0);
-    const currentUpdate = newsData[currentUpdateIndex];
-
-    if (!currentUpdate) {
-        return <div className="updates-content">No updates available.</div>;
-    }
-
-    const goToPrevious = () => {
-        if (currentUpdateIndex < newsData.length - 1) {
-            setCurrentUpdateIndex(currentUpdateIndex + 1);
-        }
-    };
-
-    const goToNext = () => {
-        if (currentUpdateIndex > 0) {
-            setCurrentUpdateIndex(currentUpdateIndex - 1);
-        }
-    };
-
-    const shareUpdate = (platform: 'facebook' | 'twitter' | 'linkedin') => {
-        // In a real app, this would implement actual sharing functionality
-        console.log(`Sharing to ${platform}: ${currentUpdate.title}`);
-    };
+    console.log(`Sharing to ${current.title}`);
 
   return (
     <div className="updates-wrapper">
-      {isCharity && projectOwner && userData?.uid === projectOwner && ( // modified condition
-        <button
-          className="toggle-form-btn"
-          onClick={() => setShowForm(s => !s)}
-        >
-          {showForm ? '✖ Close Form' : '+ Add News Update'}
-        </button>
-      )}
 
-      {showForm && isCharity && projectOwner && userData?.uid === projectOwner && ( // modified condition
+      {showForm && isCharity && projectOwner && userData?.uid === projectOwner && (
         <AddNewsUpdateForm projectId={projectId} />
       )}
 
@@ -182,7 +150,7 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData }) => {
                 <button
                   className="nav-button prev"
                   onClick={goPrev}
-                  disabled={currentUpdateIndex <= 0} // now disables when at the first update
+                  disabled={currentUpdateIndex <= 0}
                 >
                   Previous Update
                 </button>
@@ -200,11 +168,19 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData }) => {
                 <button
                   className="nav-button next"
                   onClick={goNext}
-                  disabled={currentUpdateIndex >= updates.length - 1} // now disables when at the last update
+                  disabled={currentUpdateIndex >= updates.length - 1}
                 >
                   Next Update
                 </button>
               </div>
+              {isCharity && projectOwner && userData?.uid === projectOwner && (
+                <button
+                  className="toggle-form-btn"
+                  onClick={() => setShowForm(s => !s)}
+                >
+                  {showForm ? '✖ Close Form' : '+ Add News Update'}
+                </button>
+              )}
             </>
           )}
         </>

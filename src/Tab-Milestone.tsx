@@ -216,68 +216,10 @@ const TabMilestone: React.FC<MilestoneTabProps> = ({
                   {expensesData.reduce((acc, e) => acc + (parseFloat(e.amount) || 0), 0).toFixed(2)}
                 </span>
               </div>
-              { /* Show add expense button only when the logged‐in charity is the project creator */
-                isCharity && projectCreatorId && userData?.uid === projectCreatorId && (
-                <button className="add-expense-btn" onClick={handleToggleForm}>
-                  + Add Expense
-                </button>
-              )}
               <button className="view-graph-btn" onClick={handleOpenGraph}>
                 <span className="graph-icon">📊</span> View in graph
               </button>
             </div>
-
-            {showForm && (
-              <form className="expense-form" onSubmit={handleFormSubmit}>
-                <input
-                  type="date"
-                  name="date"
-                  value={expenseForm.date}
-                  onChange={handleInputChange}
-                  required
-                />
-                <input
-                  type="text"
-                  name="type"
-                  placeholder="Type"
-                  value={expenseForm.type}
-                  onChange={handleInputChange}
-                  required
-                />
-                <input
-                  type="number"
-                  name="amount"
-                  placeholder="Amount"
-                  value={expenseForm.amount}
-                  onChange={handleInputChange}
-                  required
-                />
-                <textarea
-                  name="description"
-                  placeholder="Description"
-                  value={expenseForm.description}
-                  onChange={handleInputChange}
-                  required
-                />
-                <input
-                  type="url"
-                  name="transaction"
-                  placeholder="Transaction Link"
-                  value={expenseForm.transaction}
-                  onChange={handleInputChange}
-                  required
-                />
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={handleFileChange}
-                />
-                <div>
-                  <button type="submit">Submit</button>
-                  <button type="button" onClick={handleToggleForm}>Cancel</button>
-                </div>
-              </form>
-            )}
 
             {expensesData.map((expense, idx) => (
               <div key={idx} className="expenses-table">
@@ -323,6 +265,70 @@ const TabMilestone: React.FC<MilestoneTabProps> = ({
           </div>
         </>
       )}
+      { /* Show add expense button only when the logged‐in charity is the project creator */
+                isCharity && projectCreatorId && userData?.uid === projectCreatorId && (
+                <button className="add-expense-btn" onClick={handleToggleForm}>
+                  + Add Expense
+                </button>
+      )}
+
+            {showForm && (
+              <div className="modal-overlay" onClick={handleToggleForm}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2 className='modal-header-expenses'>Add New Expenses</h2>
+                  <form className="expense-form" onSubmit={handleFormSubmit}>
+                    <p className='expense-form-header'>New expense:</p>
+                    <input
+                      type="date"
+                      name="date"
+                      value={expenseForm.date}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    <input
+                      type="text"
+                      name="type"
+                      placeholder="Type"
+                      value={expenseForm.type}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    <input
+                      type="number"
+                      name="amount"
+                      placeholder="Amount"
+                      value={expenseForm.amount}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    <textarea
+                      name="description"
+                      placeholder="Description"
+                      value={expenseForm.description}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    <input
+                      type="url"
+                      name="transaction"
+                      placeholder="Transaction Link"
+                      value={expenseForm.transaction}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    <input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={handleFileChange}
+                    />
+                    <div className="button-group">
+                      <button type="submit">Submit</button>
+                      <button type="button" onClick={handleToggleForm}>Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
 
       <GraphOverlay
         isOpen={isGraphOpen}

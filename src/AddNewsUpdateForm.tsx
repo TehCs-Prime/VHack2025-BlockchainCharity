@@ -154,7 +154,7 @@ const AddNewsUpdateForm: React.FC<AddNewsUpdateFormProps> = ({ projectId }) => {
         />
       </div>
 
-      <button type="submit" disabled={loading}>
+      <button className='news-submit-button' type="submit" disabled={loading}>
         {loading ? 'Submitting…' : 'Submit News Update'}
       </button>
 
