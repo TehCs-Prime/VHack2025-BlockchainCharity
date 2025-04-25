@@ -1,121 +1,118 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { collection, getDocs, query, orderBy, limit, DocumentData } from 'firebase/firestore';
+import { db } from './firebase';
 import './ScrollableCards.css';
 
-interface Project {
-  id: number;
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import { Navigation, Autoplay } from 'swiper/modules';
+
+interface ProjectPreview {
+  id: string;
   title: string;
   status: string;
-  timing: string;
-  category: string;
-  location: string;
   description: string;
-  updatedAt: Date;
-  progress: number;
-  imageUrl: string;
+  mainImage: string;
+  goalAmount: number;
+  raisedAmount: number;
 }
 
-const mockProjects: Project[] = [
-  {
-    id: 1,
-    title: 'Clean Water Initiative',
-    status: 'Under Implementation',
-    timing: 'New Project',
-    category: 'Water',
-    location: 'Kenya',
-    description: 'Providing clean water access to rural communities',
-    updatedAt: new Date('2025-02-15'),
-    progress: 65,
-    imageUrl: '/assets/CleanAir.jpeg',
-  },
-  {
-    id: 2,
-    title: 'Education for All',
-    status: 'Funding',
-    timing: 'New Project',
-    category: 'Education',
-    location: 'India',
-    description: 'Building schools in underserved areas',
-    updatedAt: new Date('2025-03-01'),
-    progress: 30,
-    imageUrl: '/assets/Education.jpeg',
-  },
-  {
-    id: 3,
-    title: 'Wildlife Conservation',
-    status: 'Completed',
-    timing: 'Near to End',
-    category: 'Animals',
-    location: 'Brazil',
-    description: 'Protecting endangered species in the Amazon',
-    updatedAt: new Date('2025-01-20'),
-    progress: 100,
-    imageUrl: '/assets/Jungle.jpeg',
-  },
-];
-
 const ScrollableCards: React.FC = () => {
+  const [projects, setProjects] = useState<ProjectPreview[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
-  // 1) Create a reference for the scrollable container
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const fetchLatestProjects = async () => {
+      setLoading(true);
+      try {
+        const q = query(
+          collection(db, 'projects'),
+          orderBy('updatedAt', 'desc'),
+          limit(10) // You can increase this if needed
+        );
+        const snapshot = await getDocs(q);
+        const items = snapshot.docs.map(doc => {
+          const data = doc.data() as DocumentData;
+          return {
+            id: doc.id,
+            title: data.title,
+            status: data.status,
+            description: data.description,
+            mainImage: data.mainImage,
+            goalAmount: data.goalAmount,
+            raisedAmount: data.raisedAmount,
+          };
+        });
+        setProjects(items);
+      } catch (error) {
+        console.error('Error fetching latest projects:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // 2) Functions to handle left/right scrolling
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft -= 300;
-    }
-  };
+    fetchLatestProjects();
+  }, []);
 
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft += 300;
-    }
-  };
+  if (loading) {
+    return <p>Loading projects...</p>;
+  }
 
   return (
-    <div className="scrollable-cards-wrapper">
-      {/* Left Arrow Button */}
-      <button className="scroll-button left" onClick={scrollLeft}>
-        <i className="fa-solid fa-chevron-left"></i>
-      </button>
+    <div className="scrollable-cards-wrapper relative px-30 pb-20">
+      <Swiper
+        modules={[Navigation, Autoplay]}
+        navigation
+        spaceBetween={20}
+        slidesPerView={1.2}
+        loop={true}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        breakpoints={{
+          640: { slidesPerView: 1.5 },
+          768: { slidesPerView: 2.5 },
+          1024: { slidesPerView: 3 },
+        }}
+        className="!static !py-5 !px-3"
+      >
+        {projects.map(project => {
+          const progress = project.goalAmount > 0
+            ? Math.round((project.raisedAmount / project.goalAmount) * 100)
+            : 0;
 
-      {/* Scrollable container with a ref */}
-      <div className="cards-scroll-container" ref={scrollContainerRef}>
-        {mockProjects.map((project) => (
-          <div
-            className="project-card"
-            key={project.id}
-            onClick={() => navigate(`/project/${project.id}`)}
-          >
-            <div className="project-status" data-status={project.status}>
-              {project.status}
-            </div>
-            
-            <h3 className="project-title">{project.title}</h3>
-            <img
-              className="project-image"
-              src={project.imageUrl}
-              alt={project.title}
-            />
-            <div className="project-progress">
-              <div className="progress-label">Progress: {project.progress}%</div>
-              <div className="progress-bar-container">
-                <div
-                  className="progress-bar-fill"
-                  style={{ width: `${project.progress}%` }}
-                ></div>
+          return (
+            <SwiperSlide key={project.id}>
+              <div
+                className="project-card h-[450px]"
+                onClick={() => navigate(`/project/${project.id}`)}
+              >
+                <div className="project-status" data-status={project.status}>
+                  {project.status}
+                </div>
+                <h3 className="project-title">{project.title}</h3>
+                <img
+                  className="project-image"
+                  src={project.mainImage}
+                  alt={project.title}
+                />
+                <div className="project-progress">
+                  <div className="progress-label">Progress: {progress}%</div>
+                  <div className="progress-bar-container">
+                    <div
+                      className="progress-bar-fill"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+                <p className="project-description">{project.description}</p>
               </div>
-            </div>
-            <p className="project-description">{project.description}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Right Arrow Button */}
-      <button className="scroll-button right" onClick={scrollRight}>
-        <i className="fa-solid fa-chevron-right"></i>
-      </button>
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
     </div>
   );
 };

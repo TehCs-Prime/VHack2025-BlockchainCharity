@@ -16,7 +16,7 @@
   background-color: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   position: relative;
   overflow: hidden;
@@ -24,7 +24,7 @@
 
 .project-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(255, 251, 20, 0.8);
 }
 
 .project-status {
@@ -140,10 +140,7 @@
 
 
 .scrollable-cards-wrapper {
-  position: relative; 
   width: 100%;
-  margin: 2rem auto;
-  max-width: 1200px;
 }
 
 .scroll-button {
@@ -169,10 +166,25 @@
   opacity: 1;
 }
 
-.scroll-button.left {
-  left: -20px; /* or 10px, or wherever you want the button */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #333 !important;
+  top: 45% !important;
+  transition: all 0.3s ease;
 }
 
-.scroll-button.right {
-  right: -20px; 
+.swiper-button-next {
+  right: 50px !important;
+}
+
+.swiper-button-prev {
+  left: 50px !important;
+}
+
+.swiper-button-next:hover {
+  color: #797979 !important;
+}
+
+.swiper-button-prev:hover {
+  color: #797979 !important;
 }

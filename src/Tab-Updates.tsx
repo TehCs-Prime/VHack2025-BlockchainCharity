@@ -1,111 +1,192 @@
-import React, { useState } from 'react';
-import './Tab-Updates.css'
+// Tab-Updates.tsx
+
+import React, { useState, useEffect } from 'react';
+import { collection, query, orderBy, onSnapshot, doc, getDoc, where } from 'firebase/firestore';
+import { db } from './firebase';
+import { useAuth } from './AuthContext';
+import AddNewsUpdateForm from './AddNewsUpdateForm';
+import './Tab-Updates.css';
 
 export interface NewsUpdate {
-    id: number;
-    title: string;
-    date: string;
-    author: string;
-    content: string;
-    imageUrl: string;
+  id: string;
+  title: string;
+  date: string;
+  author: string;
+  content: string;
+  imageUrl: string;
 }
 
 interface UpdatesTabProps {
-    newsData: NewsUpdate[];
+  newsData?: NewsUpdate[];
+  projectId?: string;
 }
 
-const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData }) => {
-    const [currentUpdateIndex, setCurrentUpdateIndex] = useState(0);
-    const currentUpdate = newsData[currentUpdateIndex];
+const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
+  const { userData } = useAuth();
+  const isCharity = userData?.role === 'charity';
 
-    const goToPrevious = () => {
-        if (currentUpdateIndex < newsData.length - 1) {
-            setCurrentUpdateIndex(currentUpdateIndex + 1);
-        }
-    };
+  const [updates, setUpdates] = useState<NewsUpdate[]>([]);
+  const [currentUpdateIndex, setCurrentUpdateIndex] = useState(0);
+  const [showForm, setShowForm] = useState(false);
+  const [projectOwner, setProjectOwner] = useState<string | null>(null);
 
-    const goToNext = () => {
-        if (currentUpdateIndex > 0) {
-            setCurrentUpdateIndex(currentUpdateIndex - 1);
-        }
-    };
+  useEffect(() => {
+    if (projectId) {
+      const projectRef = doc(db, 'projects', projectId);
+      getDoc(projectRef)
+        .then((docSnap) => {
+          if (docSnap.exists()) {
+            // assuming 'createdBy' field stores the charity owner's uid
+            setProjectOwner(docSnap.data().createdBy);
+          }
+        })
+        .catch(err => console.error('Error fetching project owner:', err));
+    }
+  }, [projectId]);
 
-    const shareUpdate = (platform: 'facebook' | 'twitter' | 'linkedin') => {
-        // In a real app, this would implement actual sharing functionality
-        console.log(`Sharing to ${platform}: ${currentUpdate.title}`);
-    };
+  useEffect(() => {
+    if (newsData && newsData.length) {
+      setUpdates(newsData);
+      setCurrentUpdateIndex(newsData.length - 1); // set last update as current
+      return;
+    }
+    let q;
+    if (projectId) {
+      q = query(
+        collection(db, 'newsUpdates'),
+        where('projectId', '==', projectId), // filter by projectId
+        orderBy("createdAt")
+      );
+    } else {
+      q = query(
+        collection(db, 'newsUpdates'),
+        orderBy("createdAt")
+      );
+    }
+    const unsub = onSnapshot(q, snap => {
+      const fetched: NewsUpdate[] = [];
+      snap.forEach(doc => {
+        const d = doc.data();
+        fetched.push({
+          id: doc.id,
+          title: d.title,
+          date: d.date,
+          author: d.author,
+          content: d.content,
+          imageUrl: d.imageUrl,
+        });
+      });
+      setUpdates(fetched);
+      setCurrentUpdateIndex(fetched.length - 1); // set last update as current
+    });
+    return () => unsub();
+  }, [newsData, projectId]);
 
-    return (
-        <div className="updates-content">
-            <div className="news-update-header">
-                <h2>{currentUpdate.title}</h2>
-                <p className="news-date">{currentUpdate.date} | by {currentUpdate.author}</p>
+  const current = updates[currentUpdateIndex];
+  const goPrev = () => {
+    setCurrentUpdateIndex(i => (i > 0 ? i - 1 : i));
+  };
+  const goNext = () => {
+    setCurrentUpdateIndex(i => (i < updates.length - 1 ? i + 1 : i));
+  };
+  const share = (platform: 'facebook' | 'twitter' | 'linkedin') =>
+    console.log(`Sharing to ${current.title}`);
+
+  return (
+    <div className="updates-wrapper">
+
+      {showForm && isCharity && projectOwner && userData?.uid === projectOwner && (
+        <AddNewsUpdateForm projectId={projectId} />
+      )}
+
+      {!showForm && (
+        <>
+          {updates.length === 0 ? (
+            <div className="updates-content">
+              <p>No news updates available.</p>
             </div>
+          ) : (
+            <>
+              <div className="news-update-header">
+                <h2>{current.title}</h2>
+                <p className="news-date">
+                  {current.date} | by {current.author}
+                </p>
+              </div>
 
-            <div className="news-update-content">
+              <div className="news-update-content">
                 <div className="news-image-container">
-                    <img src={currentUpdate.imageUrl} alt={currentUpdate.title} className="news-image" />
+                  <img
+                    src={current.imageUrl}
+                    alt={current.title}
+                    className="news-image"
+                  />
                 </div>
-
                 <div className="news-text-content">
-                    <p>{currentUpdate.content}</p>
+                  <p>{current.content}</p>
 
-                    <div className="share-container">
-                        <span className="share-label">Share Update</span>
-                        <div className="share-buttons">
-                            <button 
-                                className="share-button facebook" 
-                                onClick={() => shareUpdate('facebook')}
-                                aria-label="Share on Facebook"
-                            >
-                                <img src='/assets/facebook-logo-black.png' alt='Facebook'></img>
-                            </button>
-                            <button 
-                                className="share-button twitter" 
-                                onClick={() => shareUpdate('twitter')}
-                                aria-label="Share on Twitter"
-                            >
-                                <img src='/assets/twitter-logo-black.png' alt='Twitter'></img>
-                            </button>
-                            <button 
-                                className="share-button linkedin" 
-                                onClick={() => shareUpdate('linkedin')}
-                                aria-label="Share on LinkedIn"
-                            >
-                                <img src='/assets/linkedin-square-logo-24.png' alt='LinkedIn'></img>
-                            </button>
-                        </div>
+                  <div className="share-container">
+                    <span className="share-label">Share Update</span>
+                    <div className="share-buttons">
+                      {(['facebook','twitter','linkedin'] as const).map(pl => (
+                        <button
+                          key={pl}
+                          className={`share-button ${pl}`}
+                          onClick={() => share(pl)}
+                          aria-label={`Share on ${pl}`}
+                        >
+                          <img
+                            src={`/assets/${pl}-logo-black.png`}
+                            alt={pl}
+                          />
+                        </button>
+                      ))}
                     </div>
+                  </div>
                 </div>
-            </div>
+              </div>
 
-            <div className="news-navigator">
-                <button 
-                    className="nav-button prev" 
-                    onClick={goToPrevious}
-                    disabled={currentUpdateIndex >= newsData.length - 1}
+              <div className="news-navigator">
+                <button
+                  className="nav-button prev"
+                  onClick={goPrev}
+                  disabled={currentUpdateIndex <= 0}
                 >
-                    Previous Update
+                  Previous Update
                 </button>
                 <div className="pagination-indicator">
-                    {newsData.map((_, index) => (
-                        <span 
-                            key={index} 
-                            className={`pagination-dot ${index === currentUpdateIndex ? 'active' : ''}`}
-                            onClick={() => setCurrentUpdateIndex(index)}
-                        />
-                    ))}
+                  {updates.map((_, idx) => (
+                    <span
+                      key={idx}
+                      className={`pagination-dot ${
+                        idx === currentUpdateIndex ? 'active' : ''
+                      }`}
+                      onClick={() => setCurrentUpdateIndex(idx)}
+                    />
+                  ))}
                 </div>
-                <button 
-                    className="nav-button next" 
-                    onClick={goToNext}
-                    disabled={currentUpdateIndex <= 0}
+                <button
+                  className="nav-button next"
+                  onClick={goNext}
+                  disabled={currentUpdateIndex >= updates.length - 1}
                 >
-                    Next Update
+                  Next Update
                 </button>
-            </div>
-        </div>
-    );
+              </div>
+              {isCharity && projectOwner && userData?.uid === projectOwner && (
+                <button
+                  className="toggle-form-btn"
+                  onClick={() => setShowForm(s => !s)}
+                >
+                  {showForm ? '✖ Close Form' : '+ Add News Update'}
+                </button>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
 };
 
 export default UpdatesTab;

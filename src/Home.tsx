@@ -79,7 +79,7 @@ const Home: React.FC = () => {
 
       <div className="flex flex-col items-center text-center py-10">
         <h2 className="text-4xl font-bold text-[#2d3748] pb-6">Why Us?</h2>
-        <div className="w-16 h-2 bg-[#e7b718] mb-8"></div>
+        <div className="w-16 h-2 bg-yellow-400 mb-8"></div>
         <div className="flex justify-between flex-start gap-10 select-none px-16">
           {features.map((feature, index) => (
             <div key={index} className="flex flex-col items-center text-center py-12 px-6 bg-[#fffed9] min-h-[280px] box-shadow-lg rounded-xl">
@@ -93,36 +93,39 @@ const Home: React.FC = () => {
         </div>
       </div>
     
-      <div className="landing-container">
+      <div className="flex flex-col items-center text-center py-10">
         <h2 className="text-4xl font-bold text-[#2d3748] pb-6">Ready to Start?</h2>
-        <div className="w-16 h-2 bg-[#e7b718]"></div>
-        <div className="landing-options">
-          <div className="landing-option">
-            <div className="icon-container">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon">
+        <div className="w-16 h-2 bg-yellow-400 mb-16"></div>
+        <div className="landing-options h-[50vh] ">
+          <div className="flex flex-col items-center justify-center rounded-3xl box-shadow-lg bg-yellow-300 px-10 py-8 mb-8 w-[22vw]">
+            <div className="bg-white rounded-full p-3 w-16 h-16 mb-6 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-400">
                 <path d="M12 22l10-10a4 4 0 00-5.66-5.66l-1.34 1.34L11 7 8.24 4.24a4 4 0 00-5.66 5.66l10 10z" />
               </svg>
             </div>
-            <h2>Donate</h2>
-            <p>Explore projects to contribute to around the world.</p>
-            <button className="ctas-button"><a href='/explore'>Discover Projects</a></button>
+            <h2 className='text-xl text-gray-800 font-semibold my-2'>Donate</h2>
+            <p className="mb-12 text-gray-700">Explore projects to contribute to around the world.</p>
+            <button className="cursor-pointer border-white border-2 bg-transparent text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 hover:bg-white hover:text-yellow-400"><a href='/explore'>Discover Projects</a></button>
           </div>
-          <div className="landing-option">
-            <div className="icon-container">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon">
+          <div className="flex flex-col items-center justify-center rounded-3xl box-shadow-lg bg-yellow-300 px-10 py-8 mb-8 w-[22vw]">
+            <div className="bg-white rounded-full p-3 w-16 h-16 mb-6 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-400">
                 <line x1="12" y1="2" x2="12" y2="22"></line>
                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
               </svg>
             </div>
-            <h2>Start a Project</h2>
-            <p>Nonprofits ready to fundraise can start a project here.</p>
-            <button className="ctas-button"><a href='/login'>Fundraise</a></button>
+            <h2 className='text-xl text-gray-800 font-semibold my-2'>Start a Project</h2>
+            <p className="mb-12 text-gray-700">Nonprofits ready to fundraise can start a project here.</p>
+            <button className="border-white border-2 bg-transparent text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 hover:bg-white hover:text-yellow-400 cursor-pointer"><a href='/login'>Fundraise</a></button>
           </div>
         </div>
       </div>
-
-      <div className='Recommendation'>Just For You</div>
-      <div className="why-us-underline"></div>
+        
+      <div className='flex flex-col items-center text-center py-10'>
+        <div className='Recommendation'>Just For You</div>
+        <div className="w-16 h-2 bg-yellow-400"></div>
+      </div>
+      
       <div className='Cards'><ScrollableCard /></div>
       <RollingBanner />
     </div>

@@ -1,17 +1,7 @@
 .profile-page {
   width: 100%;
-  min-height: 100vh;
   background: #fff;
-  padding: 0 1rem; /* Horizontal padding */
   box-sizing: border-box;
-}
-
-/* Centering Content */
-.profile-header,
-.profile-content,
-.content-box {
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 /* Profile Header Box */
@@ -19,17 +9,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 2rem;
-  background: #fffde7; /* Soft yellow background */
+  padding: 3rem 10rem;
+  background: linear-gradient(135deg, #ffe608 0%, #eeaf1b 50%, #ea7014 100%);
   border: 2px solid #f1c40f;
-  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
   box-sizing: border-box;
 }
 
 .avatar-section {
-  flex: 0 0 150px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -68,15 +55,15 @@
   color: #fff;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 0.9rem;
   margin-top: 0.5rem;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .edit-profile-btn:hover {
-  background: #e67e22;
+  background-color: #e67e22;
 }
 
 .email,
@@ -91,7 +78,7 @@
   padding: 0.5rem;
   font-size: 1.2rem;
   border: 2px solid #f39c12;
-  border-radius: 5px;
+  border-radius: 20px;
   margin-bottom: 1rem;
 }
 
@@ -103,7 +90,7 @@
 .save-btn,
 .cancel-btn {
   padding: 0.5rem 1rem;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   border: none;
   font-size: 0.9rem;
@@ -184,28 +171,14 @@
   object-fit: cover;
 }
 
-/* Main Content */
-.profile-content {
-  width: 100%;
-  padding: 2rem 1rem;
-  background: #fff;
-}
 
 /* Content Box with Shadow */
 .content-box {
   background: #fff;
-  padding: 2rem;
+  padding: 3rem 6rem 0 6rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   margin-bottom: 2rem;
-}
-
-/* Sections */
-.section {
-  width: 100%;
-  padding: 2rem 1rem;
-  border-bottom: 1px solid #f1c40f;
 }
 
 .section:last-of-type {
@@ -213,21 +186,10 @@
 }
 
 .section h2 {
-  font-size: 2rem;
+  font-weight: 600;
   color: #f39c12;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   position: relative;
-}
-
-.section h2::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -5px;
-  width: 50px;
-  height: 4px;
-  background: #f1c40f;
-  border-radius: 2px;
 }
 
 /* Donation List & Items */
@@ -354,4 +316,51 @@
   .section h2 {
     font-size: 1.8rem;
   }
+}
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.donation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.donation-table th,
+.donation-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #dddddd;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.donation-table th {
+  background-color: #f39c12;
+  color: #fff;
+  font-weight: bold;
+}
+
+.donation-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.tx-link {
+  color: blue;
+  text-decoration: underline;
 }

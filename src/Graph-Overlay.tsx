@@ -20,7 +20,7 @@ const GraphOverlay: React.FC<GraphOverlayProps> = ({
   // Group expenses by type for the pie chart data
   const expensesByType: Record<string, number> = {};
   expenses.forEach((expense) => {
-    const amount = parseFloat(expense.amount.replace(/[^0-9.-]+/g, ''));
+    const amount = parseFloat(String(expense.amount).replace(/[^0-9.-]+/g, ''));
     if (!isNaN(amount)) {
       if (expensesByType[expense.type]) {
         expensesByType[expense.type] += amount;
@@ -48,7 +48,8 @@ const GraphOverlay: React.FC<GraphOverlayProps> = ({
         </div>
         
         <div className="graph-body">
-          <a href='https://bitpay.com/insight/BTC/mainnet/tx/e6b6d64675281f3e0e6eeb94a28da0717e77492ae7b4194ce9fbd500716aaeda'><img src='/assets/FundMovement.png' ></img></a>
+          <p>Graph to be implemented in the future... Stay tuned!</p>
+           {/* <a href='https://bitpay.com/insight/BTC/mainnet/tx/e6b6d64675281f3e0e6eeb94a28da0717e77492ae7b4194ce9fbd500716aaeda'><img src='/assets/FundMovement.png' ></img></a> */}
         </div>
       </div>
     </div>

@@ -6,8 +6,9 @@
 }
 
 .page-title-container {
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-  margin: -2rem -2rem 2.5rem -2rem;
+  background: linear-gradient(135deg, #ea7014 0%, #eeaf1b 50%, #e6c910 100%);
+  margin: -2rem -2rem 0rem -2rem;
+  margin-bottom: 20px;
   padding: 3rem 2rem;
   text-align: center;
   position: relative;
@@ -70,14 +71,14 @@
 .clear-filters-btn {
   background: none;
   border: none;
-  color: #3498db;
+  color: #f5c209;
   font-size: 0.9rem;
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .clear-filters-btn:hover {
-  color: #2980b9;
+  color: #f5c209;
   text-decoration: underline;
 }
 
@@ -111,7 +112,7 @@
   cursor: pointer;
   width: 16px;
   height: 16px;
-  accent-color: #3498db;
+  accent-color: #f5c209;
 }
 
 .filter-option label {
@@ -122,7 +123,7 @@
 }
 
 .filter-option:hover label {
-  color: #3498db;
+  color: #f5a609;
 }
 
 .categories-section {
@@ -251,7 +252,7 @@
 }
 
 .search-bar input:focus {
-  border-color: #3498db;
+  border-color: #f5e509;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
   outline: none;
 }
@@ -307,7 +308,7 @@
 }
 
 .sort-dropdown select {
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 0.8rem;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: white;
@@ -318,7 +319,7 @@
 }
 
 .sort-dropdown select:focus {
-  border-color: #3498db;
+  border-color: #f5c209;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
   outline: none;
 }
@@ -344,7 +345,7 @@
 }
 
 .view-btn.active {
-  background-color: #3498db;
+  background-color: #f5c209;
   color: white;
 }
 
@@ -368,6 +369,7 @@
 
 .project-card {
   background-color: white;
+  height: 500px;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -474,19 +476,127 @@
   transition: width 0.3s ease;
 }
 
-/* Status-specific progress bar colors */
-[data-status="Funding"] .progress-bar-fill {
-  background-color: #FF9800;
+/* Modal Background */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-[data-status="Completed"] .progress-bar-fill {
-  background-color: #4CAF50;
+/* Container for the Form */
+.add-project-form-container {
+  background-color: #fff;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeInScale 0.3s ease-in-out;
 }
 
-[data-status="Under Implementation"] .progress-bar-fill {
-  background-color: #2196F3;
+/* Form Heading */
+.add-project-form h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
-[data-status="Cancelled"] .progress-bar-fill {
-  background-color: #F44336;
+/* Form Labels & Inputs */
+.add-project-form label {
+  display: block;
+  margin: 0.75rem 0 0.25rem;
+  font-weight: bold;
+}
+
+.add-project-form input[type="text"],
+.add-project-form input[type="number"],
+.add-project-form select,
+.add-project-form textarea,
+.add-project-form input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Textarea Specific */
+.add-project-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Uploaded Image Preview */
+.uploaded-preview {
+  margin-top: 0.5rem;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+/* Form Buttons */
+.form-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-buttons button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-buttons button[type="submit"] {
+  background-color: #f5c209;
+  color: #fff;
+}
+
+.form-buttons button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Simple fade-in/scale animation for modal */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Admin Toolbar styling */
+.admin-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem 0;
+}
+
+.admin-toolbar .add-project-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-toolbar .add-project-btn:hover {
+  background-color: #218838;
 }

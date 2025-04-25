@@ -1,6 +1,6 @@
 .nav-link {
   text-decoration: none;
-  transition: color 0.3s;
+  transition: all 0.3s;
   padding-bottom: 5px;
   border-bottom: 2px solid transparent;
 }

@@ -12,9 +12,7 @@ const Footer: React.FC = () => {
 
             <div className="lacial-logo">
               <img src={Logo} alt='Logo' />
-              <div className="logo-text">
-                <span className="lacial-text">LACIAL CHARITY</span>
-              </div>
+              <span className="text-xl font-semibold text-yellow-400 pt-1">LACIAL CHARITY</span>
             </div>
 
             <div className="subscription-container">
@@ -26,8 +24,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-
-
 
         <div className="footer-section">
           <h3 className="footer-heading">INFORMATION</h3>
@@ -69,13 +65,15 @@ const Footer: React.FC = () => {
             <img src="/assets/facebook-logo-black.png" alt="Facebook" />
             </a>
           </div>
-          <div className="copyright">
-            <p>Copyright 2025.</p>
-            <p>All Rights Reserved by Lacial</p>
-            <p>Version 2.0.1 + build.30245</p>
-          </div>
         </div>
       </div>
+
+      <div className='border-[1px] border-white/30 w-full'></div>
+
+      <div className="bg-[#111] text-center text-xs py-3 opacity-80 footer-bottom">
+        <p>Copyright 2025 | All Rights Reserved by Lacial</p>
+      </div>
+
     </footer>
   );
 };
