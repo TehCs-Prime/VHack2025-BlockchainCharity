@@ -395,8 +395,8 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
               <input
                 type="text"
                 placeholder="Enter your name"
-                defaultValue={userData?.username || ''}
-                readOnly={!!userData}
+                value={donationData.name}
+                onChange={(e) => setDonationData({ ...donationData, name: e.target.value })}
               />
             </div>
             <div className="form-group">

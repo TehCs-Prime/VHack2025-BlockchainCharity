@@ -1,5 +1,4 @@
-// CharityProfile.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useAuth } from './AuthContext';
 import LocalAvatar from './LocalAvatar';
 import FundraisingForm from './FundraisingForm';
@@ -25,7 +24,100 @@ export default function CharityProfile() {
   // Control the display of the fundraising proposal form.
   const [showFundraisingForm, setShowFundraisingForm] = useState<boolean>(false);
 
-  // Campaigns state: campaigns created by the charity.
+  // Editing state for the charity profile information.
+  const [isEditing, setIsEditing] = useState(false);
+  const [newName, setNewName] = useState(
+    charityUser.organizationName || charityUser.username || ''
+  );
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState(
+    charityUser.profilePicture || '/default-avatar.png'
+  );
+  const [loading, setLoading] = useState(false);
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadToImgBB = async (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const apiKey = 'ea041d81863434cecbdb34bfe3264458';
+      if (!apiKey) throw new Error('Missing ImgBB API key');
+
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=${apiKey}`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error?.message || 'Image upload failed');
+      }
+
+      return data.data.url;
+    } catch (err) {
+      console.error('ImgBB upload error:', err);
+      throw new Error(
+        err instanceof Error ? err.message : 'Failed to upload image'
+      );
+    }
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      const updates: any = { organizationName: newName };
+
+      if (selectedFile) {
+        if (!selectedFile.type.startsWith('image/')) {
+          throw new Error('Only image files are allowed');
+        }
+        if (selectedFile.size > 5 * 1024 * 1024) {
+          throw new Error('File size must be less than 5MB');
+        }
+        const imageUrl = await uploadToImgBB(selectedFile);
+        updates.profilePicture = imageUrl;
+      }
+
+      // Update profile info.
+      await updateProfile(updates);
+      setIsEditing(false);
+    } catch (err) {
+      console.error('Error updating profile:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggleProposalForm = async () => {
+    if (!isVerified) {
+      const confirmProposal = window.confirm(
+        "Your account is currently unverified. Would you like to submit a proposal? Submitting your proposal will flag your account for verification."
+      );
+      if (!confirmProposal) return;
+      try {
+        await updateProfile({ verified: false });
+      } catch (err) {
+        console.error("Error updating verified status:", err);
+      }
+    }
+    setShowFundraisingForm((prev) => !prev);
+  };
+
+  // (existing campaigns useEffect remains unchanged)
   const [campaigns, setCampaigns] = useState<any[]>([]);
   useEffect(() => {
     if (charityUser && charityUser.uid) {
@@ -44,30 +136,56 @@ export default function CharityProfile() {
     }
   }, [charityUser]);
 
-  const handleToggleProposalForm = async () => {
-    if (!isVerified) {
-      const confirmProposal = window.confirm(
-        "Your account is currently unverified. Would you like to submit a proposal? Submitting your proposal will flag your account for verification."
-      );
-      if (!confirmProposal) return;
-      try {
-        await updateProfile({ verified: false });
-      } catch (err) {
-        console.error("Error updating verified status:", err);
-      }
-    }
-    setShowFundraisingForm((prev) => !prev);
-  };
-
   return (
     <div className="profile-page">
       {/* Profile Header */}
       <header className="profile-header">
         <div className="avatar-section">
-          <LocalAvatar user={charityUser} className="static" />
+          {isEditing ? (
+            <label className="profile-pic-edit">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+              <img
+                src={previewUrl}
+                alt="Profile"
+                className="editable"
+              />
+              <span className="edit-overlay">✎</span>
+            </label>
+          ) : (
+            <LocalAvatar user={charityUser} className="static" />
+          )}
         </div>
         <div className="info-section">
-          <h1>{charityUser.organizationName || charityUser.username}</h1>
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                className="edit-input"
+              />
+              <div className="edit-buttons">
+                <button className="save-btn" onClick={handleSave} disabled={loading}>
+                  {loading ? 'Saving...' : 'Save'}
+                </button>
+                <button className="cancel-btn" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1>{charityUser.organizationName || charityUser.username}</h1>
+              <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>
+                Edit Profile
+              </button>
+            </>
+          )}
           <p className="email">{charityUser.email}</p>
           <p className="signup-date">
             Member since: {new Date(charityUser.createdAt).toLocaleDateString()}
@@ -108,7 +226,6 @@ export default function CharityProfile() {
             </div>
             {showFundraisingForm && (
               <div className="fundraising-form-container">
-                {/* Pass the charity user info to the form */}
                 <FundraisingForm charityUser={charityUser} />
               </div>
             )}

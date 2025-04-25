@@ -399,24 +399,31 @@ const FundraisingForm: React.FC<FundraisingFormProps> = ({ charityUser }) => {
             </div>
             {/* New project category field */}
             <div className="form-group">
-              <label htmlFor="projectCategory" className="form-label">
-                Project Category *
-              </label>
-              <select
-                id="projectCategory"
-                name="projectCategory"
-                value={formData.projectCategory}
-                onChange={handleInputChange}
-                required
-                className="form-input"
-              >
-                <option value="Water">Water</option>
-                <option value="Infrastructure">Infrastructure</option>
-                <option value="Technology">Technology</option>
-                <option value="Community">Community</option>
-                {/* Add other categories as needed */}
-              </select>
-            </div>
+  <label htmlFor="projectCategory" className="form-label">
+    Project Category *
+  </label>
+  <select
+    id="projectCategory"
+    name="projectCategory"
+    value={formData.projectCategory}
+    onChange={handleInputChange}
+    required
+    className="form-input"
+  >
+    <option value="Animals">Animals</option>
+    <option value="Children">Children</option>
+    <option value="Climate Change">Climate Change</option>
+    <option value="Disaster Recovery">Disaster Recovery</option>
+    <option value="Economic Development">Economic Development</option>
+    <option value="Education">Education</option>
+    <option value="Health">Health</option>
+    <option value="Human Rights">Human Rights</option>
+    <option value="Humanitarian Assistance">Humanitarian Assistance</option>
+    <option value="Hunger">Hunger</option>
+    <option value="Microfinance">Microfinance</option>
+    <option value="Water">Water</option>
+  </select>
+</div>
             <div className="form-actions">
               <button type="submit" className="form-button">
                 Continue to Budget Breakdown

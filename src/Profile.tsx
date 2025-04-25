@@ -104,7 +104,7 @@ export default function Profile() {
     formData.append('image', file);
 
     try {
-      const apiKey = import.meta.env.VITE_IMG_BB_API_KEY;
+      const apiKey = 'ea041d81863434cecbdb34bfe3264458';
       if (!apiKey) throw new Error('Missing ImgBB API key');
 
       const response = await fetch(
