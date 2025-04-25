@@ -6,8 +6,9 @@
 }
 
 .page-title-container {
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-  margin: -2rem -2rem 2.5rem -2rem;
+  background: linear-gradient(135deg, #ea7014 0%, #eeaf1b 50%, #e6c910 100%);
+  margin: -2rem -2rem 0rem -2rem;
+  margin-bottom: 20px;
   padding: 3rem 2rem;
   text-align: center;
   position: relative;
@@ -70,14 +71,14 @@
 .clear-filters-btn {
   background: none;
   border: none;
-  color: #3498db;
+  color: #f5c209;
   font-size: 0.9rem;
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .clear-filters-btn:hover {
-  color: #2980b9;
+  color: #f5c209;
   text-decoration: underline;
 }
 
@@ -111,7 +112,7 @@
   cursor: pointer;
   width: 16px;
   height: 16px;
-  accent-color: #3498db;
+  accent-color: #f5c209;
 }
 
 .filter-option label {
@@ -122,7 +123,7 @@
 }
 
 .filter-option:hover label {
-  color: #3498db;
+  color: #f5a609;
 }
 
 .categories-section {
@@ -251,7 +252,7 @@
 }
 
 .search-bar input:focus {
-  border-color: #3498db;
+  border-color: #f5e509;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
   outline: none;
 }
@@ -307,7 +308,7 @@
 }
 
 .sort-dropdown select {
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 0.8rem;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: white;
@@ -318,7 +319,7 @@
 }
 
 .sort-dropdown select:focus {
-  border-color: #3498db;
+  border-color: #f5c209;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
   outline: none;
 }
@@ -344,7 +345,7 @@
 }
 
 .view-btn.active {
-  background-color: #3498db;
+  background-color: #f5c209;
   color: white;
 }
 
@@ -368,6 +369,7 @@
 
 .project-card {
   background-color: white;
+  height: 500px;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -474,23 +476,6 @@
   transition: width 0.3s ease;
 }
 
-/* Status-specific progress bar colors */
-[data-status="Funding"] .progress-bar-fill {
-  background-color: #FF9800;
-}
-
-[data-status="Completed"] .progress-bar-fill {
-  background-color: #4CAF50;
-}
-
-[data-status="Under Implementation"] .progress-bar-fill {
-  background-color: #2196F3;
-}
-
-[data-status="Cancelled"] .progress-bar-fill {
-  background-color: #F44336;
-}
-
 /* Modal Background */
 .modal {
   position: fixed;
@@ -574,7 +559,7 @@
 }
 
 .form-buttons button[type="submit"] {
-  background-color: #007BFF;
+  background-color: #f5c209;
   color: #fff;
 }
 

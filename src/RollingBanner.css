@@ -1,5 +1,7 @@
 .rolling-banner {
     position: relative;
+    margin-bottom: 20px;
+    height: 160px;
     width: 100%;
     overflow: hidden;
     background-color: #fff; /* or any background you like */
@@ -26,8 +28,8 @@
   }
   
   .rolling-banner__item img {
-    max-width: 100%;
-    height: auto;
+    width: auto;
+    height: 140px;
     object-fit: contain;
   }
   
