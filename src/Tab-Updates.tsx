@@ -104,6 +104,12 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
           {updates.length === 0 ? (
             <div className="updates-content">
               <p>No news updates available.</p>
+              <button
+                  className="toggle-form-btn"
+                  onClick={() => setShowForm(s => !s)}
+                >
+                  {showForm ? '✖ Close Form' : '+ Add News Update'}
+                </button>
             </div>
           ) : (
             <>
@@ -173,7 +179,7 @@ const UpdatesTab: React.FC<UpdatesTabProps> = ({ newsData, projectId }) => {
                   Next Update
                 </button>
               </div>
-              {isCharity && projectOwner && userData?.uid === projectOwner && (
+              {isCharity && projectOwner && userData?.uid === projectOwner &&(
                 <button
                   className="toggle-form-btn"
                   onClick={() => setShowForm(s => !s)}
