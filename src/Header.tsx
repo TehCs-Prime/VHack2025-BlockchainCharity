@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { NavLink } from "react-router-dom"
 import './Header.css'
-import Logo from '/assets/Logo.png'
+import Logo from '/assets/vhack-logo-white.png'
 
 const Header: React.FC = () => {
   const { userData, logout } = useAuth()
@@ -28,17 +28,15 @@ const Header: React.FC = () => {
     : '/profile'
 
   return (
-    <header className="header">
-      <div className="container">
+    <header className="px-12 py-4 bg-[#ffc014] shadow-md sticky top-0 z-50 w-full">
+      <div className="flex items-center justify-between mx-auto">
         {/* Logo Section */}
-        <div className="logo-container">
-          <NavLink to="/">
-            <img src={Logo} alt="LaCial" className="logo" />
-          </NavLink>
-        </div>
+        <NavLink to="/">
+          <img src={Logo} alt="LaCial" className="h-6" />
+        </NavLink>
 
-        <nav className="nav">
-          <ul className="nav-list">
+        <nav className="">
+          <ul className="flex list-none gap-20 text-sm font-semibold text-gray-800">
             <li className="nav-item">
               <NavLink 
                 to="/" 
@@ -84,38 +82,36 @@ const Header: React.FC = () => {
         </nav>
 
         {/* Authentication Section */}
-        <div className="auth-section">
+        <div className="flex items-center text-sm font-semibold text-[#ffc014]">
           {userData ? (
-            <div className="user-menu">
+            <div className="flex items-center gap-6">
               <Link 
                 to={profileRoute}
-                className="profile-link"
+                className="border-2 rounded-full border-white bg-transparent text-white px-5 py-1 transition-all duration-300 hover:bg-white hover:text-[#ffc014]"
                 state={{ from: location.pathname }}
               >
                 Profile
               </Link>
-              <span className="divider">|</span>
               <button 
                 onClick={handleLogout} 
-                className="logout-btn"
+                className="cursor-pointer border-2 rounded-full border-red-600 bg-transparent text-red-600 px-5 py-1 transition-all duration-300 hover:bg-red-600 hover:text-white"
                 aria-label="Log out"
               >
                 Logout
               </button>
             </div>
           ) : (
-            <div className="login-signup">
+            <div className="flex items-center gap-6">
               <Link 
                 to="/login" 
-                className="login-link"
+                className="border-2 rounded-full border-white bg-transparent text-white px-5 py-1 transition-all duration-300 hover:bg-white hover:text-[#ffc014]"
                 state={{ from: location.pathname }}
               >
                 Login
               </Link>
-              <span className="divider">|</span>
               <Link 
                 to="/signup" 
-                className="signup-link"
+                className="border-2 rounded-full border-white bg-transparent text-white px-5 py-1 transition-all duration-300 hover:bg-white hover:text-[#ffc014]"
                 state={{ from: location.pathname }}
               >
                 Sign&nbsp;Up

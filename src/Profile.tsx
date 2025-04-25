@@ -104,7 +104,7 @@ export default function Profile() {
     formData.append('image', file);
 
     try {
-      const apiKey = import.meta.env.VITE_IMG_BB_API_KEY;
+      const apiKey = "ea041d81863434cecbdb34bfe3264458";
       if (!apiKey) throw new Error('Missing ImgBB API key');
 
       const response = await fetch(
@@ -186,7 +186,7 @@ export default function Profile() {
               <img
                 src={previewUrl || '/default-avatar.png'}
                 alt="Profile"
-                className="editable"
+                className="editable w-44 h-44 rounded-full object-cover ml-10 mr-20"
               />
               <span className="edit-overlay">✎</span>
             </label>
@@ -194,7 +194,7 @@ export default function Profile() {
             <img
               src={userData.profilePicture || '/default-avatar.png'}
               alt="Profile"
-              className="static"
+              className="static w-44 h-44 rounded-full object-cover ml-10 mr-20"
             />
           )}
         </div>
@@ -234,7 +234,7 @@ export default function Profile() {
       <main className="profile-content">
         <div className="content-box">
           <section className="section donation-history">
-            <h2>Donation History</h2>
+            <h2 className='text-4xl pb-2 text-center'>Donation History</h2>
             <div className="table-responsive">
               <table className="donation-table table-striped">
                 <thead>

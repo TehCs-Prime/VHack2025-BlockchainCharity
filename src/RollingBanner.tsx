@@ -28,7 +28,7 @@ const RollingBanner: React.FC = () => {
   ];
 
   return (
-    <div className="rolling-banner">
+    <div className="rolling-banner !mb-10">
       <div className="rolling-banner__track">
         {/* Render the logos twice for seamless looping */}
         {[...sponsors, ...sponsors].map((sponsor, index) => (

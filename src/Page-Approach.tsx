@@ -138,18 +138,6 @@ const ApproachPage: React.FC = () => {
         </div>
       </div>
 
-      <div className='intro-container'>
-      <div className='approach-intro-img'>
-        <img src='/assets/LoveHand-removebg-preview.png'></img>
-      </div>
-
-        <div className='intro-words'>
-          <div className='intro-title'>"Trace, Trust, Transform"</div>
-          <div className='intro-des'>We as <strong>LaCial Charity</strong>, are forging a robust and trusted network of partners that bridges global solutions with local challenges, collaborating with leading international organizations as well as grassroots nonprofits.</div>
-        </div>
-
-      </div>
-
       <div className="donation-flow-container">
       <div className='donation-flow-header'>
             <h1>Charity Identity Verification Flow</h1>

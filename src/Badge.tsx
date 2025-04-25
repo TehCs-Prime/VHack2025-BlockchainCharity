@@ -28,7 +28,7 @@ export function BadgeShowcase() {
   };
 
   return (
-    <div className="badge-container">
+    <div className="badge-container !pt-10 !pb-4">
       <div className="badge-header">
         <h1 className="badge-title">My Badges</h1>
         <button

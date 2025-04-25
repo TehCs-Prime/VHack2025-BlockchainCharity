@@ -513,7 +513,7 @@ export const ProjectDiscovery: React.FC = () => {
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
-                  <option value="Last updated">Last updated</option>
+                  <option className="py-2" value="Last updated">Last updated</option>
                   <option value="Name">Name</option>
                   <option value="Date created">Date created</option>
                 </select>
@@ -564,7 +564,15 @@ export const ProjectDiscovery: React.FC = () => {
                     <div className="progress-bar-container">
                       <div 
                         className="progress-bar-fill" 
-                        style={{ width: `${Math.round((project.raisedAmount / project.goalAmount) * 100)}%` }}
+                        style={{ 
+                          width: `${Math.round((project.raisedAmount / project.goalAmount) * 100)}%`,
+                          backgroundColor:
+                            project.status === "Funding" ? "#FF9800" :
+                            project.status === "Completed" ? "#4CAF50" :
+                            project.status === "Under Implementation" ? "#2196F3" :
+                            project.status === "Cancelled" ? "#F44336" :
+                            "#4CAF50"
+                        }}
                       ></div>
                     </div>
                   </div>
