@@ -548,7 +548,7 @@ const OverlayDonationFlow: React.FC<OverlayDonationFlowProps> = ({
                   </div>
                 )}
                 {transactionStatus === 'success' && (
-                  <div className="transaction-status success">
+                  <div className="transaction-status success break-words">
                     <p>Donation successful!</p>
                     <p>Transaction Hash: {transactionHash}</p>
                     <a

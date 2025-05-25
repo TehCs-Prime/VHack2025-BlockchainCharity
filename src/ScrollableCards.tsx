@@ -41,7 +41,7 @@ const ScrollableCards: React.FC = () => {
             id: doc.id,
             title: data.title,
             status: data.status,
-            description: data.description,
+            description: data.subtitle,
             mainImage: data.mainImage,
             goalAmount: data.goalAmount,
             raisedAmount: data.raisedAmount,

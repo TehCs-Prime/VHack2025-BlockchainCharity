@@ -106,7 +106,7 @@ export const ProjectDiscovery: React.FC = () => {
           status: data.status,
           subtitle: data.subtitle,
           timing: data.timing,
-          description: data.description,
+          description: data.subtitle,
           location: data.location,
           goalAmount: data.goalAmount,
           raisedAmount: data.raisedAmount,

@@ -96,7 +96,7 @@ const Home: React.FC = () => {
       <div className="flex flex-col items-center text-center py-10">
         <h2 className="text-4xl font-bold text-[#2d3748] pb-6">Ready to Start?</h2>
         <div className="w-16 h-2 bg-yellow-400 mb-16"></div>
-        <div className="landing-options h-[50vh] ">
+        <div className="landing-options h-[60vh] ">
           <div className="flex flex-col items-center justify-center rounded-3xl box-shadow-lg bg-yellow-300 px-10 py-8 mb-8 w-[22vw]">
             <div className="bg-white rounded-full p-3 w-16 h-16 mb-6 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-400">

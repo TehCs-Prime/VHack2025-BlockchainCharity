@@ -18,8 +18,18 @@ const AllocationsTab: React.FC<AllocationsTabProps> = ({ allocations }) => {
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
 
+    // Add dummy data if no allocations provided
+    const defaultAllocations: Allocation[] = allocations.length ? allocations : [{
+        id: 1,
+        receiver: "Lacial Charity",
+        date: "2024-01-15",
+        amount: 10,
+        currency: "USDT",
+        useOfFunds: "Development Fund"
+    }];
+
     // Filter function based on date range
-    const filteredAllocations = allocations.filter(allocation => {
+    const filteredAllocations = defaultAllocations.filter(allocation => {
         const allocationDate = new Date(allocation.date);
         const startDateObj = startDate ? new Date(startDate) : null;
         const endDateObj = endDate ? new Date(endDate) : null;
@@ -102,7 +112,7 @@ const AllocationsTab: React.FC<AllocationsTabProps> = ({ allocations }) => {
                             {allocation.useOfFunds || '--'}
                         </div>
                         <div className="col actions">
-                            <button className="expand-btn"><a style={{ textDecoration: "none", color: "inherit" }} href='https://explorer.bnbchain.org/tx/CE44E7BF6C19FD2C4D94EF830A71DF8BF6EFFE0244B94847A1DF115742E6F285'>›</a></button>
+                            <button className="expand-btn"><a style={{ textDecoration: "none", color: "inherit" }} href='https://sepolia.etherscan.io/tx/0x7763eafbb505a6451d93746b5cc8507626f24ec03c2dec954c401241d0f1c7fa'>›</a></button>
                         </div>
                     </div>
                 ))}
