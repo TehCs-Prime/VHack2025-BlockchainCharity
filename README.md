@@ -28,6 +28,13 @@
 Lacial is a **decentralized** charity donation platform that leverages blockchain technology to provide secure, transparent, and traceable donation transactions. The platform allows donors to contribute using cryptocurrency, ensuring that every donation is recorded immutably on the blockchain. Whether you are a donor looking to support a cause or an organization aiming to run transparent fundraising campaigns, Lacial offers an innovative solution for modern charitable giving.
 
 ---
+## 📚 Learn More About This Project
+
+Check out these links to get a better idea of what this project is all about:
+
+- 📄 [Presentation Slides (Canva)](https://www.canva.com/design/DAGioSNR9ng/WWB3SX7MDFSfMOEuFJBfLA/edit)
+- 🎥 [First Version Presentation Video (YouTube)](https://youtu.be/ZcW74X2rrjI)
+---
 
 ## Team Members 👨‍💻
 
@@ -87,7 +94,6 @@ Ensure you have the following installed on your machine:
 1. **Clone the Repository** 📥  
    ```bash
    git clone https://github.com/TehCs-Prime/VHack2025-BlockchainCharity.git
-   cd VHack2025-BlockchainCharity
 
 2. **Install Dependencies**  
    ```bash
